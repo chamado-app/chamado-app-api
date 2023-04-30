@@ -13,11 +13,12 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "test": "jest --passWithNoTests",
-    "test:watch": "jest --watch",
-    "test:ci": "jest --coverage",
+    "test": "jest --passWithNoTests --no-cache --runInBand",
+    "test:watch": "yarn test --watch",
+    "test:ci": "yarn test --coverage",
+    "test:staged": "yarn test --findRelatedTests",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config jest.e2e.config.ts"
+    "test:e2e": "yarn test --config jest.e2e.config.ts"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
