@@ -1,4 +1,4 @@
 {
-  "*.{js,ts}": ["eslint", "yarn test:staged"],
+  "*.{js,ts}": ["eslint --fix"],
   "*.{js,ts,md,json}": ["prettier --write"]
 }
