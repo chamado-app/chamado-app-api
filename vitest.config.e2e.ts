@@ -1,8 +1,13 @@
-import { defineConfig } from 'vitest/config'
+import { mergeConfig } from 'vite'
+import { configDefaults, defineConfig } from 'vitest/config'
 
-import { viteConfig } from './vite.config'
+import vitestConfig from './vitest.config'
 
-export default defineConfig({
-  ...viteConfig,
-  test: { ...viteConfig.test, include: ['src/**/*.e2e-spec.ts'] }
-})
+export default mergeConfig(
+  vitestConfig,
+  defineConfig({
+    test: {
+      exclude: [...configDefaults.exclude, 'src/**/*.spec.ts']
+    }
+  })
+)

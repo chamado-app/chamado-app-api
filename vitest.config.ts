@@ -1,14 +1,10 @@
-import { VitePluginNode } from 'vite-plugin-node'
-import { type UserConfig, defineConfig } from 'vitest/config'
+import { resolve } from 'path'
 
-export const viteConfig: UserConfig = {
-  plugins: [
-    ...VitePluginNode({
-      adapter: 'nest',
-      appPath: './src/main.ts',
-      tsCompiler: 'swc'
-    })
-  ],
+import swc from 'unplugin-swc'
+import { configDefaults, defineConfig } from 'vitest/config'
+
+export default defineConfig({
+  plugins: [swc.vite()],
   optimizeDeps: {
     exclude: [
       '@nestjs/microservices',
@@ -21,9 +17,10 @@ export const viteConfig: UserConfig = {
   },
   test: {
     globals: true,
-    // setupFiles: [],
-    include: ['src/**/*.spec.ts'],
+    exclude: [...configDefaults.exclude, 'src/**/*.test.ts'],
+    root: resolve(__dirname),
     environment: 'node',
+    // setupFiles: [],
     coverage: {
       provider: 'istanbul',
       all: true,
@@ -35,6 +32,4 @@ export const viteConfig: UserConfig = {
       exclude: ['**/*.{d,spec}.ts', 'src/main.ts', 'src/app.module.ts']
     }
   }
-}
-
-export default defineConfig(viteConfig)
+})
