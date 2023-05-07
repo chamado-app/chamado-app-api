@@ -19,6 +19,7 @@
     "test:ui": "npm run test:watch -- --ui",
     "test:debug": "npm test -- --inspect-brk --inspect --logHeapUsage --threads=false",
     "test:e2e": "npm test -- --config ./vitest.config.e2e.ts",
+    "typeorm": "node -r tsconfig-paths/register -r ts-node/register ./node_modules/typeorm/cli.js --config src/config/type-orm.module.ts",
     "prepare": "husky install"
   },
   "dependencies": {
