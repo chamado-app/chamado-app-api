@@ -29,7 +29,12 @@ export default defineConfig({
       // branches: 90,
       reporter: ['text', 'html-spa', 'lcov'],
       include: ['src/**/*.ts'],
-      exclude: ['**/*.{d,spec}.ts', 'src/main.ts', 'src/app.module.ts']
+      exclude: [
+        '**/*.{d,spec}.ts',
+        'src/main.ts',
+        'src/app.module.ts',
+        'src/{config,database}/**/*.*'
+      ]
     }
   }
 })
