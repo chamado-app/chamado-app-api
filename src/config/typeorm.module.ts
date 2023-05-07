@@ -2,16 +2,18 @@ import { join } from 'path'
 
 import { TypeOrmModule, type TypeOrmModuleOptions } from '@nestjs/typeorm'
 
+import { config } from './config.module'
+
 const typeOrmModuleOptions: TypeOrmModuleOptions = {
   type: 'postgres',
-  host: 'chamado-app.postgres',
-  port: 5432,
-  username: 'chamado.app',
-  password: 'secret',
-  database: 'chamado.app',
-  entities: [join(__dirname, '../modules/**/**/*.entity{.ts,.js}')],
-  synchronize: true,
-  autoLoadEntities: true
+  host: config.database.host,
+  port: config.database.port,
+  username: config.database.username,
+  password: config.database.password,
+  database: config.database.database,
+  synchronize: config.database.synchronize,
+  autoLoadEntities: true,
+  entities: [join(__dirname, '../modules/**/**/*.entity{.ts,.js}')]
 }
 
 export const TypeOrmHydratedModule = TypeOrmModule.forRoot(typeOrmModuleOptions)
