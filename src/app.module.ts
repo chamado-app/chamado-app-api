@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common'
 
+import { TypeOrmHydratedModule } from './config'
+
 @Module({
-  imports: [],
+  imports: [TypeOrmHydratedModule],
   controllers: [],
   providers: []
 })
