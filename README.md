@@ -23,21 +23,29 @@ cd web-service
 
 ## 🏃 Running
 
-Install node libraries
+To run the project you need to have installed [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/)
+
+> In newer versions of docker it may be necessary to install [docker buildx](https://docs.docker.com/build/architecture/).
 
 ```sh
+# Install dependencies for IDEs to work properly
 yarn install
 ```
 
 ```bash
-# development
-yarn run start
+# Development
+# Copy the .env.example file to .env and customize the environment variables.
+# Define database user and password
+cp .env.example .env
 
-# watch mode
-yarn run start:dev
+# Makes docker container up
+make up
 
-# production mode
-yarn run start:prod
+# Makes docker container down
+make down
+
+# Makes production docker image
+make build
 ```
 
 ## 🧪 Testing
