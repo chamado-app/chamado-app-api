@@ -38,7 +38,7 @@ ENV NODE_ENV production
 
 RUN yarn install --frozen-lockfile --prod --no-script && yarn cache clean
 
-USER node
+USER $user
 
 FROM node:18-alpine As production
 
