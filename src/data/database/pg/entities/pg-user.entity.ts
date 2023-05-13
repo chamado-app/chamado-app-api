@@ -3,9 +3,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm'
+
+import { PgTokenEntity } from './pg-token.entity'
 
 @Entity({ name: 'users' })
 export class PgUserEntity implements UserEntity {
@@ -26,6 +29,9 @@ export class PgUserEntity implements UserEntity {
 
   @Column({ default: true, name: 'is_active' })
   isActive: boolean
+
+  @OneToMany(() => PgTokenEntity, (token) => token.user)
+  tokens?: PgTokenEntity[]
 
   @CreateDateColumn({
     type: 'timestamp',

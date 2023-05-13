@@ -17,7 +17,7 @@ build:
 	docker build -t chamado-app.web-service --target production .
 
 migration-make: 
-	@${typeorm} migration:create ./src/database/migrations/$(or $(type), Create)${class}Table
+	@${typeorm} migration:create ./src/data/database/pg/migrations/$(or $(type), Create)${class}Table
 
 migration-run:
 	${docker-run} ${typeorm-migration-run}

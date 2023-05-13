@@ -3,5 +3,6 @@ export enum Providers {
 }
 
 export enum RepositoryProvider {
-  user = 'USER_REPOSITORY'
+  user = 'USER_REPOSITORY',
+  token = 'TOKEN_REPOSITORY'
 }
