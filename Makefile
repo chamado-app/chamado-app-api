@@ -1,7 +1,7 @@
 # typeorm execution command
 typeorm = yarn typeorm
 # typeorm config file path
-typeorm-config = -d ./src/config/typeorm.module.ts
+typeorm-config = -d ./src/data/database/pg/typeorm/config.ts
 # command to run migrations
 typeorm-migration-run = ${typeorm} migration:run ${typeorm-config}
 # command to run inside docker composer application container
@@ -19,13 +19,13 @@ build:
 migration-make: 
 	@${typeorm} migration:create ./src/database/migrations/$(or $(type), Create)${class}Table
 
-migration-run: up
+migration-run:
 	${docker-run} ${typeorm-migration-run}
 
-migration-run-fake: up
+migration-run-fake:
 	${docker-run} ${typeorm-migration-run} -f
 
-migration-drop: up
+migration-drop:
 	${docker-run} ${typeorm} ${typeorm-config} schema:drop
 
-migration-refresh: up migration-drop migration-run
+migration-refresh: migration-drop migration-run
