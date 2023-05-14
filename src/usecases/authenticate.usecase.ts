@@ -1,7 +1,7 @@
 import { NotFoundException, UnauthorizedException } from '@nestjs/common'
 import { type Observable, map, switchMap } from 'rxjs'
 
-import { type UseCase } from '@/domain/base'
+import { type Usecase } from '@/domain/base'
 import { type HashComparer } from '@/domain/contracts'
 import type { AuthenticateDto, AuthenticatedDto } from '@/domain/dtos'
 import { TokenEntity, type UserEntity } from '@/domain/entities'
@@ -11,7 +11,7 @@ import {
   type UserRepository
 } from '@/domain/repositories'
 
-export class AuthenticateUseCase implements UseCase<AuthenticatedDto> {
+export class AuthenticateUsecase implements Usecase<AuthenticatedDto> {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly tokenRepository: TokenRepository,

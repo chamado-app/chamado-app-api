@@ -1,5 +1,5 @@
 import { type Observable } from 'rxjs'
 
-export interface UseCase<TModel> {
+export interface Usecase<TModel> {
   execute: (...args: any[]) => Observable<TModel>
 }
