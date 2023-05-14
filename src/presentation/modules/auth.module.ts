@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common'
-import { makeAuthProvider } from 'src/main/factories/providers/auth.provider'
-
-import { AuthController } from '../controllers/auth.controller'
 
 import { DatabaseModule } from './global'
 import { UserModule } from './user.module'
+
+import { makeAuthProvider } from '@/main/factories'
+import { AuthController } from '@/presentation/controllers'
 
 @Module({
   imports: [DatabaseModule, UserModule],

@@ -1,12 +1,12 @@
 import { Inject } from '@nestjs/common'
-import { type UserEntity } from 'src/core/domain/entities/user.entity'
-import { type UserRepository } from 'src/core/repositories/user.repository'
-import { RepositoryProvider } from 'src/main/enum/providers'
 import { Repository } from 'typeorm'
 
-import { type PgUserEntity } from '../entities/pg-user.entity'
-
 import { PgRepository } from './pg-repository'
+
+import { type PgUserEntity } from '@/data/database/pg/entities'
+import { RepositoryProvider } from '@/data/enum'
+import { type UserEntity } from '@/domain/entities'
+import { type UserRepository } from '@/domain/repositories'
 
 export class PgUserRepository
   extends PgRepository<UserEntity>

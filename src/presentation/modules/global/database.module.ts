@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common'
-import { makeDatabaseProviders } from 'src/main/factories/providers/database.provider'
+
+import { makeDatabaseProviders } from '@/main/factories'
 
 const database = makeDatabaseProviders()
 

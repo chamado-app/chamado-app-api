@@ -1,4 +1,3 @@
-import { type UserEntity } from 'src/core/domain/entities/user.entity'
 import {
   Column,
   CreateDateColumn,
@@ -9,6 +8,8 @@ import {
 } from 'typeorm'
 
 import { PgTokenEntity } from './pg-token.entity'
+
+import { type UserEntity } from '@/domain/entities'
 
 @Entity({ name: 'users' })
 export class PgUserEntity implements UserEntity {

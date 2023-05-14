@@ -1,12 +1,12 @@
 import { Inject } from '@nestjs/common'
-import { type TokenEntity } from 'src/core/domain/entities/token.entity'
-import { type TokenRepository } from 'src/core/repositories/token.repository'
-import { RepositoryProvider } from 'src/main/enum/providers'
 import { Repository } from 'typeorm'
 
-import { type PgTokenEntity } from '../entities/pg-token.entity'
-
 import { PgRepository } from './pg-repository'
+
+import { type PgTokenEntity } from '@/data/database/pg/entities'
+import { RepositoryProvider } from '@/data/enum'
+import { type TokenEntity } from '@/domain/entities'
+import { type TokenRepository } from '@/domain/repositories'
 
 export class PgTokenRepository
   extends PgRepository<TokenEntity>

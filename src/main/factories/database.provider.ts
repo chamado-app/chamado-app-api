@@ -1,8 +1,9 @@
 import { type Provider } from '@nestjs/common'
-import { type Entity } from 'src/core/base/entity'
-import { Providers, type RepositoryProvider } from 'src/main/enum/providers'
-import config from 'src/shared/config'
 import { DataSource, type EntityTarget } from 'typeorm'
+
+import { Providers, type RepositoryProvider } from '@/data/enum'
+import { type Entity } from '@/domain/base'
+import config from '@/infra/config'
 
 export const makeDatabaseProviders = (): Provider[] => [
   {

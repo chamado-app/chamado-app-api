@@ -1,7 +1,6 @@
-import { Mapper } from 'src/core/base/mapper'
-import { type AuthenticateDto } from 'src/shared/dtos/authenticate.dto'
-
-import { UserEntity } from '../entities/user.entity'
+import { Mapper } from '@/domain/base'
+import { AuthenticateDto } from '@/domain/dtos'
+import { UserEntity } from '@/domain/entities'
 
 export class AuthenticateMapper extends Mapper<AuthenticateDto, UserEntity> {
   mapFrom(data: AuthenticateDto): UserEntity {
@@ -14,6 +13,11 @@ export class AuthenticateMapper extends Mapper<AuthenticateDto, UserEntity> {
   }
 
   mapTo(user: UserEntity): AuthenticateDto {
-    throw new Error('Method not implemented.')
+    const data = new AuthenticateDto()
+
+    data.email = user.email
+    data.email = ''
+
+    return data
   }
 }

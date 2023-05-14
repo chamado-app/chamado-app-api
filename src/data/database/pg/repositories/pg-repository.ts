@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { type Observable, from } from 'rxjs'
-import { type Entity } from 'src/core/base/entity'
-import { Repository } from 'src/core/base/repository'
 import { type FindOptionsWhere, Repository as TypeOrmRepository } from 'typeorm'
+
+import { type Entity, Repository } from '@/domain/base'
 
 @Injectable()
 export class PgRepository<T extends Entity> extends Repository<T> {

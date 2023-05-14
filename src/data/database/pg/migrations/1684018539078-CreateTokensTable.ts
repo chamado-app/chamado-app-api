@@ -1,6 +1,9 @@
 import { type MigrationInterface, type QueryRunner, Table } from 'typeorm'
 
-import { createdAtField, primaryGeneratedColumnUuid } from '../typeorm/helpers'
+import {
+  createdAtField,
+  primaryGeneratedColumnUuid
+} from '@/data/database/pg/helpers'
 
 export class CreateTokensTable1684018539078 implements MigrationInterface {
   private readonly tableName = 'tokens'

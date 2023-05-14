@@ -1,8 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common'
 import { Observable } from 'rxjs'
-import { AuthenticateDto } from 'src/shared/dtos/authenticate.dto'
-import { type AuthenticatedDto } from 'src/shared/dtos/authenticated.dto'
-import { AuthenticateUseCase } from 'src/usecases/authenticate.usecase'
+
+import { AuthenticateDto, type AuthenticatedDto } from '@/domain/dtos'
+import { AuthenticateUseCase } from '@/usecases'
 
 @Controller('/auth')
 export class AuthController {

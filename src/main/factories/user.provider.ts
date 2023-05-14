@@ -1,10 +1,11 @@
 import { type Provider } from '@nestjs/common'
-import { UserRepository } from 'src/core/repositories/user.repository'
-import { PgUserEntity } from 'src/data/database/pg/entities/pg-user.entity'
-import { PgUserRepository } from 'src/data/database/pg/repositories/pg-user-repository'
-import { RepositoryProvider } from 'src/main/enum/providers'
 
 import { makeTypeormRepositoryProvider } from './database.provider'
+
+import { PgUserEntity } from '@/data/database/pg/entities'
+import { PgUserRepository } from '@/data/database/pg/repositories'
+import { RepositoryProvider } from '@/data/enum'
+import { UserRepository } from '@/domain/repositories'
 
 export const makeUsersProvider = (): Provider[] => [
   { provide: UserRepository, useClass: PgUserRepository },

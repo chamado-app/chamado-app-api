@@ -1,6 +1,6 @@
-import { Entity } from 'src/core/base/entity'
-
 import { type TokenEntity } from './token.entity'
+
+import { Entity } from '@/domain/base'
 
 export class UserEntity extends Entity {
   email: string

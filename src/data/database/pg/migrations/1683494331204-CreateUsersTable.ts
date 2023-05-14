@@ -1,6 +1,6 @@
 import { type MigrationInterface, type QueryRunner, Table } from 'typeorm'
 
-import { makeEntityColumns } from '../typeorm/helpers'
+import { makeEntityColumns } from '@/data/database/pg/helpers'
 
 export class CreateUsersTable1683494331204 implements MigrationInterface {
   private readonly tableName = 'users'

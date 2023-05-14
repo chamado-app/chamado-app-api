@@ -1,14 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { type Observable, map, of, switchMap } from 'rxjs'
-import { type UseCase } from 'src/core/base/usecase'
-import { TokenEntity } from 'src/core/domain/entities/token.entity'
-import { type UserEntity } from 'src/core/domain/entities/user.entity'
-import { AuthenticateMapper } from 'src/core/domain/mappers/authenticate.mapper'
-import { AuthenticatedMapper } from 'src/core/domain/mappers/authenticated.mapper'
-import { TokenRepository } from 'src/core/repositories/token.repository'
-import { UserRepository } from 'src/core/repositories/user.repository'
-import { type AuthenticateDto } from 'src/shared/dtos/authenticate.dto'
-import { type AuthenticatedDto } from 'src/shared/dtos/authenticated.dto'
+
+import { type UseCase } from '@/domain/base'
+import type { AuthenticateDto, AuthenticatedDto } from '@/domain/dtos'
+import { TokenEntity, type UserEntity } from '@/domain/entities'
+import { AuthenticateMapper, AuthenticatedMapper } from '@/domain/mappers'
+import { TokenRepository, UserRepository } from '@/domain/repositories'
 
 @Injectable()
 export class AuthenticateUseCase implements UseCase<AuthenticatedDto> {

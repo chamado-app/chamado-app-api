@@ -1,9 +1,6 @@
 import { Module } from '@nestjs/common'
-import { AuthModule } from 'src/presentation/modules/auth.module'
 
-import { UserModule } from '../presentation/modules/user.module'
+import { AuthModule } from '@/presentation/modules'
 
-@Module({
-  imports: [UserModule, AuthModule]
-})
+@Module({ imports: [AuthModule] })
 export class AppModule {}
