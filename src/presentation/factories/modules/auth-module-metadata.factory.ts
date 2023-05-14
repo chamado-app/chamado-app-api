@@ -6,6 +6,7 @@ import { AuthController } from '@/presentation/controllers'
 import {
   makeAuthenticateUsecaseProvider,
   makeHashComparerFactory,
+  makeJwtGeneratorFactory,
   makeTokenRepository
 } from '@/presentation/factories'
 import { UserModule } from '@/presentation/modules'
@@ -18,6 +19,7 @@ export const makeAuthModuleMetadata = (): ModuleMetadata => {
   const providers: Provider[] = [
     makeTokenRepository(),
     makeHashComparerFactory(),
+    makeJwtGeneratorFactory(),
     makeAuthenticateUsecaseProvider()
   ]
 

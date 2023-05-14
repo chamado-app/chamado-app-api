@@ -2,7 +2,7 @@ import { NotFoundException, UnauthorizedException } from '@nestjs/common'
 import { type Observable, map, switchMap } from 'rxjs'
 
 import { type Usecase } from '@/domain/base'
-import { type HashComparer } from '@/domain/contracts'
+import type { HashComparer, JwtGenerator } from '@/domain/contracts'
 import type { AuthenticateDto, AuthenticatedDto } from '@/domain/dtos'
 import { TokenEntity, type UserEntity } from '@/domain/entities'
 import { AuthenticateMapper, AuthenticatedMapper } from '@/domain/mappers'
@@ -16,6 +16,7 @@ export class AuthenticateUsecase implements Usecase<AuthenticatedDto> {
     private readonly userRepository: UserRepository,
     private readonly tokenRepository: TokenRepository,
     private readonly hashComparer: HashComparer,
+    private readonly jwtGenerator: JwtGenerator,
     private readonly authenticateMapper = new AuthenticateMapper(),
     private readonly authenticatedMapper = new AuthenticatedMapper()
   ) {}
@@ -26,7 +27,7 @@ export class AuthenticateUsecase implements Usecase<AuthenticatedDto> {
     return this.userRepository
       .getOne({ email: data.email, isActive: true })
       .pipe(switchMap((user) => this.compare(data, user)))
-      .pipe(switchMap(this.createToken.bind(this)))
+      .pipe(switchMap((user) => this.generateToken(user)))
       .pipe(map(this.authenticatedMapper.mapTo))
   }
 
@@ -43,12 +44,20 @@ export class AuthenticateUsecase implements Usecase<AuthenticatedDto> {
       .pipe(map(result))
   }
 
-  private createToken(user: UserEntity): Observable<TokenEntity> {
-    const token = new TokenEntity()
-    token.token = Math.random().toString()
-    token.type = 'Bearer'
-    token.user = user
+  private generateToken(user: UserEntity): Observable<TokenEntity> {
+    const save = (token: string): Observable<TokenEntity> => {
+      return this.saveToken(token, user)
+    }
 
-    return this.tokenRepository.create(token)
+    return this.jwtGenerator.generate({ id: user.id }).pipe(switchMap(save))
+  }
+
+  private saveToken(token: string, user: UserEntity): Observable<TokenEntity> {
+    const entity = new TokenEntity()
+    entity.type = 'Bearer'
+    entity.token = token
+    entity.user = user
+
+    return this.tokenRepository.create(entity)
   }
 }

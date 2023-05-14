@@ -15,8 +15,8 @@ export class AuthenticatedMapper extends Mapper<AuthenticatedDto, TokenEntity> {
   mapTo(token: TokenEntity): AuthenticatedDto {
     const data = new AuthenticatedDto()
 
-    data.accessToken = token.token
     data.type = token.type
+    data.accessToken = token.token
 
     return data
   }
