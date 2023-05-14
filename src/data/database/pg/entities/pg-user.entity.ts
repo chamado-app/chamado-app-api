@@ -9,9 +9,10 @@ import {
 
 import { PgTokenEntity } from './pg-token.entity'
 
+import { TableNames } from '@/data/database/pg/helpers'
 import { type UserEntity } from '@/domain/entities'
 
-@Entity({ name: 'users' })
+@Entity({ name: TableNames.user })
 export class PgUserEntity implements UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string

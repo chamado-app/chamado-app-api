@@ -9,9 +9,10 @@ import {
 
 import { PgUserEntity } from './pg-user.entity'
 
-import { type TokenEntity } from '@/domain/entities'
+import { TableNames } from '@/data/database/pg/helpers'
+import { type TokenEntity, TokenType } from '@/domain/entities'
 
-@Entity({ name: 'tokens' })
+@Entity({ name: TableNames.token })
 export class PgTokenEntity implements TokenEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -19,8 +20,8 @@ export class PgTokenEntity implements TokenEntity {
   @Column()
   token: string
 
-  @Column()
-  type: string
+  @Column({ enum: TokenType })
+  type: TokenType
 
   @ManyToOne(() => PgUserEntity, (user) => user.tokens)
   @JoinColumn({ name: 'user_id' })

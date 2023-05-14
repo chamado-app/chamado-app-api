@@ -1,15 +1,12 @@
-import { NotFoundException, UnauthorizedException } from '@nestjs/common'
+import { UnauthorizedException } from '@nestjs/common'
 import { type Observable, map, switchMap } from 'rxjs'
 
 import { type Usecase } from '@/domain/base'
 import type { HashComparer, JwtGenerator } from '@/domain/contracts'
 import type { AuthenticateDto, AuthenticatedDto } from '@/domain/dtos'
-import { TokenEntity, type UserEntity } from '@/domain/entities'
+import { TokenEntity, TokenType, type UserEntity } from '@/domain/entities'
 import { AuthenticateMapper, AuthenticatedMapper } from '@/domain/mappers'
-import {
-  type TokenRepository,
-  type UserRepository
-} from '@/domain/repositories'
+import type { TokenRepository, UserRepository } from '@/domain/repositories'
 
 export class AuthenticateUsecase implements Usecase<AuthenticatedDto> {
   constructor(
@@ -32,32 +29,28 @@ export class AuthenticateUsecase implements Usecase<AuthenticatedDto> {
   }
 
   private compare(data: UserEntity, user?: UserEntity): Observable<UserEntity> {
-    if (!user) throw new NotFoundException()
-
-    const result = (isValid: boolean): UserEntity => {
-      if (!isValid) throw new UnauthorizedException()
-      return user
-    }
-
-    return this.hashComparer
-      .compare(data.password, user.password)
-      .pipe(map(result))
+    return this.hashComparer.compare(data.password, user.password).pipe(
+      map((isValid: boolean) => {
+        if (!isValid) throw new UnauthorizedException()
+        return user
+      })
+    )
   }
 
   private generateToken(user: UserEntity): Observable<TokenEntity> {
-    const save = (token: string): Observable<TokenEntity> => {
-      return this.saveToken(token, user)
-    }
-
-    return this.jwtGenerator.generate({ id: user.id }).pipe(switchMap(save))
+    return this.jwtGenerator
+      .generate({ id: user.id })
+      .pipe(switchMap((token: string) => this.saveToken(token, user)))
   }
 
   private saveToken(token: string, user: UserEntity): Observable<TokenEntity> {
     const entity = new TokenEntity()
-    entity.type = 'Bearer'
+    entity.type = TokenType.JWT
     entity.token = token
     entity.user = user
 
-    return this.tokenRepository.create(entity)
+    return this.tokenRepository
+      .delete({ user, type: TokenType.JWT })
+      .pipe(switchMap(() => this.tokenRepository.create(entity)))
   }
 }

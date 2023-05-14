@@ -1,12 +1,14 @@
 import { type MigrationInterface, type QueryRunner, Table } from 'typeorm'
 
 import {
+  TableNames,
   createdAtField,
   primaryGeneratedColumnUuid
 } from '@/data/database/pg/helpers'
+import { TokenType } from '@/domain/entities'
 
 export class CreateTokensTable1684018539078 implements MigrationInterface {
-  private readonly tableName = 'tokens'
+  private readonly tableName = TableNames.token
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     const table = new Table({
@@ -14,9 +16,16 @@ export class CreateTokensTable1684018539078 implements MigrationInterface {
       columns: [
         primaryGeneratedColumnUuid(),
         { name: 'token', type: 'varchar', isUnique: true },
-        { name: 'type', type: 'varchar', length: '64' },
+        { name: 'type', type: 'enum', enum: Object.values(TokenType) },
         { name: 'user_id', type: 'uuid' },
         createdAtField()
+      ],
+      foreignKeys: [
+        {
+          columnNames: ['user_id'],
+          referencedColumnNames: ['id'],
+          referencedTableName: TableNames.user
+        }
       ]
     })
 

@@ -10,5 +10,5 @@ export abstract class Repository<T extends Entity> {
   // abstract getAll(): Observable<T[]>
   abstract getOne(filter: Partial<T>): Observable<T>
   // abstract getMany(filter: Partial<T>): Observable<T[]>
-  // abstract delete(id: number): Observable<void>
+  abstract delete(filter: Partial<T>): Observable<number>
 }

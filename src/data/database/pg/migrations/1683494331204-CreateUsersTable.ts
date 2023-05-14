@@ -1,9 +1,9 @@
 import { type MigrationInterface, type QueryRunner, Table } from 'typeorm'
 
-import { makeEntityColumns } from '@/data/database/pg/helpers'
+import { TableNames, makeEntityColumns } from '@/data/database/pg/helpers'
 
 export class CreateUsersTable1683494331204 implements MigrationInterface {
-  private readonly tableName = 'users'
+  private readonly tableName = TableNames.user
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     const table = new Table({

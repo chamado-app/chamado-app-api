@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { type Observable, from } from 'rxjs'
+import { type Observable, from, map } from 'rxjs'
 import { type FindOptionsWhere, Repository as TypeOrmRepository } from 'typeorm'
 
 import { type Entity, Repository } from '@/domain/base'
@@ -18,9 +18,15 @@ export class PgRepository<T extends Entity> extends Repository<T> {
     return from(promise)
   }
 
-  getOne(filter: Partial<T>): Observable<T> {
+  public getOne(filter: Partial<T>): Observable<T> {
     const where = filter as FindOptionsWhere<T>
     const promise = this.repository.findOne({ where })
     return from(promise)
+  }
+
+  public delete(filter: Partial<T>): Observable<number> {
+    const options = filter as FindOptionsWhere<T>
+    const promise = this.repository.delete(options)
+    return from(promise).pipe(map((rows) => rows.affected))
   }
 }
