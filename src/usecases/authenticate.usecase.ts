@@ -1,7 +1,8 @@
-import { NotFoundException } from '@nestjs/common'
-import { type Observable, map, of, switchMap } from 'rxjs'
+import { NotFoundException, UnauthorizedException } from '@nestjs/common'
+import { type Observable, map, switchMap } from 'rxjs'
 
 import { type UseCase } from '@/domain/base'
+import { type HashComparer } from '@/domain/contracts'
 import type { AuthenticateDto, AuthenticatedDto } from '@/domain/dtos'
 import { TokenEntity, type UserEntity } from '@/domain/entities'
 import { AuthenticateMapper, AuthenticatedMapper } from '@/domain/mappers'
@@ -14,24 +15,32 @@ export class AuthenticateUseCase implements UseCase<AuthenticatedDto> {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly tokenRepository: TokenRepository,
+    private readonly hashComparer: HashComparer,
     private readonly authenticateMapper = new AuthenticateMapper(),
     private readonly authenticatedMapper = new AuthenticatedMapper()
   ) {}
 
   execute(credentials: AuthenticateDto): Observable<AuthenticatedDto> {
-    const entity = this.authenticateMapper.mapFrom(credentials)
+    const data = this.authenticateMapper.mapFrom(credentials)
 
     return this.userRepository
-      .getOne(entity)
-      .pipe(switchMap(this.validateUser))
+      .getOne({ email: data.email, isActive: true })
+      .pipe(switchMap((user) => this.compare(data, user)))
       .pipe(switchMap(this.createToken.bind(this)))
       .pipe(map(this.authenticatedMapper.mapTo))
   }
 
-  private validateUser(user?: UserEntity): Observable<UserEntity> {
+  private compare(data: UserEntity, user?: UserEntity): Observable<UserEntity> {
     if (!user) throw new NotFoundException()
 
-    return of(user)
+    const result = (isValid: boolean): UserEntity => {
+      if (!isValid) throw new UnauthorizedException()
+      return user
+    }
+
+    return this.hashComparer
+      .compare(data.password, user.password)
+      .pipe(map(result))
   }
 
   private createToken(user: UserEntity): Observable<TokenEntity> {
