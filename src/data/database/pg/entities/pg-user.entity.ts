@@ -22,10 +22,10 @@ export class PgUserEntity implements UserEntity {
   @Column()
   password: string
 
-  @Column()
+  @Column({ name: 'first_name' })
   firstName: string
 
-  @Column()
+  @Column({ name: 'last_name' })
   lastName: string
 
   @Column({ default: true, name: 'is_active' })

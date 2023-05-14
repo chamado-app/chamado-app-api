@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { join } from 'path'
 
 import { app } from './app'
 
@@ -12,6 +12,8 @@ export const database = {
   synchronize: process.env.DB_SYNCHRONIZE === 'true' || false,
   username: process.env.DB_USERNAME,
   entities: [
-    resolve(__dirname, '../../data/database/pg/entities/*.entity.{t,j}s')
-  ]
+    join(__dirname, '../../data/database/pg/entities/*.entity.{t,j}s')
+  ],
+  migrations: [join(__dirname, '../../data/database/pg/migrations/*.{t,j}s')],
+  autoLoadEntities: true
 }

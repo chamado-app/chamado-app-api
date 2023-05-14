@@ -1,10 +1,9 @@
-import { Inject } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
 import { PgRepository } from './pg-repository'
 
-import { type PgUserEntity } from '@/data/database/pg/entities'
-import { RepositoryProvider } from '@/data/enum'
+import { PgUserEntity } from '@/data/database/pg/entities'
 import { type UserEntity } from '@/domain/entities'
 import { type UserRepository } from '@/domain/repositories'
 
@@ -13,7 +12,7 @@ export class PgUserRepository
   implements UserRepository
 {
   constructor(
-    @Inject(RepositoryProvider.user)
+    @InjectRepository(PgUserEntity)
     repository: Repository<PgUserEntity>
   ) {
     super(repository)

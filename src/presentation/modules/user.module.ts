@@ -1,12 +1,6 @@
 import { Module } from '@nestjs/common'
 
-import { DatabaseModule } from './global'
+import { makeUsersModuleMetadata } from '@/presentation/factories'
 
-import { makeUsersProvider } from '@/main/factories'
-
-@Module({
-  imports: [DatabaseModule],
-  providers: makeUsersProvider(),
-  exports: makeUsersProvider()
-})
+@Module(makeUsersModuleMetadata())
 export class UserModule {}

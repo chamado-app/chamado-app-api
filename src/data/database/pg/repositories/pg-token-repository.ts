@@ -1,10 +1,9 @@
-import { Inject } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
 import { PgRepository } from './pg-repository'
 
-import { type PgTokenEntity } from '@/data/database/pg/entities'
-import { RepositoryProvider } from '@/data/enum'
+import { PgTokenEntity } from '@/data/database/pg/entities'
 import { type TokenEntity } from '@/domain/entities'
 import { type TokenRepository } from '@/domain/repositories'
 
@@ -13,7 +12,7 @@ export class PgTokenRepository
   implements TokenRepository
 {
   constructor(
-    @Inject(RepositoryProvider.token)
+    @InjectRepository(PgTokenEntity)
     repository: Repository<PgTokenEntity>
   ) {
     super(repository)
