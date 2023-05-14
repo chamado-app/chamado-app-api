@@ -5,18 +5,18 @@ typeorm-config = -d ./dist/infra/type-orm-module/type-orm.config.js
 # command to run migrations
 typeorm-migration-run = ${typeorm} migration:run ${typeorm-config}
 # command to run inside docker composer application container
-docker-exec = docker-compose exec web-service /bin/sh -c 
+docker-exec = docker-compose exec web-service /bin/sh -c
 
-up: 
+up:
 	docker-compose up -d
 
-down: 
+down:
 	docker-compose down
 
 build:
 	docker build -t chamado-app.web-service --target production .
 
-migration-make: 
+migration-make:
 	@${typeorm} migration:create ./src/data/database/pg/migrations/$(or $(type), Create)${class}Table
 
 migration-run: up
