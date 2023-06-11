@@ -1,6 +1,6 @@
 import { Mapper } from '@/domain/base'
-import { AuthenticatedDto } from '@/domain/dtos'
 import { TokenEntity } from '@/domain/entities'
+import { AuthenticatedDto } from '@/shared/dtos'
 
 export class AuthenticatedMapper extends Mapper<AuthenticatedDto, TokenEntity> {
   mapFrom(data: AuthenticatedDto): TokenEntity {

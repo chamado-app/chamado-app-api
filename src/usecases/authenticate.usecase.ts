@@ -3,10 +3,10 @@ import { type Observable, map, switchMap } from 'rxjs'
 
 import { type Usecase } from '@/domain/base'
 import type { HashComparer, JwtGenerator } from '@/domain/contracts'
-import type { AuthenticateDto, AuthenticatedDto } from '@/domain/dtos'
 import { TokenEntity, TokenType, type UserEntity } from '@/domain/entities'
 import { AuthenticateMapper, AuthenticatedMapper } from '@/domain/mappers'
 import type { TokenRepository, UserRepository } from '@/domain/repositories'
+import { type AuthenticateDto, type AuthenticatedDto } from '@/shared/dtos'
 
 export class AuthenticateUsecase implements Usecase<AuthenticatedDto> {
   constructor(
@@ -29,6 +29,8 @@ export class AuthenticateUsecase implements Usecase<AuthenticatedDto> {
   }
 
   private compare(data: UserEntity, user?: UserEntity): Observable<UserEntity> {
+    if (!user) throw new UnauthorizedException()
+
     return this.hashComparer.compare(data.password, user.password).pipe(
       map((isValid: boolean) => {
         if (!isValid) throw new UnauthorizedException()
