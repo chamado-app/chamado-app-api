@@ -16,7 +16,7 @@ export class AuthenticateMapper extends Mapper<AuthenticateDto, UserEntity> {
     const data = new AuthenticateDto()
 
     data.email = user.email
-    data.email = ''
+    data.password = user.password
 
     return data
   }
