@@ -1,8 +1,22 @@
 # 🛸 Chamado.app [Web Service]
 
+<!--toc:start-->
+
+- [🛸 Chamado.app [Web Service]](#-chamadoapp-web-service)
+  - [📖 About](#-about)
+  - [📦 Prerequisites](#-prerequisites)
+  - [🛬 Cloning](#-cloning)
+  - [🏃 Running](#-running)
+  - [🧪 Testing](#-testing)
+  <!--toc:end-->
+
+## 📖 About
+
 Another service desk application.
 
-This project is intended to be used as a basis for studies and in the construction of a Course Completion Work, of the Technology in Systems Analysis and Development course.
+This project is intended to be used as a basis for studies and in the construction
+of a Course Completion Work, of the Technology in Systems Analysis and Development
+course.
 
 ## 📦 Prerequisites
 
@@ -12,9 +26,9 @@ This project is intended to be used as a basis for studies and in the constructi
 ## 🛬 Cloning
 
 ```sh
-git clone git@gitlab.com:chamado.app/web-service.git
+git clone git@github.com:chamado-app/web-service.git
 # or
-git clone https://gitlab.com/chamado.app/web-service.git
+git clone https://github.com/chamado-app/web-service.git
 ```
 
 ```sh
@@ -23,21 +37,30 @@ cd web-service
 
 ## 🏃 Running
 
-Install node libraries
+To run the project you need to have installed [docker](https://docs.docker.com/engine/install/)
+and [docker-compose](https://docs.docker.com/compose/install/)
+
+> In newer versions of docker it may be necessary to install [docker buildx](https://docs.docker.com/build/architecture/).
 
 ```sh
+# Install dependencies for IDEs to work properly
 yarn install
 ```
 
 ```bash
-# development
-yarn run start
+# Development
+# Copy the .env.example file to .env and customize the environment variables.
+# Define database user and password
+cp .env.example .env
 
-# watch mode
-yarn run start:dev
+# Makes docker container up
+make up
 
-# production mode
-yarn run start:prod
+# Makes docker container down
+make down
+
+# Makes production docker image
+make build
 ```
 
 ## 🧪 Testing
@@ -55,4 +78,5 @@ yarn run test:ci
 
 <!-- ## ✏️ Contributing
 
-For more information about code patterns and rules for development, see the [CONTRIBUTING](./CONTRIBUTING.md) file. -->
+For more information about code patterns and rules for development,
+see the [CONTRIBUTING](./CONTRIBUTING.md) file. -->

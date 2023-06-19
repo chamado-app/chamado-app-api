@@ -1,0 +1,48 @@
+version: '3.9'
+services:
+  web-service:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    command: yarn start:dev
+    container_name: chamado-app.web-service
+    env_file:
+      - .env
+    environment:
+      PORT: ${PORT}
+    ports:
+      - '${PORT:-3000}:${PORT:-3000}'
+      - 9229:9229
+    depends_on:
+      - postgres
+
+    volumes:
+      - ./src:/usr/src/app/src
+
+    networks:
+      - chamado.app
+
+  postgres:
+    image: postgres
+    container_name: chamado-app.postgres
+    environment:
+      POSTGRES_DB: '${DB_DATABASE}'
+      POSTGRES_USER: '${DB_USERNAME}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD}'
+    ports:
+      - '${DB_PORT:-5432}:5432'
+
+    volumes:
+      - chamado-app.postgres:/var/lib/postgresql/data
+
+    networks:
+      - chamado.app
+
+volumes:
+  chamado-app.postgres:
+
+
+networks:
+  chamado.app:
+    driver: bridge

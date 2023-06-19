@@ -15,6 +15,12 @@ export default defineConfig({
       'fastify-swagger'
     ]
   },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+      '@tests': resolve(__dirname, 'tests')
+    }
+  },
   test: {
     globals: true,
     exclude: [...configDefaults.exclude, 'src/**/*.test.ts'],
@@ -29,7 +35,13 @@ export default defineConfig({
       // branches: 90,
       reporter: ['text', 'html-spa', 'lcov'],
       include: ['src/**/*.ts'],
-      exclude: ['**/*.{d,spec}.ts', 'src/main.ts', 'src/app.module.ts']
+      exclude: [
+        '**/*.{d,spec,config}.ts',
+        'src/main/**/*.*',
+        'src/shared/dtos/**/*.*',
+        'src/domain/{base,contracts,entities,repositories}/**/*.*',
+        'src/infra/config/*.*'
+      ]
     }
   }
 })
