@@ -1,5 +1,6 @@
 # typeorm execution command
 typeorm = yarn typeorm
+typeorm-extension = yarn typeorm:extension
 # typeorm config file path
 typeorm-config = -d ./dist/infra/type-orm-module/type-orm.config.js
 # command to run migrations
@@ -27,5 +28,11 @@ migration-run-fake: up
 
 migration-drop: up
 	${docker-exec} "${typeorm} ${typeorm-config} schema:drop"
+
+seed-create:
+	@${typeorm-extension} seed:create -n ./src/data/database/pg/seeds/${name}.seed.ts
+
+seed-run: up
+	${docker-exec} "${typeorm-extension} ${typeorm-config} seed:run"
 
 migration-refresh: up migration-drop migration-run
