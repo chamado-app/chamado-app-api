@@ -5,14 +5,15 @@ import {
   JwtConfigModule,
   TypeOrmConfigModule
 } from '@/infra'
-import { AuthModule } from '@/presentation/modules'
+import { AuthModule, CategoryModule } from '@/presentation/modules'
 
 @Module({
   imports: [
     EnvironmentConfigModule,
     JwtConfigModule,
     TypeOrmConfigModule,
-    AuthModule
+    AuthModule,
+    CategoryModule
   ]
 })
 export class AppModule {}
