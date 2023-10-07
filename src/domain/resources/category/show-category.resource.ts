@@ -4,6 +4,7 @@ export class CategoryShow {
   private constructor(
     readonly id: CategoryEntity['id'],
     readonly name: CategoryEntity['name'],
+    readonly slug: CategoryEntity['slug'],
     readonly description: CategoryEntity['description'],
     readonly isActive: CategoryEntity['isActive'],
     readonly parentId: CategoryEntity['id'],
@@ -20,6 +21,7 @@ export class CategoryShow {
     return new CategoryShow(
       category.id,
       category.name,
+      category.slug,
       category.description,
       category.isActive,
       category.parent?.id,

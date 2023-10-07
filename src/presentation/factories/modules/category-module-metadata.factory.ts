@@ -5,13 +5,15 @@ import { PgCategoryEntity } from '@/data/database/pg/entities'
 import { CategoryController } from '@/presentation/controllers'
 import {
   makeCategoryRepository,
-  makeCreateCategoryUsecaseProvider
+  makeCreateCategoryUsecaseProvider,
+  makeSlugifier
 } from '@/presentation/factories'
 
 export const makeCategoryModuleMetadata = (): ModuleMetadata => {
   const database = TypeOrmModule.forFeature([PgCategoryEntity])
   const providers: Provider[] = [
     makeCategoryRepository(),
+    makeSlugifier(),
     makeCreateCategoryUsecaseProvider()
   ]
   const imports = [database]

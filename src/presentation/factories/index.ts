@@ -1,4 +1,5 @@
 export * from './adapters'
+export * from './implementations'
 export * from './modules'
 export * from './repositories'
 export * from './usecases'

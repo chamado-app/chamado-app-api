@@ -21,6 +21,9 @@ export class PgCategoryEntity implements CategoryEntity {
   name: string
 
   @Column()
+  slug: string
+
+  @Column()
   description?: string
 
   @ManyToOne(() => PgCategoryEntity, (category) => category.children)

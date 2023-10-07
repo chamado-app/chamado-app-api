@@ -10,6 +10,7 @@ export class CreateCategoryTable1694365804269 implements MigrationInterface {
       name: this.tableName,
       columns: makeEntityColumns([
         { name: 'name', type: 'varchar', length: '60' },
+        { name: 'slug', type: 'varchar', length: '60', isUnique: true },
         {
           name: 'description',
           type: 'varchar',
