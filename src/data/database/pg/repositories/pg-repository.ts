@@ -24,6 +24,12 @@ export class PgRepository<T extends Entity> extends Repository<T> {
     return from(promise)
   }
 
+  public getMany(filter: Partial<T>): Observable<T[]> {
+    const where = filter as FindOptionsWhere<T>
+    const promise = this.repository.find({ where })
+    return from(promise)
+  }
+
   public delete(filter: Partial<T>): Observable<number> {
     const options = filter as FindOptionsWhere<T>
     const promise = this.repository.delete(options)

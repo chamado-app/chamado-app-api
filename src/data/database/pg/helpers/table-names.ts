@@ -1,4 +1,5 @@
 export enum TableNames {
-  user = 'users',
-  token = 'tokens'
+  category = 'categories',
+  token = 'tokens',
+  user = 'users'
 }

@@ -1,2 +1,2 @@
-export * from './authenticate.mapper'
-export * from './authenticated.mapper'
+export * from './authenticate'
+export * from './category'
