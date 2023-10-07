@@ -1,7 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
-import { Observable } from 'rxjs'
 
-import { AuthenticateDto, type AuthenticatedDto } from '@/shared/dtos'
+import { AccessTokenShow } from '@/domain/resources'
+import { AuthenticateDto } from '@/shared/dtos'
 import { AuthenticateUsecase } from '@/usecases'
 
 @Controller('/auth')
@@ -10,9 +10,8 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  authenticate(
-    @Body() credentials: AuthenticateDto
-  ): Observable<AuthenticatedDto> {
-    return this.authenticateUsecase.execute(credentials)
+  async authenticate(@Body() data: AuthenticateDto): Promise<AccessTokenShow> {
+    const token = await this.authenticateUsecase.execute(data)
+    return AccessTokenShow.mapTo(token)
   }
 }

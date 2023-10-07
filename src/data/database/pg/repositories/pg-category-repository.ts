@@ -17,4 +17,20 @@ export class PgCategoryRepository
   ) {
     super(repository)
   }
+
+  async getSlugSequence(filter: Partial<CategoryEntity>): Promise<number> {
+    const queryBuilder = this.repository
+      .createQueryBuilder('categories')
+      .where(`categories.slug ~ '^${filter.slug}(-\\d+)?$'`)
+
+    Object.keys(filter)
+      .filter((key) => key !== 'slug')
+      .forEach((key) =>
+        queryBuilder.where(`categories.${key} = :${key}`, {
+          [key]: filter[key]
+        })
+      )
+
+    return await queryBuilder.getCount()
+  }
 }

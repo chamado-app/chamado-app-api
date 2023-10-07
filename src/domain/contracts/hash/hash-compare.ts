@@ -1,5 +1,3 @@
-import { type Observable } from 'rxjs'
-
 export abstract class HashComparer {
-  compare: (value: string, hashedValue: string) => Observable<boolean>
+  compare: (value: string, hashedValue: string) => Promise<boolean>
 }

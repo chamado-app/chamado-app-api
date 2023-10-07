@@ -1,5 +1,3 @@
-import { type Observable, map, switchMap } from 'rxjs'
-
 import { type Usecase } from '@/domain/base'
 import { type Slugifier } from '@/domain/contracts'
 import { type CategoryEntity } from '@/domain/entities'
@@ -14,19 +12,18 @@ export class CreateCategoryUsecase implements Usecase<CategoryEntity> {
     private readonly mapper = new CreateCategoryMapper()
   ) {}
 
-  execute(data: CreateCategoryDto): Observable<CategoryEntity> {
+  async execute(data: CreateCategoryDto): Promise<CategoryEntity> {
     const payload = this.mapper.mapFrom(data)
     payload.slug = this.slugifier.slugify(payload.name)
 
-    return this.repository
-      .getMany({ slug: payload.slug })
-      .pipe(
-        map((result) => {
-          if (!result.length) return
-          const slugBase = `${payload.slug}-${result.length + 1}`
-          payload.slug = this.slugifier.slugify(slugBase)
-        })
-      )
-      .pipe(switchMap(() => this.repository.create(payload)))
+    const categoriesWithSameSlug = await this.repository.getSlugSequence({
+      slug: payload.slug
+    })
+
+    if (categoriesWithSameSlug) {
+      payload.slug = `${payload.slug}-${categoriesWithSameSlug + 1}`
+    }
+
+    return await this.repository.create(payload)
   }
 }

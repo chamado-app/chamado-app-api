@@ -1,58 +1,55 @@
 import { UnauthorizedException } from '@nestjs/common'
-import { type Observable, map, switchMap } from 'rxjs'
 
 import { type Usecase } from '@/domain/base'
 import type { HashComparer, JwtGenerator } from '@/domain/contracts'
 import { TokenEntity, TokenType, type UserEntity } from '@/domain/entities'
-import { AuthenticateMapper, AuthenticatedMapper } from '@/domain/mappers'
+import { AuthenticateMapper } from '@/domain/mappers'
 import type { TokenRepository, UserRepository } from '@/domain/repositories'
-import { type AuthenticateDto, type AuthenticatedDto } from '@/shared/dtos'
+import { type AuthenticateDto } from '@/shared/dtos'
 
-export class AuthenticateUsecase implements Usecase<AuthenticatedDto> {
+export class AuthenticateUsecase implements Usecase<TokenEntity> {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly tokenRepository: TokenRepository,
     private readonly hashComparer: HashComparer,
     private readonly jwtGenerator: JwtGenerator,
-    private readonly authenticateMapper = new AuthenticateMapper(),
-    private readonly authenticatedMapper = new AuthenticatedMapper()
+    private readonly authenticateMapper = new AuthenticateMapper()
   ) {}
 
-  execute(credentials: AuthenticateDto): Observable<AuthenticatedDto> {
+  async execute(credentials: AuthenticateDto): Promise<TokenEntity> {
     const data = this.authenticateMapper.mapFrom(credentials)
-
-    return this.userRepository
-      .getOne({ email: data.email, isActive: true })
-      .pipe(switchMap((user) => this.compare(data, user)))
-      .pipe(switchMap((user) => this.generateToken(user)))
-      .pipe(map(this.authenticatedMapper.mapTo))
+    const user = await this.userRepository.getOne({
+      email: data.email,
+      isActive: true
+    })
+    await this.compare(user)
+    return await this.generateToken(user)
   }
 
-  private compare(data: UserEntity, user?: UserEntity): Observable<UserEntity> {
+  private async compare(data: UserEntity, user?: UserEntity): Promise<void> {
     if (!user) throw new UnauthorizedException()
-
-    return this.hashComparer.compare(data.password, user.password).pipe(
-      map((isValid: boolean) => {
-        if (!isValid) throw new UnauthorizedException()
-        return user
-      })
+    const isValid = await this.hashComparer.compare(
+      data.password,
+      user.password
     )
+    if (!isValid) throw new UnauthorizedException()
   }
 
-  private generateToken(user: UserEntity): Observable<TokenEntity> {
-    return this.jwtGenerator
-      .generate({ id: user.id })
-      .pipe(switchMap((token: string) => this.saveToken(token, user)))
+  private async generateToken(user: UserEntity): Promise<TokenEntity> {
+    const token = await this.jwtGenerator.generate({ id: user.id })
+    return await this.saveToken(token, user)
   }
 
-  private saveToken(token: string, user: UserEntity): Observable<TokenEntity> {
+  private async saveToken(
+    token: string,
+    user: UserEntity
+  ): Promise<TokenEntity> {
     const entity = new TokenEntity()
     entity.type = TokenType.JWT
     entity.token = token
     entity.user = user
 
-    return this.tokenRepository
-      .delete({ user, type: TokenType.JWT })
-      .pipe(switchMap(() => this.tokenRepository.create(entity)))
+    await this.tokenRepository.delete({ user, type: TokenType.JWT })
+    return await this.tokenRepository.create(entity)
   }
 }

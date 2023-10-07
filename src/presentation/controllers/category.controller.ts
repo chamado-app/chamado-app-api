@@ -1,5 +1,4 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
-import { Observable, map } from 'rxjs'
 
 import { CategoryShow } from '@/domain/resources'
 import { CreateCategoryDto } from '@/shared/dtos'
@@ -11,9 +10,8 @@ export class CategoryController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  public create(@Body() data: CreateCategoryDto): Observable<CategoryShow> {
-    return this.createCategoryUsecase
-      .execute(data)
-      .pipe(map(CategoryShow.mapTo))
+  async create(@Body() data: CreateCategoryDto): Promise<CategoryShow> {
+    const createdCategory = await this.createCategoryUsecase.execute(data)
+    return CategoryShow.mapTo(createdCategory)
   }
 }

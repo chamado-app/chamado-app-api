@@ -1,16 +1,15 @@
 import * as bcrypt from 'bcrypt'
-import { type Observable, from } from 'rxjs'
 
 import { type HashComparer, type HashGenerator } from '@/domain/contracts'
 
 export class BcryptAdapter implements HashComparer, HashGenerator {
   constructor(private readonly salt: number = 10) {}
 
-  compare(value: string, hashedValue: string): Observable<boolean> {
-    return from(bcrypt.compare(value, hashedValue))
+  async compare(value: string, hashedValue: string): Promise<boolean> {
+    return await bcrypt.compare(value, hashedValue)
   }
 
-  generate(value: string): Observable<string> {
-    return from(bcrypt.hash(value, this.salt))
+  async generate(value: string): Promise<string> {
+    return await bcrypt.hash(value, this.salt)
   }
 }

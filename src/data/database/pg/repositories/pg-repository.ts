@@ -1,38 +1,34 @@
 import { Injectable } from '@nestjs/common'
-import { type Observable, from, map } from 'rxjs'
 import { type FindOptionsWhere, Repository as TypeOrmRepository } from 'typeorm'
 
 import { type Entity, Repository } from '@/domain/base'
 
 @Injectable()
 export class PgRepository<T extends Entity> extends Repository<T> {
-  private readonly repository: TypeOrmRepository<T>
+  protected readonly repository: TypeOrmRepository<T>
 
   constructor(repository: TypeOrmRepository<T>) {
     super()
     this.repository = repository
   }
 
-  public create(data: T): Observable<T> {
-    const promise = this.repository.save(data)
-    return from(promise)
+  async create(data: T): Promise<T> {
+    return await this.repository.save(data)
   }
 
-  public getOne(filter: Partial<T>): Observable<T> {
+  async getOne(filter: Partial<T>): Promise<T> {
     const where = filter as FindOptionsWhere<T>
-    const promise = this.repository.findOne({ where })
-    return from(promise)
+    return await this.repository.findOne({ where })
   }
 
-  public getMany(filter: Partial<T>): Observable<T[]> {
+  async getMany(filter: Partial<T>): Promise<T[]> {
     const where = filter as FindOptionsWhere<T>
-    const promise = this.repository.find({ where })
-    return from(promise)
+    return await this.repository.find({ where })
   }
 
-  public delete(filter: Partial<T>): Observable<number> {
+  async delete(filter: Partial<T>): Promise<number> {
     const options = filter as FindOptionsWhere<T>
-    const promise = this.repository.delete(options)
-    return from(promise).pipe(map((rows) => rows.affected))
+    const { affected } = await this.repository.delete(options)
+    return affected
   }
 }
