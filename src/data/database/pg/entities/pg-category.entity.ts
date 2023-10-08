@@ -3,9 +3,10 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
+  Tree,
+  TreeChildren,
+  TreeParent,
   UpdateDateColumn
 } from 'typeorm'
 
@@ -13,6 +14,10 @@ import { TableNames } from '@/data/database/pg/helpers'
 import { type CategoryEntity } from '@/domain/entities'
 
 @Entity({ name: TableNames.category })
+@Tree('closure-table', {
+  ancestorColumnName: () => 'parent_id',
+  descendantColumnName: () => 'child_id'
+})
 export class PgCategoryEntity implements CategoryEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -26,11 +31,11 @@ export class PgCategoryEntity implements CategoryEntity {
   @Column()
   description?: string
 
-  @ManyToOne(() => PgCategoryEntity, (category) => category.children)
+  @TreeParent()
   @JoinColumn({ name: 'parent_id' })
   parent?: PgCategoryEntity
 
-  @OneToMany(() => PgCategoryEntity, (category) => category.parent)
+  @TreeChildren()
   children: PgCategoryEntity[]
 
   @Column({ name: 'is_active' })
