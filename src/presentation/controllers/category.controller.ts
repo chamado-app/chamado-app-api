@@ -1,12 +1,29 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post
+} from '@nestjs/common'
 
-import { CategoryShow } from '@/domain/resources'
+import { CategoriesList, CategoryShow } from '@/domain/resources'
 import { CreateCategoryDto } from '@/shared/dtos'
-import { CreateCategoryUsecase } from '@/usecases'
+import { CreateCategoryUsecase, ListCategoriesUsecase } from '@/usecases'
 
 @Controller('/categories')
 export class CategoryController {
-  constructor(private readonly createCategoryUsecase: CreateCategoryUsecase) {}
+  constructor(
+    private readonly listCategoriesUsecase: ListCategoriesUsecase,
+    private readonly createCategoryUsecase: CreateCategoryUsecase
+  ) {}
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async list(): Promise<CategoriesList> {
+    const categories = await this.listCategoriesUsecase.execute()
+    return CategoriesList.mapTo(categories)
+  }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)

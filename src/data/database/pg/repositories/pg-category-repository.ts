@@ -4,6 +4,7 @@ import { Repository } from 'typeorm'
 import { PgRepository } from './pg-repository'
 
 import { PgCategoryEntity } from '@/data/database/pg/entities'
+import { type GetManyOptions } from '@/domain/base'
 import { type CategoryEntity } from '@/domain/entities'
 import { type CategoryRepository } from '@/domain/repositories'
 
@@ -32,5 +33,11 @@ export class PgCategoryRepository
       )
 
     return await queryBuilder.getCount()
+  }
+
+  async getMany(
+    options?: GetManyOptions<CategoryEntity>
+  ): Promise<CategoryEntity[]> {
+    return await super.getMany(options)
   }
 }
