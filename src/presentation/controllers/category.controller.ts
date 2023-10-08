@@ -11,7 +11,7 @@ import { CategoriesList, CategoryShow } from '@/domain/resources'
 import { CreateCategoryDto } from '@/shared/dtos'
 import { CreateCategoryUsecase, ListCategoriesUsecase } from '@/usecases'
 
-@Controller('/categories')
+@Controller('categories')
 export class CategoryController {
   constructor(
     private readonly listCategoriesUsecase: ListCategoriesUsecase,

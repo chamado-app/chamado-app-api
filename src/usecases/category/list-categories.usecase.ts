@@ -6,10 +6,17 @@ export class ListCategoriesUsecase implements Usecase<CategoryEntity[]> {
   constructor(private readonly repository: CategoryRepository) {}
 
   async execute(): Promise<CategoryEntity[]> {
-    return await this.repository.getMany({
-      filter: { isActive: true },
-      fields: ['id', 'name', 'description', 'parent'],
-      orderBy: { name: 'ASC' }
-    })
+    const categories = await this.repository.getMany()
+
+    return this.sortCategories(categories)
+  }
+
+  private sortCategories(categories: CategoryEntity[]): CategoryEntity[] {
+    return categories
+      .map((category) => ({
+        ...category,
+        children: this.sortCategories(category.children)
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name))
   }
 }
