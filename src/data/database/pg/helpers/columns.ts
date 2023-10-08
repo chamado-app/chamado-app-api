@@ -23,15 +23,23 @@ export const updatedAtField = (): TableColumnOptions => ({
   onUpdate: 'CURRENT_TIMESTAMP(6)'
 })
 
-export const timestampFields = (): TableColumnOptions[] => [
+export const deletedAtField = (): TableColumnOptions => ({
+  name: 'deleted_at',
+  type: 'timestamp',
+  isNullable: true
+})
+
+export const timestampFields = (softDeletes = true): TableColumnOptions[] => [
   createdAtField(),
-  updatedAtField()
+  updatedAtField(),
+  ...(softDeletes ? [deletedAtField()] : [])
 ]
 
 export const makeEntityColumns = (
-  columns: TableColumnOptions[]
+  columns: TableColumnOptions[],
+  softDeletes = true
 ): TableColumnOptions[] => [
   primaryGeneratedColumnUuid(),
   ...columns,
-  ...timestampFields()
+  ...timestampFields(softDeletes)
 ]
