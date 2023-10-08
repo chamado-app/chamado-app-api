@@ -6,6 +6,7 @@ import { CategoryController } from '@/presentation/controllers'
 import {
   makeCategoryRepository,
   makeCreateCategoryUsecaseProvider,
+  makeDeleteCategoryUsecaseProvider,
   makeListCategoriesUsecaseProvider,
   makeSlugifier,
   makeUpdateCategoryUsecaseProvider
@@ -18,7 +19,8 @@ export const makeCategoryModuleMetadata = (): ModuleMetadata => {
     makeSlugifier(),
     makeCreateCategoryUsecaseProvider(),
     makeUpdateCategoryUsecaseProvider(),
-    makeListCategoriesUsecaseProvider()
+    makeListCategoriesUsecaseProvider(),
+    makeDeleteCategoryUsecaseProvider()
   ]
   const imports = [database]
   const controllers = [CategoryController]

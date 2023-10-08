@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -14,6 +15,7 @@ import { CategoriesList, CategoryShow } from '@/domain/resources'
 import { CreateCategoryDto } from '@/shared/dtos'
 import {
   CreateCategoryUsecase,
+  DeleteCategoryUsecase,
   ListCategoriesUsecase,
   UpdateCategoryUsecase
 } from '@/usecases'
@@ -21,9 +23,10 @@ import {
 @Controller('categories')
 export class CategoryController {
   constructor(
-    private readonly listCategoriesUsecase: ListCategoriesUsecase,
     private readonly createCategoryUsecase: CreateCategoryUsecase,
-    private readonly updateCategoryUsecase: UpdateCategoryUsecase
+    private readonly updateCategoryUsecase: UpdateCategoryUsecase,
+    private readonly listCategoriesUsecase: ListCategoriesUsecase,
+    private readonly deleteCategoryUsecase: DeleteCategoryUsecase
   ) {}
 
   @Post()
@@ -48,5 +51,11 @@ export class CategoryController {
   async list(): Promise<CategoriesList> {
     const categories = await this.listCategoriesUsecase.execute()
     return CategoriesList.mapTo(categories)
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async destroy(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    return this.deleteCategoryUsecase.execute(id)
   }
 }
