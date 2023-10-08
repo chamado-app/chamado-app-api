@@ -18,17 +18,15 @@ export class PgCategoryRepository
     super(dataSource.getTreeRepository(PgCategoryEntity))
   }
 
-  async getCountBySlug(slug: string): Promise<number> {
+  async getCountBySlug(slug: string, id?: string): Promise<number> {
     const table = this.repository.metadata.tableName
     const query = this.repository
       .createQueryBuilder(table)
       .where(`categories.slug ~ '^${slug}(-\\d+)?$'`)
 
-    return await query.getCount()
-  }
+    if (id) query.andWhere('categories.id <> :id', { id })
 
-  async create(data: PgCategoryEntity): Promise<PgCategoryEntity> {
-    return await this.repository.save(data)
+    return await query.getCount()
   }
 
   async getMany(

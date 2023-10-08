@@ -7,7 +7,8 @@ import {
   makeCategoryRepository,
   makeCreateCategoryUsecaseProvider,
   makeListCategoriesUsecaseProvider,
-  makeSlugifier
+  makeSlugifier,
+  makeUpdateCategoryUsecaseProvider
 } from '@/presentation/factories'
 
 export const makeCategoryModuleMetadata = (): ModuleMetadata => {
@@ -16,6 +17,7 @@ export const makeCategoryModuleMetadata = (): ModuleMetadata => {
     makeCategoryRepository(),
     makeSlugifier(),
     makeCreateCategoryUsecaseProvider(),
+    makeUpdateCategoryUsecaseProvider(),
     makeListCategoriesUsecaseProvider()
   ]
   const imports = [database]

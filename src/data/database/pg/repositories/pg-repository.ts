@@ -16,6 +16,10 @@ export class PgRepository<T extends Entity> extends Repository<T> {
     return await this.repository.save(data)
   }
 
+  async update(id: string, data: T): Promise<T> {
+    return await this.repository.save({ ...data, id })
+  }
+
   async getOne(filter: Partial<T>): Promise<T> {
     const where = filter as FindOptionsWhere<T>
     return await this.repository.findOne({ where })

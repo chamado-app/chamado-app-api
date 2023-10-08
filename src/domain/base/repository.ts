@@ -10,7 +10,7 @@ export interface GetManyOptions<T> {
 
 export abstract class Repository<T extends Entity> {
   abstract create(data: T): Promise<T>
-  // abstract update(id: number, data: T): Promise<T>
+  abstract update(id: string, data: T): Promise<T>
   // abstract patch(id: number, data: Partial<T>): Promise<T>
   // abstract getById(id: number): Promise<T>
   // abstract getAll(): Promise<T[]>
