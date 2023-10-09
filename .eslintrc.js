@@ -24,6 +24,7 @@ module.exports = {
     '@typescript-eslint/promise-function-async': 'off',
     '@typescript-eslint/prefer-nullish-coalescing': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/return-await': 'off',
 
     'import/order': [
       'error',

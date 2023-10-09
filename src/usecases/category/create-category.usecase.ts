@@ -13,17 +13,25 @@ export class CreateCategoryUsecase implements Usecase<CategoryEntity> {
   ) {}
 
   async execute(data: CreateCategoryDto): Promise<CategoryEntity> {
+    const payload = await this.preparePayload(data)
+    return this.repository.create(payload)
+  }
+
+  private async preparePayload(
+    data: CreateCategoryDto
+  ): Promise<CategoryEntity> {
     const payload = this.mapper.mapFrom(data)
-    payload.slug = this.slugifier.slugify(payload.name)
+    const slug = this.slugifier.slugify(payload.name)
+    const uniqueSlug = await this.getUniqueSlug(slug)
+    return { ...payload, slug: uniqueSlug }
+  }
 
-    const categoriesWithSameSlug = await this.repository.getSlugSequence({
-      slug: payload.slug
-    })
+  private async getUniqueSlug(slug: string, attempt = 0): Promise<string> {
+    const uniqueSlug = attempt === 0 ? slug : `${slug}-${attempt}`
+    const existingCategory = await this.repository.getCountBySlug(uniqueSlug)
 
-    if (categoriesWithSameSlug) {
-      payload.slug = `${payload.slug}-${categoriesWithSameSlug + 1}`
-    }
-
-    return await this.repository.create(payload)
+    return !existingCategory
+      ? uniqueSlug
+      : this.getUniqueSlug(slug, attempt + 1)
   }
 }

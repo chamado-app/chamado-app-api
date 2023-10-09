@@ -27,10 +27,6 @@ export class PgTokenEntity implements TokenEntity {
   @JoinColumn({ name: 'user_id' })
   user: PgUserEntity
 
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    name: 'created_at'
-  })
+  @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date
 }
