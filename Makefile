@@ -2,7 +2,7 @@
 typeorm = yarn typeorm
 typeorm-extension = yarn typeorm:extension
 # typeorm config file path
-typeorm-config = -d ./dist/infra/type-orm-module/type-orm.config.js
+typeorm-config = -d ./dist/infra/modules/type-orm/type-orm.config.ts
 # command to run migrations
 typeorm-migration-run = ${typeorm} migration:run ${typeorm-config}
 # command to run inside docker composer application container
