@@ -1,6 +1,6 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
 
-import { AccessTokenShow } from '@/domain/resources'
+import { AccessTokenShow } from '@/presentation/resources'
 import { AuthenticateDto } from '@/shared/dtos'
 import { AuthenticateUsecase } from '@/usecases'
 

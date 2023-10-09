@@ -11,7 +11,7 @@ import {
   Put
 } from '@nestjs/common'
 
-import { CategoriesList, CategoryShow } from '@/domain/resources'
+import { CategoriesList, CategoryShow } from '@/presentation/resources'
 import { CreateCategoryDto } from '@/shared/dtos'
 import {
   CreateCategoryUsecase,
