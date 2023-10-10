@@ -3,19 +3,17 @@ import { NotFoundException } from '@nestjs/common'
 import { type Usecase } from '@/domain/base'
 import { type Slugifier } from '@/domain/contracts'
 import { type CategoryEntity } from '@/domain/entities'
-import { UpdateCategoryMapper } from '@/domain/mappers'
 import { type CategoryRepository } from '@/domain/repositories'
-import { type UpdateCategoryDto } from '@/shared/dtos'
 
 export class UpdateCategoryUsecase implements Usecase<CategoryEntity> {
   constructor(
     private readonly repository: CategoryRepository,
-    private readonly slugifier: Slugifier,
-    private readonly mapper = new UpdateCategoryMapper()
+    private readonly slugifier: Slugifier
   ) {}
 
-  async execute(id: string, data: UpdateCategoryDto): Promise<CategoryEntity> {
+  async execute(id: string, data: CategoryEntity): Promise<CategoryEntity> {
     const existingCategory = await this.repository.getOne({ id })
+
     if (!existingCategory) throw new NotFoundException()
 
     const payload = await this.prepareCategoryToUpdate(existingCategory, data)
@@ -24,18 +22,19 @@ export class UpdateCategoryUsecase implements Usecase<CategoryEntity> {
 
   private async prepareCategoryToUpdate(
     existingCategory: CategoryEntity,
-    data: UpdateCategoryDto
+    updatedCategory: CategoryEntity
   ): Promise<CategoryEntity> {
-    const payload = this.mapper.mapFrom(data)
+    const { name: currentName } = existingCategory
+    const { name: updatedName } = updatedCategory
 
-    if (payload.name && payload.name !== existingCategory.name) {
-      const slug = this.slugifier.slugify(payload.name)
-      payload.slug = await this.getUniqueSlug(slug, existingCategory.id)
+    if (updatedName && updatedName !== currentName) {
+      const slug = this.slugifier.slugify(updatedName)
+      updatedCategory.slug = await this.getUniqueSlug(slug, existingCategory.id)
     } else {
-      payload.slug = existingCategory.slug
+      updatedCategory.slug = existingCategory.slug
     }
 
-    return { ...existingCategory, ...payload }
+    return { ...existingCategory, ...updatedCategory }
   }
 
   private async getUniqueSlug(slug: string, id: string): Promise<string> {

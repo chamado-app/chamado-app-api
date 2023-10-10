@@ -11,7 +11,16 @@ import {
   Put
 } from '@nestjs/common'
 
-import { CategoriesList, CategoryShow } from '@/domain/resources'
+import {
+  type ListCategoriesDto,
+  type ShowCategoryDto
+} from '@/presentation/resources'
+import {
+  CreateCategoryTransformer,
+  ListCategoriesTransformer,
+  ShowCategoryTransformer,
+  UpdateCategoryTransformer
+} from '@/presentation/transformers'
 import { CreateCategoryDto } from '@/shared/dtos'
 import {
   CreateCategoryUsecase,
@@ -31,26 +40,30 @@ export class CategoryController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() data: CreateCategoryDto): Promise<CategoryShow> {
+  async create(@Body() dto: CreateCategoryDto): Promise<ShowCategoryDto> {
+    const data = CreateCategoryTransformer.mapFrom(dto)
     const createdCategory = await this.createCategoryUsecase.execute(data)
-    return CategoryShow.mapTo(createdCategory)
+
+    return ShowCategoryTransformer.mapTo(createdCategory)
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() data: CreateCategoryDto
-  ): Promise<CategoryShow> {
+    @Body() dto: CreateCategoryDto
+  ): Promise<ShowCategoryDto> {
+    const data = UpdateCategoryTransformer.mapFrom(dto)
     const updatedCategory = await this.updateCategoryUsecase.execute(id, data)
-    return CategoryShow.mapTo(updatedCategory)
+
+    return ShowCategoryTransformer.mapTo(updatedCategory)
   }
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  async list(): Promise<CategoriesList> {
+  async list(): Promise<ListCategoriesDto> {
     const categories = await this.listCategoriesUsecase.execute()
-    return CategoriesList.mapTo(categories)
+    return ListCategoriesTransformer.mapTo(categories)
   }
 
   @Delete(':id')

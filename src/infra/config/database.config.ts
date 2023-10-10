@@ -1,6 +1,6 @@
 import { join } from 'path'
 
-import { app } from './app'
+import { app } from './app.config'
 
 export const database = {
   type: 'postgres' as const,

@@ -3,21 +3,18 @@ import { UnauthorizedException } from '@nestjs/common'
 import { type Usecase } from '@/domain/base'
 import type { HashComparer, JwtGenerator } from '@/domain/contracts'
 import { TokenEntity, TokenType, type UserEntity } from '@/domain/entities'
-import { AuthenticateMapper } from '@/domain/mappers'
 import type { TokenRepository, UserRepository } from '@/domain/repositories'
-import { type AuthenticateDto } from '@/shared/dtos'
+import { type AuthenticateInputDto } from '@/presentation/resources'
 
 export class AuthenticateUsecase implements Usecase<TokenEntity> {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly tokenRepository: TokenRepository,
     private readonly hashComparer: HashComparer,
-    private readonly jwtGenerator: JwtGenerator,
-    private readonly authenticateMapper = new AuthenticateMapper()
+    private readonly jwtGenerator: JwtGenerator
   ) {}
 
-  async execute(credentials: AuthenticateDto): Promise<TokenEntity> {
-    const data = this.authenticateMapper.mapFrom(credentials)
+  async execute(data: AuthenticateInputDto): Promise<TokenEntity> {
     const user = await this.userRepository.getOne({
       email: data.email,
       isActive: true

@@ -1,29 +1,24 @@
 import { type Usecase } from '@/domain/base'
 import { type Slugifier } from '@/domain/contracts'
 import { type CategoryEntity } from '@/domain/entities'
-import { CreateCategoryMapper } from '@/domain/mappers'
 import { type CategoryRepository } from '@/domain/repositories'
-import { type CreateCategoryDto } from '@/shared/dtos'
 
 export class CreateCategoryUsecase implements Usecase<CategoryEntity> {
   constructor(
     private readonly repository: CategoryRepository,
-    private readonly slugifier: Slugifier,
-    private readonly mapper = new CreateCategoryMapper()
+    private readonly slugifier: Slugifier
   ) {}
 
-  async execute(data: CreateCategoryDto): Promise<CategoryEntity> {
+  async execute(data: CategoryEntity): Promise<CategoryEntity> {
     const payload = await this.preparePayload(data)
     return this.repository.create(payload)
   }
 
-  private async preparePayload(
-    data: CreateCategoryDto
-  ): Promise<CategoryEntity> {
-    const payload = this.mapper.mapFrom(data)
-    const slug = this.slugifier.slugify(payload.name)
+  private async preparePayload(data: CategoryEntity): Promise<CategoryEntity> {
+    const slug = this.slugifier.slugify(data.name)
     const uniqueSlug = await this.getUniqueSlug(slug)
-    return { ...payload, slug: uniqueSlug }
+
+    return { ...data, slug: uniqueSlug }
   }
 
   private async getUniqueSlug(slug: string, attempt = 0): Promise<string> {
