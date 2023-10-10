@@ -2,7 +2,7 @@ import { type Provider } from '@nestjs/common'
 
 import { Slugifier } from '@/domain/contracts'
 import { CategoryRepository } from '@/domain/repositories'
-import { UpdateCategoryUsecase } from '@/usecases'
+import { UpdateCategoryUsecase } from '@/domain/usecases'
 
 export const makeUpdateCategoryUsecase = (
   repository: CategoryRepository,

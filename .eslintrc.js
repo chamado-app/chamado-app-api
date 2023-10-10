@@ -25,10 +25,7 @@ module.exports = {
     '@typescript-eslint/prefer-nullish-coalescing': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/return-await': 'off',
-    '@typescript-eslint/no-extraneous-class': [
-      'error',
-      { allowStaticOnly: true }
-    ],
+    '@typescript-eslint/no-extraneous-class': 'off',
 
     'import/order': [
       'error',

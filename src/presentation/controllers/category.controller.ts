@@ -12,6 +12,12 @@ import {
 } from '@nestjs/common'
 
 import {
+  CreateCategoryUsecase,
+  DeleteCategoryUsecase,
+  ListCategoriesUsecase,
+  UpdateCategoryUsecase
+} from '@/domain/usecases'
+import {
   type ListCategoriesDto,
   type ShowCategoryDto
 } from '@/presentation/resources'
@@ -25,12 +31,6 @@ import {
   CreateCategoryValidated,
   UpdateCategoryValidated
 } from '@/presentation/validation'
-import {
-  CreateCategoryUsecase,
-  DeleteCategoryUsecase,
-  ListCategoriesUsecase,
-  UpdateCategoryUsecase
-} from '@/usecases'
 
 @Controller('categories')
 export class CategoryController {

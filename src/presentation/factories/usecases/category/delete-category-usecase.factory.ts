@@ -1,7 +1,7 @@
 import { type Provider } from '@nestjs/common'
 
 import { CategoryRepository } from '@/domain/repositories'
-import { DeleteCategoryUsecase } from '@/usecases'
+import { DeleteCategoryUsecase } from '@/domain/usecases'
 
 export const makeDeleteCategoryUsecase = (
   repository: CategoryRepository

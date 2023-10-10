@@ -2,7 +2,7 @@ import { type Provider } from '@nestjs/common'
 
 import { HashComparer, JwtGenerator } from '@/domain/contracts'
 import { TokenRepository, UserRepository } from '@/domain/repositories'
-import { AuthenticateUsecase } from '@/usecases'
+import { AuthenticateUsecase } from '@/domain/usecases'
 
 export const makeAuthenticateUsecase = (
   userRepository: UserRepository,

@@ -1,12 +1,12 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
 
+import { AuthenticateUsecase } from '@/domain/usecases'
 import { type AuthenticateOutputDto } from '@/presentation/resources'
 import {
   AuthenticateInputTransformer,
   AuthenticateOutputTransformer
 } from '@/presentation/transformers'
 import { AuthenticateValidated } from '@/presentation/validation'
-import { AuthenticateUsecase } from '@/usecases'
 
 @Controller('/auth')
 export class AuthController {
