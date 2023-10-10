@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 
-import { makeAuthModuleMetadata } from '@/presentation/factories'
+import { makeAuthModuleMetadata } from '@/main/factories'
 
 @Module(makeAuthModuleMetadata())
 export class AuthModule {}

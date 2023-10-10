@@ -2,7 +2,6 @@ import { type ModuleMetadata, type Provider } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { PgCategoryEntity } from '@/data/database/pg/entities'
-import { CategoryController } from '@/presentation/controllers'
 import {
   makeCategoryRepository,
   makeCreateCategoryUsecaseProvider,
@@ -10,7 +9,8 @@ import {
   makeListCategoriesUsecaseProvider,
   makeSlugifier,
   makeUpdateCategoryUsecaseProvider
-} from '@/presentation/factories'
+} from '@/main/factories'
+import { CategoryController } from '@/presentation/controllers'
 
 export const makeCategoryModuleMetadata = (): ModuleMetadata => {
   const database = TypeOrmModule.forFeature([PgCategoryEntity])

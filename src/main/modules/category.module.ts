@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 
-import { makeCategoryModuleMetadata } from '@/presentation/factories'
+import { makeCategoryModuleMetadata } from '@/main/factories'
 
 @Module(makeCategoryModuleMetadata())
 export class CategoryModule {}

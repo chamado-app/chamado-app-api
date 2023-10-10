@@ -2,7 +2,7 @@ import { type ModuleMetadata, type Provider } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { PgUserEntity } from '@/data/database/pg/entities'
-import { makeUserRepository } from '@/presentation/factories'
+import { makeUserRepository } from '@/main/factories'
 
 export const makeUsersModuleMetadata = (): ModuleMetadata => {
   const database = TypeOrmModule.forFeature([PgUserEntity])

@@ -3,7 +3,7 @@ import { type Seeder, type SeederFactoryManager } from 'typeorm-extension'
 
 import { PgUserEntity } from '../entities'
 
-import { makePureHashGeneratorFactory } from '@/presentation/factories/adapters'
+import { makePureHashGeneratorFactory } from '@/main/factories/adapters'
 
 const hasher = makePureHashGeneratorFactory()
 export default class UsersSeed implements Seeder {

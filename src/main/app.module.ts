@@ -5,7 +5,7 @@ import {
   JwtConfigModule,
   TypeOrmConfigModule
 } from '@/infra'
-import { AuthModule, CategoryModule } from '@/presentation/modules'
+import { AuthModule, CategoryModule } from '@/main/modules'
 
 @Module({
   imports: [
