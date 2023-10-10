@@ -5,7 +5,7 @@ import {
   AuthenticateInputTransformer,
   AuthenticateOutputTransformer
 } from '@/presentation/transformers'
-import { AuthenticateDto } from '@/shared/dtos'
+import { AuthenticateValidated } from '@/presentation/validation'
 import { AuthenticateUsecase } from '@/usecases'
 
 @Controller('/auth')
@@ -15,7 +15,7 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async authenticate(
-    @Body() dto: AuthenticateDto
+    @Body() dto: AuthenticateValidated
   ): Promise<AuthenticateOutputDto> {
     const data = AuthenticateInputTransformer.mapFrom(dto)
     const token = await this.authenticateUsecase.execute(data)

@@ -9,7 +9,7 @@ import {
 
 import { type CategoryEntity } from '@/domain/entities'
 
-export class CreateCategoryDto {
+export class CreateCategoryValidated {
   @IsNotEmpty({ message: 'O nome não pode estar vazio' })
   @IsString({ message: 'O nome deve ser uma string' })
   @Length(3, 60, { message: 'O nome deve ter de 3 a 60 caracteres' })

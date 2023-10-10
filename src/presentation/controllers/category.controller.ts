@@ -21,7 +21,10 @@ import {
   ShowCategoryTransformer,
   UpdateCategoryTransformer
 } from '@/presentation/transformers'
-import { CreateCategoryDto } from '@/shared/dtos'
+import {
+  CreateCategoryValidated,
+  UpdateCategoryValidated
+} from '@/presentation/validation'
 import {
   CreateCategoryUsecase,
   DeleteCategoryUsecase,
@@ -40,7 +43,7 @@ export class CategoryController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() dto: CreateCategoryDto): Promise<ShowCategoryDto> {
+  async create(@Body() dto: CreateCategoryValidated): Promise<ShowCategoryDto> {
     const data = CreateCategoryTransformer.mapFrom(dto)
     const createdCategory = await this.createCategoryUsecase.execute(data)
 
@@ -51,7 +54,7 @@ export class CategoryController {
   @HttpCode(HttpStatus.OK)
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() dto: CreateCategoryDto
+    @Body() dto: UpdateCategoryValidated
   ): Promise<ShowCategoryDto> {
     const data = UpdateCategoryTransformer.mapFrom(dto)
     const updatedCategory = await this.updateCategoryUsecase.execute(id, data)

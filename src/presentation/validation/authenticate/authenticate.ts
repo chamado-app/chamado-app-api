@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty } from 'class-validator'
 
-export class AuthenticateDto {
+export class AuthenticateValidated {
   @IsEmail({}, { message: 'Informe um e-mail válido' })
   email: string
 

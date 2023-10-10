@@ -1,8 +1,8 @@
 import { CategoryEntity } from '@/domain/entities'
-import { type CreateCategoryDto } from '@/shared/dtos'
+import { type CreateCategoryValidated } from '@/presentation/validation'
 
 export class CreateCategoryTransformer {
-  static mapFrom(data: CreateCategoryDto): CategoryEntity {
+  static mapFrom(data: CreateCategoryValidated): CategoryEntity {
     const category = new CategoryEntity()
 
     category.name = data.name

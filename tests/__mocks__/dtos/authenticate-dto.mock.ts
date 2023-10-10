@@ -1,8 +1,8 @@
 import { faker } from '@tests/__helpers__'
 
-import { type AuthenticateDto } from '@/shared/dtos'
+import { type AuthenticateValidated } from '@/presentation/validation'
 
-export const mockAuthenticateDto = (): AuthenticateDto => ({
+export const mockAuthenticateValidated = (): AuthenticateValidated => ({
   email: faker.internet.email(),
   password: faker.internet.password()
 })

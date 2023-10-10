@@ -1,8 +1,8 @@
 import { AuthenticateInputDto } from '@/presentation/resources'
-import { type AuthenticateDto } from '@/shared/dtos'
+import { type AuthenticateValidated } from '@/presentation/validation'
 
 export class AuthenticateInputTransformer {
-  static mapFrom(data: AuthenticateDto): AuthenticateInputDto {
+  static mapFrom(data: AuthenticateValidated): AuthenticateInputDto {
     return new AuthenticateInputDto(data.email, data.password)
   }
 }

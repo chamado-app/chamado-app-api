@@ -38,7 +38,7 @@ export default defineConfig({
       exclude: [
         '**/*.{d,spec,config}.ts',
         'src/main/**/*.*',
-        'src/shared/dtos/**/*.*',
+        'src/presentation/validation/**/*.*',
         'src/domain/{base,contracts,entities,repositories}/**/*.*',
         'src/infra/config/*.*'
       ]
