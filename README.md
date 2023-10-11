@@ -1,14 +1,13 @@
-# 🛸 Chamado.app [Web Service]
+# 🛸 Chamado.app API
 
 <!--toc:start-->
-
-- [🛸 Chamado.app [Web Service]](#-chamadoapp-web-service)
+- [🛸 Chamado.app API](#-chamadoapp-api)
   - [📖 About](#-about)
   - [📦 Prerequisites](#-prerequisites)
   - [🛬 Cloning](#-cloning)
   - [🏃 Running](#-running)
   - [🧪 Testing](#-testing)
-  <!--toc:end-->
+<!--toc:end-->
 
 ## 📖 About
 
@@ -26,13 +25,13 @@ course.
 ## 🛬 Cloning
 
 ```sh
-git clone git@github.com:chamado-app/web-service.git
+git clone git@github.com:chamado-app/chamado-app-api.git
 # or
-git clone https://github.com/chamado-app/web-service.git
+git clone https://github.com/chamado-app/chamado-app-api.git
 ```
 
 ```sh
-cd web-service
+cd chamado-app-api
 ```
 
 ## 🏃 Running
