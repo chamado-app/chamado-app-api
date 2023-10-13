@@ -5,19 +5,18 @@ import {
   UnauthorizedException
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { JwtService } from '@nestjs/jwt'
 import { type Request } from 'express'
 
+import { JwtVerifier } from '@/domain/contracts'
 import { Role, type RoleEntity, TokenType } from '@/domain/entities'
 import { UserRepository } from '@/domain/repositories'
-import { config } from '@/infra'
 import { ROLES_KEY } from '@/presentation/decorators'
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-    private readonly jwtService: JwtService,
+    private readonly jwtVerifier: JwtVerifier,
     private readonly userRepository: UserRepository
   ) {}
 
@@ -34,14 +33,10 @@ export class AuthGuard implements CanActivate {
     if (!token) throw new UnauthorizedException()
 
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: config.app.jwtSecret
-      })
-
+      const payload = await this.jwtVerifier.verify(token)
       if (!payload) throw new UnauthorizedException()
 
       const user = await this.userRepository.getByIdWithRoles(payload.id)
-
       if (!user || !this.isValidUserRoles(requiredRoles, user.roles)) {
         throw new UnauthorizedException()
       }

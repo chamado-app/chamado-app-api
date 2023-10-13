@@ -1,7 +1,12 @@
 import { type Provider } from '@nestjs/common'
 
-import { makeUserRepository } from '../factories/repositories/user-repository.factory'
-
 import { authProvider } from './auth.provider'
 
-export const providers: Provider[] = [authProvider, makeUserRepository()]
+import { makeJwtVerifierFactory } from '@/main/factories/adapters'
+import { makeUserRepository } from '@/main/factories/repositories'
+
+export const providers: Provider[] = [
+  authProvider,
+  makeUserRepository(),
+  makeJwtVerifierFactory()
+]
