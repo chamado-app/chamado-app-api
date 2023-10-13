@@ -2,7 +2,7 @@
 typeorm = yarn typeorm
 typeorm-extension = yarn typeorm:extension
 # typeorm config file path
-typeorm-config = -d ./dist/infra/modules/type-orm/type-orm.config.js
+typeorm-config = -d ./dist/infra/modules/type-orm/cli-integration/datasource.js
 # command to run migrations
 typeorm-migration-run = ${typeorm} migration:run ${typeorm-config}
 # command to run inside docker composer application container
@@ -33,6 +33,6 @@ seed-create:
 	@${typeorm-extension} seed:create -n ./src/data/database/pg/seeds/${name}.seed.ts
 
 seed-run: up
-	${docker-exec} "${typeorm-extension} ${typeorm-config} seed:run"
+	${docker-exec} "${typeorm-extension} ${typeorm-config} seed:run -n SeedRunner"
 
 migration-refresh: up migration-drop migration-run
