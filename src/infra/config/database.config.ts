@@ -15,7 +15,7 @@ export const database = {
     join(__dirname, '../../data/database/pg/entities/*.entity.{t,j}s')
   ],
   migrations: [join(__dirname, '../../data/database/pg/migrations/*.{t,j}s')],
-  seeds: [join(__dirname, '../modules/type-orm/cli-integration/seeds/*.js')],
+  seeds: [join(__dirname, '../../main/database/seeder.js')],
   factories: [join(__dirname, '../../data/database/pg/factories/*.js')],
   autoLoadEntities: true
 }
