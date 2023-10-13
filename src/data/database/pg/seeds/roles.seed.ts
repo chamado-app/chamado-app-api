@@ -4,7 +4,7 @@ import { type Seeder } from 'typeorm-extension'
 import { PgRoleEntity } from '@/data/database/pg/entities'
 import { Role } from '@/domain/entities'
 
-export default class RolesSeed implements Seeder {
+export class RolesSeed implements Seeder {
   async run(dataSource: DataSource): Promise<void> {
     const repository = dataSource.getRepository(PgRoleEntity)
     const roles: Array<Partial<PgRoleEntity>> = [

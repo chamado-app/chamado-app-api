@@ -4,7 +4,7 @@ import { type Seeder, type SeederFactoryManager } from 'typeorm-extension'
 import { PgRoleEntity, PgUserEntity } from '@/data/database/pg/entities'
 import { Role } from '@/domain/entities'
 
-export default class UsersSeed implements Seeder {
+export class UsersSeed implements Seeder {
   async run(
     dataSource: DataSource,
     factoryManager: SeederFactoryManager

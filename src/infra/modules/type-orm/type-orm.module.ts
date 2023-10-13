@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
-import { dataSourceOptions } from './type-orm.config'
+import { typeOrmDataSource } from './type-orm.config'
 
 import { config } from '@/infra'
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      ...dataSourceOptions,
+      ...typeOrmDataSource,
       autoLoadEntities: config.database.autoLoadEntities
     })
   ]

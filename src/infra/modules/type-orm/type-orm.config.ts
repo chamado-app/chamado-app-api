@@ -1,9 +1,8 @@
-import { DataSource, type DataSourceOptions } from 'typeorm'
-import { type SeederOptions } from 'typeorm-extension'
+import { type DataSourceOptions } from 'typeorm'
 
 import { config } from '@/infra'
 
-export const dataSourceOptions: DataSourceOptions & SeederOptions = {
+export const typeOrmDataSource: DataSourceOptions = {
   type: 'postgres',
   host: config.database.host,
   port: config.database.port,
@@ -11,10 +10,5 @@ export const dataSourceOptions: DataSourceOptions & SeederOptions = {
   password: config.database.password,
   database: config.database.database,
   synchronize: config.database.synchronize,
-  entities: config.database.entities,
-  migrations: config.database.migrations,
-  seeds: config.database.seeds,
-  factories: config.database.factories
+  entities: config.database.entities
 }
-
-export default new DataSource(dataSourceOptions)
