@@ -1,3 +1,4 @@
+import { type RoleEntity } from './role.entity'
 import { type TokenEntity } from './token.entity'
 
 import { Entity } from '@/domain/base'
@@ -8,6 +9,7 @@ export class UserEntity extends Entity {
   firstName: string
   lastName: string
   isActive: boolean
+  roles: RoleEntity[]
   tokens?: TokenEntity[]
   createdAt: Date
   updatedAt: Date
