@@ -11,4 +11,5 @@ export class UserEntity extends Entity {
   tokens?: TokenEntity[]
   createdAt: Date
   updatedAt: Date
+  deletedAt: Date
 }

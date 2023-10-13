@@ -9,4 +9,5 @@ export class CategoryEntity extends Entity {
   isActive: boolean
   createdAt: Date
   updatedAt: Date
+  deletedAt: Date
 }
