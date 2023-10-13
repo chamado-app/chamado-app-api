@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common'
 
+import { providers } from './providers'
+
 import {
   EnvironmentConfigModule,
   JwtConfigModule,
@@ -14,6 +16,7 @@ import { AuthModule, CategoryModule } from '@/main/modules'
     TypeOrmConfigModule,
     AuthModule,
     CategoryModule
-  ]
+  ],
+  providers
 })
 export class AppModule {}

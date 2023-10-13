@@ -19,11 +19,15 @@ export class AuthenticateUsecase implements Usecase<TokenEntity> {
       email: data.email,
       isActive: true
     })
-    await this.compare(user)
+
+    await this.compare(data, user)
     return await this.generateToken(user)
   }
 
-  private async compare(data: UserEntity, user?: UserEntity): Promise<void> {
+  private async compare(
+    data: AuthenticateInputDto,
+    user: UserEntity
+  ): Promise<void> {
     if (!user) throw new UnauthorizedException()
     const isValid = await this.hashComparer.compare(
       data.password,
@@ -46,7 +50,7 @@ export class AuthenticateUsecase implements Usecase<TokenEntity> {
     entity.token = token
     entity.user = user
 
-    await this.tokenRepository.delete({ user, type: TokenType.JWT })
+    await this.tokenRepository.delete({ user, type: TokenType.JWT }, true)
     return await this.tokenRepository.create(entity)
   }
 }

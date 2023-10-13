@@ -1,27 +1,13 @@
-import { type Faker } from '@faker-js/faker'
 import { setSeederFactory } from 'typeorm-extension'
 
 import { PgUserEntity } from '../entities'
 
-setSeederFactory(PgUserEntity, (faker: Faker) => {
-  const firstName = faker.person.firstName()
-  const lastName = faker.person.lastName()
-
+setSeederFactory(PgUserEntity, () => {
   return {
-    firstName,
-    lastName,
-    isActive: true,
-    email: faker.internet
-      .email({
-        firstName,
-        lastName,
-        allowSpecialCharacters: false,
-        provider: 'gmail.com'
-      })
-      .toLowerCase(),
-    password: faker.internet.password({
-      length: 8,
-      memorable: true
-    })
+    firstName: 'Chamado.app',
+    lastName: 'Admin',
+    email: 'admin@chamado.app',
+    password: '$2b$10$n6qEASeoEizrPhqXtGBRgu9qGqzCokuWLXkl8wCI6z7dBQ72SKf0K',
+    isActive: true
   }
 })
