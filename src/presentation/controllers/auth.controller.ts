@@ -1,7 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
 
 import { AuthenticateUsecase } from '@/domain/usecases'
-import { Public } from '@/presentation/decorators'
+import { GuestRole } from '@/presentation/decorators'
 import { type AuthenticateOutputDto } from '@/presentation/resources'
 import {
   AuthenticateInputTransformer,
@@ -13,7 +13,7 @@ import { AuthenticateValidated } from '@/presentation/validation'
 export class AuthController {
   constructor(private readonly authenticateUsecase: AuthenticateUsecase) {}
 
-  @Public()
+  @GuestRole()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async authenticate(

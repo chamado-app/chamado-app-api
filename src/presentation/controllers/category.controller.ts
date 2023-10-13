@@ -11,6 +11,8 @@ import {
   Put
 } from '@nestjs/common'
 
+import { AuthenticatedRoles, ManagerRole } from '../decorators'
+
 import {
   CreateCategoryUsecase,
   DeleteCategoryUsecase,
@@ -41,6 +43,7 @@ export class CategoryController {
     private readonly deleteCategoryUsecase: DeleteCategoryUsecase
   ) {}
 
+  @ManagerRole()
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() dto: CreateCategoryValidated): Promise<ShowCategoryDto> {
@@ -50,6 +53,7 @@ export class CategoryController {
     return ShowCategoryTransformer.mapTo(createdCategory)
   }
 
+  @ManagerRole()
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   async update(
@@ -62,6 +66,7 @@ export class CategoryController {
     return ShowCategoryTransformer.mapTo(updatedCategory)
   }
 
+  @AuthenticatedRoles()
   @Get()
   @HttpCode(HttpStatus.OK)
   async list(): Promise<ListCategoriesDto> {
@@ -69,6 +74,7 @@ export class CategoryController {
     return ListCategoriesTransformer.mapTo(categories)
   }
 
+  @ManagerRole()
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async destroy(@Param('id', ParseUUIDPipe) id: string): Promise<void> {

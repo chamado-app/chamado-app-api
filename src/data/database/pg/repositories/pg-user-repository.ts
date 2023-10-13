@@ -17,4 +17,11 @@ export class PgUserRepository
   ) {
     super(repository)
   }
+
+  async getByIdWithRoles(id: UserEntity['id']): Promise<UserEntity> {
+    return this.repository.findOne({
+      where: { id, isActive: true },
+      relations: { roles: true }
+    })
+  }
 }
