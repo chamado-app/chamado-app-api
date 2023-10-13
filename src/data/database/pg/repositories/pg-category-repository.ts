@@ -22,6 +22,7 @@ export class PgCategoryRepository
     const table = this.repository.metadata.tableName
     const query = this.repository
       .createQueryBuilder(table)
+      .withDeleted()
       .where(`categories.slug ~ '^${slug}(-\\d+)?$'`)
 
     if (id) query.andWhere('categories.id <> :id', { id })
