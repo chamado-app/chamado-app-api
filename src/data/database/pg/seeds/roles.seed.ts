@@ -13,7 +13,8 @@ export default class RolesSeed implements Seeder {
       {
         name: Role.MANAGER,
         description: 'Gerente de TI e administrador do sistema'
-      }
+      },
+      { name: Role.GUEST, description: 'Usuário não logado no sistema' }
     ]
 
     await repository.save(roles)

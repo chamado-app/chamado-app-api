@@ -5,7 +5,8 @@ import { Entity } from '@/domain/base'
 export enum Role {
   MANAGER = 'manager',
   TECHNICIAN = 'technician',
-  USER = 'user'
+  USER = 'user',
+  GUEST = 'guest'
 }
 
 export class RoleEntity extends Entity {
