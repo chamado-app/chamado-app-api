@@ -11,14 +11,13 @@ import {
   Put
 } from '@nestjs/common'
 
-import { AuthenticatedRoles, ManagerRole } from '../decorators'
-
 import {
   CreateCategoryUsecase,
   DeleteCategoryUsecase,
   ListCategoriesUsecase,
   UpdateCategoryUsecase
 } from '@/domain/usecases'
+import { AuthenticatedRoles, ManagerRole } from '@/presentation/decorators'
 import {
   type ListCategoriesDto,
   type ShowCategoryDto
