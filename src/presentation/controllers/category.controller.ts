@@ -45,29 +45,27 @@ export class CategoryController {
   @ManagerRole()
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() dto: CreateCategoryValidated): Promise<ShowCategoryDto> {
-    const data = CreateCategoryTransformer.mapFrom(dto)
-    const createdCategory = await this.createCategoryUsecase.execute(data)
-
+  async create(
+    @Body() data: CreateCategoryValidated
+  ): Promise<ShowCategoryDto> {
+    const payload = CreateCategoryTransformer.mapFrom(data)
+    const createdCategory = await this.createCategoryUsecase.execute(payload)
     return ShowCategoryTransformer.mapTo(createdCategory)
   }
 
   @ManagerRole()
   @Put(':id')
-  @HttpCode(HttpStatus.OK)
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() dto: UpdateCategoryValidated
+    @Body() data: UpdateCategoryValidated
   ): Promise<ShowCategoryDto> {
-    const data = UpdateCategoryTransformer.mapFrom(dto)
-    const updatedCategory = await this.updateCategoryUsecase.execute(id, data)
-
-    return ShowCategoryTransformer.mapTo(updatedCategory)
+    const payload = UpdateCategoryTransformer.mapFrom(data)
+    const category = await this.updateCategoryUsecase.execute(id, payload)
+    return ShowCategoryTransformer.mapTo(category)
   }
 
   @AuthenticatedRoles()
   @Get()
-  @HttpCode(HttpStatus.OK)
   async list(): Promise<ListCategoriesDto> {
     const categories = await this.listCategoriesUsecase.execute()
     return ListCategoriesTransformer.mapTo(categories)
