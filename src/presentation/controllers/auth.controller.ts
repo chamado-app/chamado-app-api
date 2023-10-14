@@ -1,12 +1,25 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req
+} from '@nestjs/common'
 
 import { AuthenticateUsecase } from '@/domain/usecases'
-import { GuestRole } from '@/presentation/decorators'
-import { type AuthenticateOutputDto } from '@/presentation/resources'
+import { AuthenticatedRoles, GuestRole } from '@/presentation/decorators'
+import {
+  type AuthenticateOutputDto,
+  type WhoAmIDto
+} from '@/presentation/resources'
 import {
   AuthenticateInputTransformer,
-  AuthenticateOutputTransformer
+  AuthenticateOutputTransformer,
+  WhoAmITransformer
 } from '@/presentation/transformers'
+import { Request } from '@/presentation/types'
 import { AuthenticateValidated } from '@/presentation/validation'
 
 @Controller('/auth')
@@ -22,5 +35,13 @@ export class AuthController {
     const data = AuthenticateInputTransformer.mapFrom(dto)
     const token = await this.authenticateUsecase.execute(data)
     return AuthenticateOutputTransformer.mapTo(token)
+  }
+
+  @AuthenticatedRoles()
+  @Get('whoami')
+  @HttpCode(HttpStatus.OK)
+  async whoAmI(@Req() request: Request): Promise<WhoAmIDto> {
+    const { user } = request
+    return WhoAmITransformer.mapTo(user)
   }
 }
