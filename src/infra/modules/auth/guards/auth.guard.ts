@@ -1,6 +1,7 @@
 import {
   type CanActivate,
   type ExecutionContext,
+  ForbiddenException,
   Injectable,
   UnauthorizedException
 } from '@nestjs/common'
@@ -29,21 +30,26 @@ export class AuthGuard implements CanActivate {
     if (this.isOnlyGuest(requiredRoles)) return true
 
     const request = context.switchToHttp().getRequest()
-    const token = this.extractTokenFromHeader(request)
-    if (!token) throw new UnauthorizedException()
 
     try {
+      const token = this.extractTokenFromHeader(request)
+      if (!token) throw new UnauthorizedException()
+
       const payload = await this.jwtVerifier.verify(token)
       if (!payload) throw new UnauthorizedException()
 
       const user = await this.userRepository.getByIdWithRoles(payload.id)
-      if (!user || !this.isValidUserRoles(requiredRoles, user.roles)) {
-        throw new UnauthorizedException()
-      }
+      if (!user) throw new UnauthorizedException()
+
+      if (!this.isValidUserRoles(requiredRoles, user.roles))
+        throw new ForbiddenException()
 
       request.user = user
-    } catch {
-      throw new UnauthorizedException()
+    } catch (exception) {
+      throw exception instanceof UnauthorizedException ||
+        exception instanceof ForbiddenException
+        ? exception
+        : new UnauthorizedException()
     }
 
     return true
