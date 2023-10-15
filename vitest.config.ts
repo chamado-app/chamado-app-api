@@ -17,8 +17,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
-      '@tests': resolve(__dirname, 'tests')
+      '@': resolve(__dirname, 'src')
     }
   },
   test: {
@@ -37,10 +36,12 @@ export default defineConfig({
       include: ['src/**/*.ts'],
       exclude: [
         '**/*.{d,spec,config}.ts',
-        'src/main/**/*.*',
-        'src/presentation/validation/**/*.*',
+        'src/**/{types,__mocks__,__tests__}/**/*.*',
+        'src/data/{entities,factories,migrations,helpers,seeds}/*.*',
         'src/domain/{base,contracts,entities,repositories}/**/*.*',
-        'src/infra/config/*.*'
+        'src/infra/config/*.*',
+        'src/main/**/*.*',
+        'src/presentation/validation/**/*.*'
       ]
     }
   }

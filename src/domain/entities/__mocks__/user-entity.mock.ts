@@ -1,5 +1,4 @@
-import { faker } from '@tests/__helpers__'
-
+import { faker } from '@/__mocks__'
 import { type UserEntity } from '@/domain/entities'
 
 export const mockUserEntity = (): UserEntity => ({
@@ -8,7 +7,9 @@ export const mockUserEntity = (): UserEntity => ({
   password: faker.internet.password(),
   firstName: faker.person.firstName(),
   lastName: faker.person.lastName(),
+  roles: [],
   isActive: true,
   updatedAt: faker.date.past(),
-  createdAt: faker.date.past()
+  createdAt: faker.date.past(),
+  deletedAt: null
 })
