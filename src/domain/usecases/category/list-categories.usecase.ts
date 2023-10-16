@@ -8,15 +8,6 @@ export class ListCategoriesUsecase implements Usecase<CategoryEntity[]> {
   async execute(): Promise<CategoryEntity[]> {
     const categories = await this.repository.getMany()
 
-    return this.sortCategories(categories)
-  }
-
-  private sortCategories(categories: CategoryEntity[]): CategoryEntity[] {
     return categories
-      .map((category) => ({
-        ...category,
-        children: this.sortCategories(category.children)
-      }))
-      .sort((a, b) => a.name.localeCompare(b.name))
   }
 }

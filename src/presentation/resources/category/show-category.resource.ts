@@ -7,8 +7,6 @@ export class ShowCategoryDto {
     readonly slug: CategoryEntity['slug'],
     readonly description: CategoryEntity['description'],
     readonly isActive: CategoryEntity['isActive'],
-    readonly parentId: CategoryEntity['id'],
-    readonly children: ShowCategoryDto[],
     readonly createdAt: CategoryEntity['createdAt'],
     readonly updatedAt: CategoryEntity['updatedAt']
   ) {}

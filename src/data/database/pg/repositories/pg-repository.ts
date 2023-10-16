@@ -26,7 +26,7 @@ export class PgRepository<T extends Entity> extends Repository<T> {
   }
 
   async getMany(options?: GetManyOptions<T>): Promise<T[]> {
-    const where = options.filter as FindOptionsWhere<T>
+    const where = options?.filter as FindOptionsWhere<T>
     return await this.repository.find({ where })
   }
 
