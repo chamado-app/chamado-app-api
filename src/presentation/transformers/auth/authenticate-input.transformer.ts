@@ -1,4 +1,4 @@
-import { AuthenticateInputDto } from '@/presentation/resources'
+import { AuthenticateInputDto } from '@/domain/usecases'
 import { type AuthenticateValidated } from '@/presentation/validation'
 
 export class AuthenticateInputTransformer {

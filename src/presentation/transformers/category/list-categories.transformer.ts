@@ -4,20 +4,18 @@ import {
   type ListCategoriesUsecaseInputDto,
   type ListCategoriesUsecaseOutputDto
 } from '@/domain/usecases'
-import { ListCategoriesDto } from '@/presentation/resources'
+import { ListCategoriesOutputDto } from '@/presentation/resources'
 import { type ListCategoriesValidated } from '@/presentation/validation'
 
 export class ListCategoriesTransformer {
-  static mapTo(payload: ListCategoriesUsecaseOutputDto): ListCategoriesDto {
-    const { categories, total } = payload
+  static mapTo(data: ListCategoriesUsecaseOutputDto): ListCategoriesOutputDto {
+    const { categories, total } = data
     const transformedCategories = categories.map(ShowCategoryTransformer.mapTo)
-    return new ListCategoriesDto(transformedCategories, total)
+    return new ListCategoriesOutputDto(transformedCategories, total)
   }
 
-  static mapFrom(
-    payload: ListCategoriesValidated
-  ): ListCategoriesUsecaseInputDto {
-    const { take, skip } = payload
+  static mapFrom(data: ListCategoriesValidated): ListCategoriesUsecaseInputDto {
+    const { take, skip } = data
     return { take, skip }
   }
 }

@@ -4,7 +4,7 @@ import { AuthenticateUsecase } from '@/domain/usecases'
 import { AuthenticatedRoles, GuestRole } from '@/presentation/decorators'
 import {
   type AuthenticateOutputDto,
-  type WhoAmIDto
+  type WhoAmIOutputDto
 } from '@/presentation/resources'
 import {
   AuthenticateInputTransformer,
@@ -30,7 +30,7 @@ export class AuthController {
 
   @AuthenticatedRoles()
   @Get('whoami')
-  async whoAmI(@Req() request: Request): Promise<WhoAmIDto> {
+  async whoAmI(@Req() request: Request): Promise<WhoAmIOutputDto> {
     const { user } = request
     return WhoAmITransformer.mapTo(user)
   }

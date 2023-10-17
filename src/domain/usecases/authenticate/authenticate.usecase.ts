@@ -1,10 +1,11 @@
 import { UnauthorizedException } from '@nestjs/common'
 
+import { type AuthenticateInputDto } from './types'
+
 import { type Usecase } from '@/domain/base'
 import type { HashComparer, JwtGenerator } from '@/domain/contracts'
 import { TokenEntity, TokenType, type UserEntity } from '@/domain/entities'
 import type { TokenRepository, UserRepository } from '@/domain/repositories'
-import { type AuthenticateInputDto } from '@/presentation/resources'
 
 export class AuthenticateUsecase implements Usecase<TokenEntity> {
   constructor(

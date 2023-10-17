@@ -1,9 +1,9 @@
 import { type UserEntity } from '@/domain/entities'
-import { WhoAmIDto } from '@/presentation/resources'
+import { WhoAmIOutputDto } from '@/presentation/resources'
 
 export class WhoAmITransformer {
-  static mapTo(data: UserEntity): WhoAmIDto {
-    return new WhoAmIDto(
+  static mapTo(data: UserEntity): WhoAmIOutputDto {
+    return new WhoAmIOutputDto(
       data.id,
       data.email,
       data.firstName,

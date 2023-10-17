@@ -20,7 +20,7 @@ import {
 } from '@/domain/usecases'
 import { AuthenticatedRoles, ManagerRole } from '@/presentation/decorators'
 import {
-  type ListCategoriesDto,
+  type ListCategoriesOutputDto,
   type ShowCategoryDto
 } from '@/presentation/resources'
 import {
@@ -70,7 +70,7 @@ export class CategoryController {
   @Get()
   async list(
     @Query() query: ListCategoriesValidated
-  ): Promise<ListCategoriesDto> {
+  ): Promise<ListCategoriesOutputDto> {
     const payload = ListCategoriesTransformer.mapFrom(query)
     const result = await this.listCategoriesUsecase.execute(payload)
     return ListCategoriesTransformer.mapTo(result)
