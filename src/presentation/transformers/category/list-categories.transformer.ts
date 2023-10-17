@@ -1,9 +1,9 @@
 import { ShowCategoryTransformer } from './show-category.transformer'
 
 import {
-  type ListCategoriesUsecaseInputDto,
+  ListCategoriesInputDto,
   type ListCategoriesUsecaseOutputDto
-} from '@/domain/usecases'
+} from '@/domain/dtos'
 import { ListCategoriesOutputDto } from '@/presentation/resources'
 import { type ListCategoriesValidated } from '@/presentation/validation'
 
@@ -14,8 +14,7 @@ export class ListCategoriesTransformer {
     return new ListCategoriesOutputDto(transformedCategories, total)
   }
 
-  static mapFrom(data: ListCategoriesValidated): ListCategoriesUsecaseInputDto {
-    const { take, skip } = data
-    return { take, skip }
+  static mapFrom(data: ListCategoriesValidated): ListCategoriesInputDto {
+    return new ListCategoriesInputDto(data.take, data.skip)
   }
 }

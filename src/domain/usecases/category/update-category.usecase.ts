@@ -2,6 +2,7 @@ import { NotFoundException } from '@nestjs/common'
 
 import { type Usecase } from '@/domain/base'
 import { type Slugifier } from '@/domain/contracts'
+import { type UpdateCategoryInputDto } from '@/domain/dtos'
 import { type CategoryEntity } from '@/domain/entities'
 import { type CategoryRepository } from '@/domain/repositories'
 
@@ -11,7 +12,10 @@ export class UpdateCategoryUsecase implements Usecase<CategoryEntity> {
     private readonly slugifier: Slugifier
   ) {}
 
-  async execute(id: string, data: CategoryEntity): Promise<CategoryEntity> {
+  async execute(
+    id: string,
+    data: UpdateCategoryInputDto
+  ): Promise<CategoryEntity> {
     const existingCategory = await this.repository.getOne({ id })
 
     if (!existingCategory) throw new NotFoundException()
@@ -22,19 +26,20 @@ export class UpdateCategoryUsecase implements Usecase<CategoryEntity> {
 
   private async prepareCategoryToUpdate(
     existingCategory: CategoryEntity,
-    updatedCategory: CategoryEntity
-  ): Promise<CategoryEntity> {
+    updatedCategory: UpdateCategoryInputDto
+  ): Promise<Partial<CategoryEntity>> {
     const { name: currentName } = existingCategory
     const { name: updatedName } = updatedCategory
+    const category = { ...existingCategory, ...updatedCategory }
 
     if (updatedName && updatedName !== currentName) {
       const slug = this.slugifier.slugify(updatedName)
-      updatedCategory.slug = await this.getUniqueSlug(slug, existingCategory.id)
+      category.slug = await this.getUniqueSlug(slug, existingCategory.id)
     } else {
-      updatedCategory.slug = existingCategory.slug
+      category.slug = existingCategory.slug
     }
 
-    return { ...existingCategory, ...updatedCategory }
+    return category
   }
 
   private async getUniqueSlug(slug: string, id: string): Promise<string> {

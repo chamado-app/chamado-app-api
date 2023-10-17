@@ -17,7 +17,7 @@ export class ShowCategoryTransformer {
       entity.id,
       entity.name,
       entity.slug,
-      entity.description,
+      entity.description ?? null,
       entity.isActive,
       entity.createdAt,
       entity.updatedAt

@@ -1,5 +1,6 @@
 import { type Usecase } from '@/domain/base'
 import { type Slugifier } from '@/domain/contracts'
+import { type CreateCategoryInputDto } from '@/domain/dtos'
 import { type CategoryEntity } from '@/domain/entities'
 import { type CategoryRepository } from '@/domain/repositories'
 
@@ -9,12 +10,15 @@ export class CreateCategoryUsecase implements Usecase<CategoryEntity> {
     private readonly slugifier: Slugifier
   ) {}
 
-  async execute(data: CategoryEntity): Promise<CategoryEntity> {
+  async execute(data: CreateCategoryInputDto): Promise<CategoryEntity> {
     const payload = await this.preparePayload(data)
-    return this.repository.create(payload)
+    const result = await this.repository.create(payload)
+    return { ...payload, ...result }
   }
 
-  private async preparePayload(data: CategoryEntity): Promise<CategoryEntity> {
+  private async preparePayload(
+    data: CreateCategoryInputDto
+  ): Promise<Partial<CategoryEntity>> {
     const slug = this.slugifier.slugify(data.name)
     const uniqueSlug = await this.getUniqueSlug(slug)
 

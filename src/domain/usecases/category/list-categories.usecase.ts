@@ -1,9 +1,8 @@
-import {
-  type ListCategoriesUsecaseInputDto,
-  type ListCategoriesUsecaseOutputDto
-} from './types'
-
 import { type Usecase } from '@/domain/base'
+import {
+  type ListCategoriesInputDto,
+  type ListCategoriesUsecaseOutputDto
+} from '@/domain/dtos'
 import { type CategoryRepository } from '@/domain/repositories'
 
 export class ListCategoriesUsecase
@@ -12,7 +11,7 @@ export class ListCategoriesUsecase
   constructor(private readonly repository: CategoryRepository) {}
 
   async execute(
-    options: ListCategoriesUsecaseInputDto
+    options: ListCategoriesInputDto
   ): Promise<ListCategoriesUsecaseOutputDto> {
     const { items: categories, total } = await this.repository.getMany({
       ...options,
