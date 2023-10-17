@@ -1,22 +1,25 @@
+import {
+  type ListCategoriesUsecaseInputDto,
+  type ListCategoriesUsecaseOutputDto
+} from './types'
+
 import { type Usecase } from '@/domain/base'
-import { type CategoryEntity } from '@/domain/entities'
 import { type CategoryRepository } from '@/domain/repositories'
 
-export class ListCategoriesUsecase implements Usecase<CategoryEntity[]> {
+export class ListCategoriesUsecase
+  implements Usecase<ListCategoriesUsecaseOutputDto>
+{
   constructor(private readonly repository: CategoryRepository) {}
 
-  async execute(): Promise<CategoryEntity[]> {
-    const categories = await this.repository.getMany()
+  async execute(
+    options: ListCategoriesUsecaseInputDto
+  ): Promise<ListCategoriesUsecaseOutputDto> {
+    const { items: categories, total } = await this.repository.getMany({
+      ...options,
+      filter: { isActive: true },
+      orderBy: { name: 'ASC' }
+    })
 
-    return this.sortCategories(categories)
-  }
-
-  private sortCategories(categories: CategoryEntity[]): CategoryEntity[] {
-    return categories
-      .map((category) => ({
-        ...category,
-        children: this.sortCategories(category.children)
-      }))
-      .sort((a, b) => a.name.localeCompare(b.name))
+    return { categories, total }
   }
 }

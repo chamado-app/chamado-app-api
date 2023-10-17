@@ -1,7 +1,16 @@
 import { Injectable } from '@nestjs/common'
-import { type FindOptionsWhere, Repository as TypeOrmRepository } from 'typeorm'
+import {
+  type FindOptionsOrder,
+  type FindOptionsWhere,
+  Repository as TypeOrmRepository
+} from 'typeorm'
 
-import { type Entity, type GetManyOptions, Repository } from '@/domain/base'
+import {
+  type Entity,
+  type GetManyOptions,
+  type GetManyResult,
+  Repository
+} from '@/domain/base'
 
 @Injectable()
 export class PgRepository<T extends Entity> extends Repository<T> {
@@ -25,9 +34,18 @@ export class PgRepository<T extends Entity> extends Repository<T> {
     return await this.repository.findOne({ where })
   }
 
-  async getMany(options?: GetManyOptions<T>): Promise<T[]> {
-    const where = options.filter as FindOptionsWhere<T>
-    return await this.repository.find({ where })
+  async getMany(options?: GetManyOptions<T>): Promise<GetManyResult<T>> {
+    const { fields, filter = {}, orderBy, take, skip } = options
+
+    const [items, total] = await this.repository.findAndCount({
+      select: fields,
+      where: filter,
+      order: orderBy as FindOptionsOrder<T>,
+      take,
+      skip
+    })
+
+    return { items, total }
   }
 
   async delete(filter: Partial<T>, permanent?: boolean): Promise<number> {

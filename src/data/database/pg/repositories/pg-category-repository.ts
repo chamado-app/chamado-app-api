@@ -1,10 +1,9 @@
-import { InjectDataSource } from '@nestjs/typeorm'
-import { DataSource, type TreeRepository } from 'typeorm'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
 
 import { PgRepository } from './pg-repository'
 
 import { PgCategoryEntity } from '@/data/database/pg/entities'
-import { type GetManyOptions } from '@/domain/base'
 import { type CategoryEntity } from '@/domain/entities'
 import { type CategoryRepository } from '@/domain/repositories'
 
@@ -12,10 +11,11 @@ export class PgCategoryRepository
   extends PgRepository<CategoryEntity>
   implements CategoryRepository
 {
-  protected repository: TreeRepository<CategoryEntity>
-
-  constructor(@InjectDataSource() dataSource: DataSource) {
-    super(dataSource.getTreeRepository(PgCategoryEntity))
+  constructor(
+    @InjectRepository(PgCategoryEntity)
+    repository: Repository<PgCategoryEntity>
+  ) {
+    super(repository)
   }
 
   async getCountBySlug(slug: string, id?: string): Promise<number> {
@@ -28,12 +28,5 @@ export class PgCategoryRepository
     if (id) query.andWhere('categories.id <> :id', { id })
 
     return await query.getCount()
-  }
-
-  async getMany(
-    options?: GetManyOptions<CategoryEntity>
-  ): Promise<CategoryEntity[]> {
-    if (options) return await super.getMany(options)
-    return await this.repository.findTrees({ relations: ['parent'] })
   }
 }
