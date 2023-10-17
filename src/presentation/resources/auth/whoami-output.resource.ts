@@ -1,6 +1,6 @@
 import { type Role, type UserEntity } from '@/domain/entities'
 
-export class WhoAmIDto {
+export class WhoAmIOutputDto {
   constructor(
     readonly id: UserEntity['id'],
     readonly email: UserEntity['email'],

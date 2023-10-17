@@ -1,5 +1,5 @@
 import { type ShowCategoryDto } from './show-category.resource'
 
-export class ListCategoriesDto {
+export class ListCategoriesOutputDto {
   constructor(readonly categories: ShowCategoryDto[], readonly total: number) {}
 }
