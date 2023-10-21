@@ -15,6 +15,6 @@ export class ListCategoriesTransformer {
   }
 
   static mapFrom(data: ListCategoriesValidated): ListCategoriesInputDto {
-    return new ListCategoriesInputDto(data.take, data.skip)
+    return new ListCategoriesInputDto(data.take, data.skip, data.search)
   }
 }

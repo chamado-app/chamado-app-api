@@ -8,7 +8,7 @@ import { config } from '@/infra'
     JwtModule.register({
       global: true,
       secret: config.app.jwtSecret,
-      signOptions: { expiresIn: '60m', noTimestamp: true }
+      signOptions: { expiresIn: '30d', noTimestamp: true }
     })
   ]
 })

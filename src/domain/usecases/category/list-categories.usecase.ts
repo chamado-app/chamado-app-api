@@ -1,8 +1,9 @@
-import { type Usecase } from '@/domain/base'
+import { type GetManyOptions, type Usecase } from '@/domain/base'
 import {
   type ListCategoriesInputDto,
   type ListCategoriesUsecaseOutputDto
 } from '@/domain/dtos'
+import { type CategoryEntity } from '@/domain/entities'
 import { type CategoryRepository } from '@/domain/repositories'
 
 export class ListCategoriesUsecase
@@ -13,12 +14,19 @@ export class ListCategoriesUsecase
   async execute(
     options: ListCategoriesInputDto
   ): Promise<ListCategoriesUsecaseOutputDto> {
-    const { items: categories, total } = await this.repository.getMany({
-      ...options,
+    const { take, skip, search } = options
+    const getOptions: GetManyOptions<CategoryEntity> = {
+      take,
+      skip,
       filter: { isActive: true },
       orderBy: { name: 'ASC' }
-    })
+    }
 
-    return { categories, total }
+    if (search) {
+      getOptions.search = { value: search, fields: ['name', 'description'] }
+    }
+
+    const { items, total } = await this.repository.getMany(getOptions)
+    return { categories: items, total }
   }
 }

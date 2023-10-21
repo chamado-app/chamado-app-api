@@ -1,6 +1,7 @@
 import { type Entity } from './entity'
 
 export interface GetManyOptions<T> {
+  search?: { value: string; fields: Array<keyof T> }
   filter?: Partial<T>
   fields?: Array<keyof T>
   orderBy?: { [K in keyof T]?: 'ASC' | 'DESC' }

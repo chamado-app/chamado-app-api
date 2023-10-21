@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import {
-  type FindOptionsOrder,
   type FindOptionsWhere,
+  ILike,
   Repository as TypeOrmRepository
 } from 'typeorm'
 
@@ -35,16 +35,31 @@ export class PgRepository<T extends Entity> extends Repository<T> {
   }
 
   async getMany(options?: GetManyOptions<T>): Promise<GetManyResult<T>> {
-    const { fields, filter = {}, orderBy, take, skip } = options
+    const { fields, filter = {}, orderBy, take, skip, search } = options
 
-    const [items, total] = await this.repository.findAndCount({
-      select: fields,
-      where: filter,
-      order: orderBy as FindOptionsOrder<T>,
-      take,
-      skip
-    })
+    const query = this.repository.createQueryBuilder(
+      this.repository.metadata.tableName
+    )
 
+    if (fields) query.select(fields as string[])
+    if (orderBy) query.orderBy(orderBy)
+    if (take) query.take(take)
+    if (skip) query.skip(skip)
+
+    if (search) {
+      const iLikeSearch = ILike(`%${search.value}%`)
+
+      search.fields.forEach((field, index) => {
+        if (index === 0) query.where({ [field]: iLikeSearch })
+        else query.orWhere({ [field]: iLikeSearch })
+      })
+
+      query.andWhere(filter)
+    } else {
+      query.where(filter)
+    }
+
+    const [items, total] = await query.getManyAndCount()
     return { items, total }
   }
 

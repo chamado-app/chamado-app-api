@@ -1,4 +1,4 @@
-import { IsNumberString, IsOptional } from 'class-validator'
+import { IsNumberString, IsOptional, IsString } from 'class-validator'
 
 export class BaseListValidated {
   @IsOptional()
@@ -8,4 +8,8 @@ export class BaseListValidated {
   @IsOptional()
   @IsNumberString({}, { message: 'O parametro take deve ser um número.' })
   skip?: number
+
+  @IsOptional()
+  @IsString({ message: 'O parametro search deve ser uma string.' })
+  search?: string
 }
