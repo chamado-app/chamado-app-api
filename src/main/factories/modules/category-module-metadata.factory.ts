@@ -7,6 +7,7 @@ import {
   makeCreateCategoryUsecaseProvider,
   makeDeleteCategoryUsecaseProvider,
   makeListCategoriesUsecaseProvider,
+  makeShowCategoryUsecaseProvider,
   makeSlugifier,
   makeUpdateCategoryUsecaseProvider
 } from '@/main/factories'
@@ -18,6 +19,7 @@ export const makeCategoryModuleMetadata = (): ModuleMetadata => {
     makeCategoryRepository(),
     makeSlugifier(),
     makeCreateCategoryUsecaseProvider(),
+    makeShowCategoryUsecaseProvider(),
     makeUpdateCategoryUsecaseProvider(),
     makeListCategoriesUsecaseProvider(),
     makeDeleteCategoryUsecaseProvider()

@@ -16,6 +16,7 @@ import {
   CreateCategoryUsecase,
   DeleteCategoryUsecase,
   ListCategoriesUsecase,
+  ShowCategoryUsecase,
   UpdateCategoryUsecase
 } from '@/domain/usecases'
 import { AuthenticatedRoles, ManagerRole } from '@/presentation/decorators'
@@ -39,6 +40,7 @@ import {
 export class CategoryController {
   constructor(
     private readonly createCategoryUsecase: CreateCategoryUsecase,
+    private readonly showCategoryUsecase: ShowCategoryUsecase,
     private readonly updateCategoryUsecase: UpdateCategoryUsecase,
     private readonly listCategoriesUsecase: ListCategoriesUsecase,
     private readonly deleteCategoryUsecase: DeleteCategoryUsecase
@@ -55,6 +57,23 @@ export class CategoryController {
     return ShowCategoryTransformer.mapTo(createdCategory)
   }
 
+  @AuthenticatedRoles()
+  @Get()
+  async list(
+    @Query() query: ListCategoriesValidated
+  ): Promise<ListCategoriesOutputDto> {
+    const payload = ListCategoriesTransformer.mapFrom(query)
+    const result = await this.listCategoriesUsecase.execute(payload)
+    return ListCategoriesTransformer.mapTo(result)
+  }
+
+  @AuthenticatedRoles()
+  @Get(':id')
+  async show(@Param('id', ParseUUIDPipe) id: string): Promise<ShowCategoryDto> {
+    const category = await this.showCategoryUsecase.execute(id)
+    return ShowCategoryTransformer.mapTo(category)
+  }
+
   @ManagerRole()
   @Put(':id')
   async update(
@@ -64,16 +83,6 @@ export class CategoryController {
     const payload = UpdateCategoryTransformer.mapFrom(data)
     const category = await this.updateCategoryUsecase.execute(id, payload)
     return ShowCategoryTransformer.mapTo(category)
-  }
-
-  @AuthenticatedRoles()
-  @Get()
-  async list(
-    @Query() query: ListCategoriesValidated
-  ): Promise<ListCategoriesOutputDto> {
-    const payload = ListCategoriesTransformer.mapFrom(query)
-    const result = await this.listCategoriesUsecase.execute(payload)
-    return ListCategoriesTransformer.mapTo(result)
   }
 
   @ManagerRole()
