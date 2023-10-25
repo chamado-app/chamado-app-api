@@ -1,3 +1,7 @@
-import { CreateCategoryInputDto } from './create-category-input.dto'
-
-export class UpdateCategoryInputDto extends CreateCategoryInputDto {}
+export class UpdateCategoryInputDto {
+  constructor(
+    readonly name?: string,
+    readonly description?: string,
+    readonly isActive?: boolean
+  ) {}
+}

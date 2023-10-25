@@ -1,6 +1,6 @@
-import { type UserEntity } from './user.entity'
-
 import { Entity } from '@/domain/base'
+
+import { type UserEntity } from './user.entity'
 
 export enum TokenType {
   JWT = 'Bearer'

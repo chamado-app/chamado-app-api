@@ -1,7 +1,7 @@
+import { Entity } from '@/domain/base'
+
 import { type RoleEntity } from './role.entity'
 import { type TokenEntity } from './token.entity'
-
-import { Entity } from '@/domain/base'
 
 export class UserEntity extends Entity {
   email: string
@@ -13,5 +13,5 @@ export class UserEntity extends Entity {
   tokens?: TokenEntity[]
   createdAt: Date
   updatedAt: Date
-  deletedAt: Date
+  deletedAt: Date | null
 }

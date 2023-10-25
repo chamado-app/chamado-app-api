@@ -1,3 +1,3 @@
 export class Entity {
-  id?: string
+  id: string
 }

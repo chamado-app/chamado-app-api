@@ -9,7 +9,12 @@ import { Reflector } from '@nestjs/core'
 import { type Request } from 'express'
 
 import { JwtVerifier } from '@/domain/contracts'
-import { Role, type RoleEntity, TokenType } from '@/domain/entities'
+import {
+  Role,
+  type RoleEntity,
+  TokenType,
+  type UserEntity
+} from '@/domain/entities'
 import { UserRepository } from '@/domain/repositories'
 import { ROLES_KEY } from '@/presentation/decorators'
 
@@ -29,7 +34,9 @@ export class AuthGuard implements CanActivate {
 
     if (this.isOnlyGuest(requiredRoles)) return true
 
-    const request = context.switchToHttp().getRequest()
+    const request = context
+      .switchToHttp()
+      .getRequest<Request & { user: UserEntity }>()
 
     try {
       const token = this.extractTokenFromHeader(request)

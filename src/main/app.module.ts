@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common'
 
-import { providers } from './providers'
-
 import {
   EnvironmentConfigModule,
   JwtConfigModule,
   TypeOrmConfigModule
 } from '@/infra'
 import { AuthModule, CategoryModule, UserModule } from '@/main/modules'
+
+import { providers } from './providers'
 
 @Module({
   imports: [

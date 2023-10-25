@@ -3,7 +3,7 @@ import * as bcrypt from 'bcrypt'
 import { type HashComparer, type HashGenerator } from '@/domain/contracts'
 
 export class BcryptAdapter implements HashComparer, HashGenerator {
-  constructor(private readonly salt: number = 10) {}
+  constructor(private readonly salt = 10) {}
 
   async compare(value: string, hashedValue: string): Promise<boolean> {
     return await bcrypt.compare(value, hashedValue)

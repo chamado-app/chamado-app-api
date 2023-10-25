@@ -12,7 +12,7 @@ type Dependencies = {
 
 const makeDependencies = (): Dependencies => {
   const { useClass: HashGeneratorClass } =
-    makeHashGeneratorFactory() as ClassProvider
+    makeHashGeneratorFactory() as ClassProvider<HashGenerator>
 
   return { hashGenerator: new HashGeneratorClass() }
 }

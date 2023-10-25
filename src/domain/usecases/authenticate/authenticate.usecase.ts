@@ -20,6 +20,8 @@ export class AuthenticateUsecase implements Usecase<TokenEntity> {
       isActive: true
     })
 
+    if (!user) throw new UnauthorizedException()
+
     await this.compare(data, user)
     return await this.generateToken(user)
   }
@@ -28,7 +30,6 @@ export class AuthenticateUsecase implements Usecase<TokenEntity> {
     data: AuthenticateInputDto,
     user: UserEntity
   ): Promise<void> {
-    if (!user) throw new UnauthorizedException()
     const isValid = await this.hashComparer.compare(
       data.password,
       user.password

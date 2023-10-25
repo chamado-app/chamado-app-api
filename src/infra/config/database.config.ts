@@ -8,7 +8,7 @@ export const database = {
   debug: process.env.DB_DEBUG === 'true' || app.isProduction,
   host: process.env.DB_HOST,
   password: process.env.DB_PASSWORD,
-  port: parseInt(process.env.DB_PORT, 10) || 5432,
+  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
   synchronize: process.env.DB_SYNCHRONIZE === 'true' || false,
   username: process.env.DB_USERNAME,
   entities: [

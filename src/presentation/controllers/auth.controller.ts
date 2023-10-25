@@ -30,7 +30,7 @@ export class AuthController {
 
   @AuthenticatedRoles()
   @Get('whoami')
-  async whoAmI(@Req() request: Request): Promise<WhoAmIOutputDto> {
+  whoAmI(@Req() request: Request): WhoAmIOutputDto {
     const { user } = request
     return WhoAmITransformer.mapTo(user)
   }

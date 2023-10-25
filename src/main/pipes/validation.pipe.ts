@@ -9,13 +9,10 @@ export const useValidationPipe = (app: INestApplication): void => {
     new ValidationPipe({
       whitelist: true,
       exceptionFactory: (errors) => {
-        const message = errors.reduce(
-          (prev, { property, constraints }) => ({
-            ...prev,
-            [property]: Object.values(constraints)
-          }),
-          {}
-        )
+        const message = errors.reduce((prev, { property, constraints }) => {
+          if (!constraints) return { ...prev }
+          return { ...prev, [property]: Object.values(constraints) }
+        }, {})
 
         return new UnprocessableEntityException({ errors: message })
       }

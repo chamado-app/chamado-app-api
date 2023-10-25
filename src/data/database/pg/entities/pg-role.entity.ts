@@ -8,10 +8,10 @@ import {
   UpdateDateColumn
 } from 'typeorm'
 
-import { PgUserEntity } from './pg-user.entity'
-
 import { TableNames } from '@/data/database/pg/helpers'
 import { Role, type RoleEntity } from '@/domain/entities'
+
+import { PgUserEntity } from './pg-user.entity'
 
 @Entity({ name: TableNames.role })
 export class PgRoleEntity implements RoleEntity {

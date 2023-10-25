@@ -7,10 +7,10 @@ import {
   PrimaryGeneratedColumn
 } from 'typeorm'
 
-import { PgUserEntity } from './pg-user.entity'
-
 import { TableNames } from '@/data/database/pg/helpers'
 import { type TokenEntity, TokenType } from '@/domain/entities'
+
+import { PgUserEntity } from './pg-user.entity'
 
 @Entity({ name: TableNames.token })
 export class PgTokenEntity implements TokenEntity {

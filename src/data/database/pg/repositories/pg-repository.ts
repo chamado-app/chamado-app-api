@@ -29,12 +29,12 @@ export class PgRepository<T extends Entity> extends Repository<T> {
     return await this.repository.save({ ...data, id })
   }
 
-  async getOne(filter: Partial<T>): Promise<T> {
+  async getOne(filter: Partial<T>): Promise<T | null> {
     const where = filter as FindOptionsWhere<T>
     return await this.repository.findOne({ where })
   }
 
-  async getMany(options?: GetManyOptions<T>): Promise<GetManyResult<T>> {
+  async getMany(options: GetManyOptions<T> = {}): Promise<GetManyResult<T>> {
     const { fields, filter = {}, orderBy, take, skip, search } = options
 
     const query = this.repository.createQueryBuilder(
@@ -42,9 +42,16 @@ export class PgRepository<T extends Entity> extends Repository<T> {
     )
 
     if (fields) query.select(fields as string[])
-    if (orderBy) query.orderBy(orderBy)
     if (take) query.take(take)
     if (skip) query.skip(skip)
+
+    if (orderBy) {
+      Object.keys(orderBy).forEach((key, index) => {
+        const direction = orderBy[key] as 'ASC' | 'DESC'
+        if (index === 0) query.orderBy(key, direction)
+        else query.addOrderBy(key, direction)
+      })
+    }
 
     if (search) {
       const iLikeSearch = ILike(`%${search.value}%`)
@@ -69,10 +76,10 @@ export class PgRepository<T extends Entity> extends Repository<T> {
 
     if (permanent) {
       const deleteResult = await this.repository.delete(where)
-      affected = deleteResult.affected
+      affected = deleteResult.affected ?? 0
     } else {
       const softDeleteResult = await this.repository.softDelete(where)
-      affected = softDeleteResult.affected
+      affected = softDeleteResult.affected ?? 0
     }
 
     return affected

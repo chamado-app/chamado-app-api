@@ -5,8 +5,8 @@ export class UpdateCategoryTransformer {
   static mapFrom(data: UpdateCategoryValidated): UpdateCategoryInputDto {
     return new UpdateCategoryInputDto(
       data.name,
-      data.isActive,
-      data.description
+      data.description,
+      data.isActive
     )
   }
 }

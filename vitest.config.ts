@@ -1,5 +1,4 @@
 import { resolve } from 'path'
-
 import swc from 'unplugin-swc'
 import { configDefaults, defineConfig } from 'vitest/config'
 

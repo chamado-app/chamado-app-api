@@ -1,13 +1,14 @@
 # 🛸 Chamado.app API
 
 <!--toc:start-->
-- [🛸 Chamado.app API](#-chamadoapp-api)
-  - [📖 About](#-about)
-  - [📦 Prerequisites](#-prerequisites)
-  - [🛬 Cloning](#-cloning)
-  - [🏃 Running](#-running)
-  - [🧪 Testing](#-testing)
-<!--toc:end-->
+
+- [🛸 Chamado.app API](#🛸-chamadoapp-api)
+  - [📖 About](#📖-about)
+  - [📦 Prerequisites](#📦-prerequisites)
+  - [🛬 Cloning](#🛬-cloning)
+  - [🏃 Running](#🏃-running)
+  - [🧪 Testing](#🧪-testing)
+  <!--toc:end-->
 
 ## 📖 About
 

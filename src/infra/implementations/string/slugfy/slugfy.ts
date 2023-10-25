@@ -1,7 +1,7 @@
 import { type Slugifier } from '@/domain/contracts'
 
 export class Slugify implements Slugifier {
-  constructor(private readonly separator: string = '-') {}
+  constructor(private readonly separator = '-') {}
 
   slugify(value: string): string {
     if (!value) return ''

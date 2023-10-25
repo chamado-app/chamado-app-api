@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
-import { typeOrmDataSource } from './type-orm.config'
-
 import { config } from '@/infra'
+
+import { typeOrmDataSource } from './type-orm.config'
 
 @Module({
   imports: [
