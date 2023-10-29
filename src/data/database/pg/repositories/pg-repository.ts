@@ -12,6 +12,9 @@ import {
   Repository
 } from '@/domain/base'
 
+const VALIDATE_UUID_REGEXP =
+  /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi
+
 @Injectable()
 export class PgRepository<T extends Entity> extends Repository<T> {
   protected readonly repository: TypeOrmRepository<T>
@@ -55,11 +58,25 @@ export class PgRepository<T extends Entity> extends Repository<T> {
 
     if (search) {
       const iLikeSearch = ILike(`%${search.value}%`)
+      const searchFielsWithoutId = search.fields.filter(
+        (field) => field !== 'id'
+      )
 
-      search.fields.forEach((field, index) => {
-        if (index === 0) query.where({ [field]: iLikeSearch })
-        else query.orWhere({ [field]: iLikeSearch })
+      searchFielsWithoutId.forEach((field, index) => {
+        const where = { [field]: iLikeSearch }
+        if (index === 0) query.where(where)
+        else query.orWhere(where)
       })
+
+      if (search.fields.includes('id')) {
+        const isValidateUuid = VALIDATE_UUID_REGEXP.test(search.value)
+
+        if (isValidateUuid) {
+          const where = { id: search.value }
+          if (searchFielsWithoutId.length > 0) query.orWhere(where)
+          else query.where(where)
+        }
+      }
 
       query.andWhere(filter)
     } else {
