@@ -27,7 +27,9 @@ import {
 } from '@/presentation/resources'
 import {
   CreateCategoryTransformer,
-  ListCategoriesTransformer,
+  ListCategoriesInputTransformer,
+  ListCategoriesOutputTransformer,
+  ShowCategoryInputTransformer,
   ShowCategoryTransformer,
   UpdateCategoryTransformer
 } from '@/presentation/transformers'
@@ -66,15 +68,21 @@ export class CategoryController {
     @Query() query: ListCategoriesValidated,
     @Req() request: Request
   ): Promise<ListCategoriesOutputDto> {
-    const payload = ListCategoriesTransformer.mapFrom(query, request.user.roles)
+    const roles = request.user.roles
+    const payload = ListCategoriesInputTransformer.mapFrom(query, roles)
     const result = await this.listCategoriesUsecase.execute(payload)
-    return ListCategoriesTransformer.mapTo(result)
+    return ListCategoriesOutputTransformer.mapTo(result)
   }
 
   @AuthenticatedRoles()
   @Get(':id')
-  async show(@Param('id', ParseUUIDPipe) id: string): Promise<ShowCategoryDto> {
-    const category = await this.showCategoryUsecase.execute(id)
+  async show(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() request: Request
+  ): Promise<ShowCategoryDto> {
+    const roles = request.user.roles
+    const payload = ShowCategoryInputTransformer.mapFrom(id, roles)
+    const category = await this.showCategoryUsecase.execute(payload)
     return ShowCategoryTransformer.mapTo(category)
   }
 
