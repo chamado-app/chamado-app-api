@@ -2,6 +2,7 @@ import {
   ListCategoriesInputDto,
   type ListCategoriesUsecaseOutputDto
 } from '@/domain/dtos'
+import { type RoleEntity } from '@/domain/entities'
 import { ListCategoriesOutputDto } from '@/presentation/resources'
 import { type ListCategoriesValidated } from '@/presentation/validation'
 
@@ -10,12 +11,22 @@ import { ShowCategoryTransformer } from './show-category.transformer'
 export class ListCategoriesTransformer {
   static mapTo(data: ListCategoriesUsecaseOutputDto): ListCategoriesOutputDto {
     const { categories, total } = data
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    const transformedCategories = categories.map(ShowCategoryTransformer.mapTo)
+    const transformedCategories = categories.map((category) =>
+      ShowCategoryTransformer.mapTo(category)
+    )
     return new ListCategoriesOutputDto(transformedCategories, total)
   }
 
-  static mapFrom(data: ListCategoriesValidated): ListCategoriesInputDto {
-    return new ListCategoriesInputDto(data.take, data.skip, data.search)
+  static mapFrom(
+    data: ListCategoriesValidated,
+    roles: RoleEntity[]
+  ): ListCategoriesInputDto {
+    const enumeratedRoles = roles.map((role) => role.name)
+    return new ListCategoriesInputDto(
+      data.take,
+      data.skip,
+      enumeratedRoles,
+      data.search
+    )
   }
 }

@@ -3,7 +3,7 @@ import {
   type ListCategoriesInputDto,
   type ListCategoriesUsecaseOutputDto
 } from '@/domain/dtos'
-import { type CategoryEntity } from '@/domain/entities'
+import { Role, type CategoryEntity } from '@/domain/entities'
 import { type CategoryRepository } from '@/domain/repositories'
 
 export class ListCategoriesUsecase
@@ -14,12 +14,18 @@ export class ListCategoriesUsecase
   async execute(
     options: ListCategoriesInputDto
   ): Promise<ListCategoriesUsecaseOutputDto> {
-    const { take, skip, search } = options
+    const { take, skip, search, roles } = options
+    const isManager = roles.includes(Role.MANAGER)
+
     const getOptions: GetManyOptions<CategoryEntity> = {
       take,
       skip,
-      filter: { isActive: true },
+      filter: {},
       orderBy: { name: 'ASC' }
+    }
+
+    if (!isManager) {
+      Object.assign(getOptions, { filter: { isActive: true } })
     }
 
     if (search) {

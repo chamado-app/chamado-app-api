@@ -9,7 +9,8 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  Query
+  Query,
+  Req
 } from '@nestjs/common'
 
 import {
@@ -36,6 +37,8 @@ import {
   UpdateCategoryValidated
 } from '@/presentation/validation'
 
+import { Request } from '../types'
+
 @Controller('categories')
 export class CategoryController {
   constructor(
@@ -60,9 +63,10 @@ export class CategoryController {
   @AuthenticatedRoles()
   @Get()
   async list(
-    @Query() query: ListCategoriesValidated
+    @Query() query: ListCategoriesValidated,
+    @Req() request: Request
   ): Promise<ListCategoriesOutputDto> {
-    const payload = ListCategoriesTransformer.mapFrom(query)
+    const payload = ListCategoriesTransformer.mapFrom(query, request.user.roles)
     const result = await this.listCategoriesUsecase.execute(payload)
     return ListCategoriesTransformer.mapTo(result)
   }
