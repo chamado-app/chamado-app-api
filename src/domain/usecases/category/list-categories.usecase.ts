@@ -29,7 +29,10 @@ export class ListCategoriesUsecase
     }
 
     if (search) {
-      getOptions.search = { value: search, fields: ['name', 'description'] }
+      getOptions.search = {
+        value: search,
+        fields: ['description', 'id', 'name']
+      }
     }
 
     const { items, total } = await this.repository.getMany(getOptions)
