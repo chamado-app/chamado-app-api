@@ -52,7 +52,7 @@ export class PgUserEntity implements UserEntity {
   @JoinTable({
     name: TableNames.categoryUser,
     joinColumn: { name: 'user_id' },
-    inverseJoinColumn: { name: 'sector_id' }
+    inverseJoinColumn: { name: 'section_id' }
   })
   sectors: PgCategoryEntity[]
 
