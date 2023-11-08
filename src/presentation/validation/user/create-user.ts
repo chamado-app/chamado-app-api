@@ -5,7 +5,9 @@ import {
   Length,
   IsArray,
   IsIn,
-  IsUUID
+  IsUUID,
+  ValidateIf,
+  IsBoolean
 } from 'class-validator'
 
 import { Role, type CategoryEntity } from '@/domain/entities'
@@ -39,4 +41,8 @@ export class CreateUserValidated {
   @IsArray({ message: 'O usuário deve estar em ao menos um setor' })
   @IsUUID('4', { each: true, message: 'O setor deve ser um UUID válido' })
   sectors: Array<CategoryEntity['id']>
+
+  @ValidateIf((_, value) => value !== undefined)
+  @IsBoolean()
+  isActive?: boolean
 }

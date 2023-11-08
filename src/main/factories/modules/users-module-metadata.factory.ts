@@ -6,6 +6,7 @@ import {
   makeCreateUserUsecaseProvider,
   makeHashGeneratorFactory,
   makeRoleRepository,
+  makeUpdateUserUsecaseProvider,
   makeUserRepository
 } from '@/main/factories'
 import { UserController } from '@/presentation/controllers'
@@ -16,7 +17,8 @@ export const makeUsersModuleMetadata = (): ModuleMetadata => {
     makeUserRepository(),
     makeRoleRepository(),
     makeHashGeneratorFactory(),
-    makeCreateUserUsecaseProvider()
+    makeCreateUserUsecaseProvider(),
+    makeUpdateUserUsecaseProvider()
   ]
   const imports = [database]
   const exports = [database, ...providers]

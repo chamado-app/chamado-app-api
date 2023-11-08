@@ -9,7 +9,8 @@ export class CreateUserTransformer {
       data.email,
       data.password,
       data.roles,
-      data.sectors
+      data.sectors,
+      data.isActive
     )
   }
 }

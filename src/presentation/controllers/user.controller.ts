@@ -1,17 +1,33 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put
+} from '@nestjs/common'
 
-import { CreateUserUsecase } from '@/domain/usecases'
+import { CreateUserUsecase, UpdateUserUsecase } from '@/domain/usecases'
 import { ManagerRole } from '@/presentation/decorators'
 import { type ShowUserDto } from '@/presentation/resources'
 import {
   CreateUserTransformer,
-  ShowUserTransformer
+  ShowUserTransformer,
+  UpdateUserTransformer
 } from '@/presentation/transformers'
-import { CreateUserValidated } from '@/presentation/validation'
+import {
+  CreateUserValidated,
+  UpdateUserValidated
+} from '@/presentation/validation'
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly createUserUsecase: CreateUserUsecase) {}
+  constructor(
+    private readonly createUserUsecase: CreateUserUsecase,
+    private readonly updateUserUsecase: UpdateUserUsecase
+  ) {}
 
   @ManagerRole()
   @Post()
@@ -20,5 +36,16 @@ export class UserController {
     const payload = CreateUserTransformer.mapFrom(data)
     const createdUser = await this.createUserUsecase.execute(payload)
     return ShowUserTransformer.mapTo(createdUser)
+  }
+
+  @ManagerRole()
+  @Put(':id')
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() data: UpdateUserValidated
+  ): Promise<ShowUserDto> {
+    const payload = UpdateUserTransformer.mapFrom(data)
+    const user = await this.updateUserUsecase.execute(id, payload)
+    return ShowUserTransformer.mapTo(user)
   }
 }
