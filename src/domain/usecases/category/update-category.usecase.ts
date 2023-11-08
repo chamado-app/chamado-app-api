@@ -16,7 +16,7 @@ export class UpdateCategoryUsecase implements Usecase<CategoryEntity> {
     id: string,
     data: UpdateCategoryInputDto
   ): Promise<CategoryEntity> {
-    const existingCategory = await this.repository.getOne({ id })
+    const existingCategory = await this.repository.getOne({ filter: { id } })
 
     if (!existingCategory) throw new NotFoundException()
 

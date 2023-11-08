@@ -10,10 +10,10 @@ export class ShowCategoryUsecase implements Usecase<CategoryEntity> {
 
   async execute({ id, roles }: ShowCategoryInputDto): Promise<CategoryEntity> {
     const isManager = roles.includes(Role.MANAGER)
-    const searchParams: Partial<CategoryEntity> = { id }
-    if (!isManager) searchParams.isActive = true
+    const filter: Partial<CategoryEntity> = { id }
+    if (!isManager) filter.isActive = true
 
-    const category = await this.repository.getOne(searchParams)
+    const category = await this.repository.getOne({ filter })
     if (!category) throw new NotFoundException()
     return category
   }

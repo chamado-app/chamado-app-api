@@ -15,7 +15,7 @@ export class UpdateUserUsecase implements Usecase<UserEntity> {
   ) {}
 
   async execute(id: string, data: UpdateUserInputDto): Promise<UserEntity> {
-    const existentUser = await this.userRepository.getOne({ id })
+    const existentUser = await this.userRepository.getOne({ filter: { id } })
     if (!existentUser) throw new NotFoundException()
 
     await this.verifyEmailIsUnique(id, data.email)
@@ -31,9 +31,12 @@ export class UpdateUserUsecase implements Usecase<UserEntity> {
 
   private async verifyEmailIsUnique(id: string, email?: string): Promise<void> {
     if (!email) return
-    const user = await this.userRepository.getOne({ email })
+    const user = await this.userRepository.getOne({
+      filter: { email },
+      withDeleted: true
+    })
 
-    if (user?.id === id) throw new UnprocessableEntityException()
+    if (user?.id !== id) throw new UnprocessableEntityException()
   }
 
   private async preparePayload(

@@ -9,7 +9,8 @@ import {
   type Entity,
   type GetManyOptions,
   type GetManyResult,
-  Repository
+  Repository,
+  type GetOneOptions
 } from '@/domain/base'
 
 const VALIDATE_UUID_REGEXP =
@@ -32,9 +33,10 @@ export class PgRepository<T extends Entity> extends Repository<T> {
     return await this.repository.save({ ...data, id })
   }
 
-  async getOne(filter: Partial<T>): Promise<T | null> {
+  async getOne(options: GetOneOptions<T>): Promise<T | null> {
+    const { filter, withDeleted = false } = options
     const where = filter as FindOptionsWhere<T>
-    return await this.repository.findOne({ where })
+    return await this.repository.findOne({ where, withDeleted })
   }
 
   async getMany(options: GetManyOptions<T> = {}): Promise<GetManyResult<T>> {

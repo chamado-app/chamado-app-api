@@ -16,8 +16,7 @@ export class AuthenticateUsecase implements Usecase<TokenEntity> {
 
   async execute(data: AuthenticateInputDto): Promise<TokenEntity> {
     const user = await this.userRepository.getOne({
-      email: data.email,
-      isActive: true
+      filter: { email: data.email, isActive: true }
     })
 
     if (!user) throw new UnauthorizedException()

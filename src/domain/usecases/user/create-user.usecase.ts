@@ -24,7 +24,10 @@ export class CreateUserUsecase implements Usecase<UserEntity> {
   }
 
   private async verifyEmailIsUnique(email: string): Promise<void> {
-    const user = await this.userRepository.getOne({ email })
+    const user = await this.userRepository.getOne({
+      filter: { email },
+      withDeleted: true
+    })
     if (user) throw new UnprocessableEntityException()
   }
 
