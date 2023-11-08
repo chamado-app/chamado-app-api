@@ -3,12 +3,15 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm'
 
 import { TableNames } from '@/data/database/pg/helpers'
 import { type CategoryEntity } from '@/domain/entities'
+
+import { PgUserEntity } from './pg-user.entity'
 
 @Entity({ name: TableNames.category })
 export class PgCategoryEntity implements CategoryEntity {
@@ -26,6 +29,9 @@ export class PgCategoryEntity implements CategoryEntity {
 
   @Column({ name: 'is_active' })
   isActive: boolean
+
+  @ManyToMany(() => PgUserEntity, (user) => user.sectors)
+  users: PgUserEntity[]
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date

@@ -1,5 +1,6 @@
 export enum TableNames {
   category = 'categories',
+  categoryUser = 'category_user',
   role = 'roles',
   roleUser = 'role_user',
   token = 'tokens',
