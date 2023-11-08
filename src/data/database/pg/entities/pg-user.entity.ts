@@ -13,6 +13,7 @@ import {
 import { TableNames } from '@/data/database/pg/helpers'
 import { type UserEntity } from '@/domain/entities'
 
+import { type PgCategoryEntity } from './pg-category.entity'
 import { PgRoleEntity } from './pg-role.entity'
 import { PgTokenEntity } from './pg-token.entity'
 
@@ -46,6 +47,14 @@ export class PgUserEntity implements UserEntity {
     inverseJoinColumn: { name: 'role_id' }
   })
   roles: PgRoleEntity[]
+
+  @ManyToMany(() => PgRoleEntity, (role) => role.users)
+  @JoinTable({
+    name: TableNames.categoryUser,
+    joinColumn: { name: 'user_id' },
+    inverseJoinColumn: { name: 'sector_id' }
+  })
+  sectors: PgCategoryEntity[]
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date
