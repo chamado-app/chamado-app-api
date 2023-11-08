@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { PgRoleEntity, PgUserEntity } from '@/data/database/pg/entities'
 import {
   makeCreateUserUsecaseProvider,
+  makeDeleteUserUsecaseProvider,
   makeHashGeneratorFactory,
   makeRoleRepository,
   makeUpdateUserUsecaseProvider,
@@ -18,7 +19,8 @@ export const makeUsersModuleMetadata = (): ModuleMetadata => {
     makeRoleRepository(),
     makeHashGeneratorFactory(),
     makeCreateUserUsecaseProvider(),
-    makeUpdateUserUsecaseProvider()
+    makeUpdateUserUsecaseProvider(),
+    makeDeleteUserUsecaseProvider()
   ]
   const imports = [database]
   const exports = [database, ...providers]

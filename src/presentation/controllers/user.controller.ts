@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   HttpCode,
   HttpStatus,
   Param,
@@ -9,7 +10,11 @@ import {
   Put
 } from '@nestjs/common'
 
-import { CreateUserUsecase, UpdateUserUsecase } from '@/domain/usecases'
+import {
+  CreateUserUsecase,
+  DeleteUserUsecase,
+  UpdateUserUsecase
+} from '@/domain/usecases'
 import { ManagerRole } from '@/presentation/decorators'
 import { type ShowUserDto } from '@/presentation/resources'
 import {
@@ -26,7 +31,8 @@ import {
 export class UserController {
   constructor(
     private readonly createUserUsecase: CreateUserUsecase,
-    private readonly updateUserUsecase: UpdateUserUsecase
+    private readonly updateUserUsecase: UpdateUserUsecase,
+    private readonly deleteUserUsecase: DeleteUserUsecase
   ) {}
 
   @ManagerRole()
@@ -47,5 +53,12 @@ export class UserController {
     const payload = UpdateUserTransformer.mapFrom(data)
     const user = await this.updateUserUsecase.execute(id, payload)
     return ShowUserTransformer.mapTo(user)
+  }
+
+  @ManagerRole()
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async destroy(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    await this.deleteUserUsecase.execute(id)
   }
 }
