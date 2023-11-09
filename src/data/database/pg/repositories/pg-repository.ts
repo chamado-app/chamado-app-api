@@ -12,6 +12,7 @@ import {
   Repository,
   type GetOneOptions
 } from '@/domain/base'
+import { camelToSnakeCase } from '@/shared/utils'
 
 const VALIDATE_UUID_REGEXP =
   /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi
@@ -41,20 +42,25 @@ export class PgRepository<T extends Entity> extends Repository<T> {
 
   async getMany(options: GetManyOptions<T> = {}): Promise<GetManyResult<T>> {
     const { fields, filter = {}, orderBy, take, skip, search } = options
+    const snakeCasedFilter = Object.entries(filter).reduce(
+      (prev, [key, value]) => ({ ...prev, [camelToSnakeCase(key)]: value }),
+      {}
+    )
 
     const query = this.repository.createQueryBuilder(
       this.repository.metadata.tableName
     )
 
-    if (fields) query.select(fields as string[])
+    if (fields) query.select(fields.map(camelToSnakeCase))
     if (take) query.take(take)
     if (skip) query.skip(skip)
 
     if (orderBy) {
       Object.keys(orderBy).forEach((key, index) => {
-        const direction = orderBy[key] as 'ASC' | 'DESC'
-        if (index === 0) query.orderBy(key, direction)
-        else query.addOrderBy(key, direction)
+        const snakeCaseKey = camelToSnakeCase(key)
+        const direction = orderBy[snakeCaseKey] as 'ASC' | 'DESC'
+        if (index === 0) query.orderBy(snakeCaseKey, direction)
+        else query.addOrderBy(snakeCaseKey, direction)
       })
     }
 
@@ -65,7 +71,8 @@ export class PgRepository<T extends Entity> extends Repository<T> {
       )
 
       searchFielsWithoutId.forEach((field, index) => {
-        const where = { [field]: iLikeSearch }
+        const snakeCaseField = camelToSnakeCase(field)
+        const where = { [snakeCaseField]: iLikeSearch }
         if (index === 0) query.where(where)
         else query.orWhere(where)
       })
@@ -80,9 +87,9 @@ export class PgRepository<T extends Entity> extends Repository<T> {
         }
       }
 
-      query.andWhere(filter)
+      query.andWhere(snakeCasedFilter)
     } else {
-      query.where(filter)
+      query.where(snakeCasedFilter)
     }
 
     const [items, total] = await query.getManyAndCount()

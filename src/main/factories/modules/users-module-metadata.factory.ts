@@ -6,6 +6,7 @@ import {
   makeCreateUserUsecaseProvider,
   makeDeleteUserUsecaseProvider,
   makeHashGeneratorFactory,
+  makeListUsersUsecaseProvider,
   makeRoleRepository,
   makeShowUserUsecaseProvider,
   makeUpdateUserUsecaseProvider,
@@ -21,6 +22,7 @@ export const makeUsersModuleMetadata = (): ModuleMetadata => {
     makeHashGeneratorFactory(),
     makeCreateUserUsecaseProvider(),
     makeShowUserUsecaseProvider(),
+    makeListUsersUsecaseProvider(),
     makeUpdateUserUsecaseProvider(),
     makeDeleteUserUsecaseProvider()
   ]

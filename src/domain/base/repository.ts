@@ -6,9 +6,9 @@ export interface GetOneOptions<T> {
 }
 
 export interface GetManyOptions<T> {
-  search?: { value: string; fields: Array<keyof T> }
+  search?: { value: string; fields: Array<keyof T & string> }
   filter?: Partial<T>
-  fields?: Array<keyof T>
+  fields?: Array<keyof T & string>
   orderBy?: { [K in keyof T]?: 'ASC' | 'DESC' }
   take?: number
   skip?: number

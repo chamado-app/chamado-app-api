@@ -9,34 +9,42 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  Query,
   Req
 } from '@nestjs/common'
 
 import {
   CreateUserUsecase,
   DeleteUserUsecase,
+  ListUsersUsecase,
   ShowUserUsecase,
   UpdateUserUsecase
 } from '@/domain/usecases'
 import { ManagerRole } from '@/presentation/decorators'
-import { type ShowUserDto } from '@/presentation/resources'
+import {
+  type ListUsersOutputDto,
+  type ShowUserDto
+} from '@/presentation/resources'
 import {
   CreateUserTransformer,
   ShowUserInputTransformer,
   ShowUserTransformer,
-  UpdateUserTransformer
+  UpdateUserTransformer,
+  ListUsersInputTransformer,
+  ListUsersOutputTransformer
 } from '@/presentation/transformers'
+import { Request } from '@/presentation/types'
 import {
   CreateUserValidated,
+  ListUsersValidated,
   UpdateUserValidated
 } from '@/presentation/validation'
-
-import { Request } from '../types'
 
 @Controller('users')
 export class UserController {
   constructor(
     private readonly createUserUsecase: CreateUserUsecase,
+    private readonly listUsersUsecase: ListUsersUsecase,
     private readonly showUserUsecase: ShowUserUsecase,
     private readonly updateUserUsecase: UpdateUserUsecase,
     private readonly deleteUserUsecase: DeleteUserUsecase
@@ -49,6 +57,18 @@ export class UserController {
     const payload = CreateUserTransformer.mapFrom(data)
     const createdUser = await this.createUserUsecase.execute(payload)
     return ShowUserTransformer.mapTo(createdUser)
+  }
+
+  @ManagerRole()
+  @Get()
+  async list(
+    @Query() query: ListUsersValidated,
+    @Req() request: Request
+  ): Promise<ListUsersOutputDto> {
+    const roles = request.user.roles
+    const payload = ListUsersInputTransformer.mapFrom(query, roles)
+    const result = await this.listUsersUsecase.execute(payload)
+    return ListUsersOutputTransformer.mapTo(result)
   }
 
   @ManagerRole()
