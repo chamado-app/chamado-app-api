@@ -71,8 +71,7 @@ export class PgRepository<T extends Entity> extends Repository<T> {
       )
 
       searchFielsWithoutId.forEach((field, index) => {
-        const snakeCaseField = camelToSnakeCase(field)
-        const where = { [snakeCaseField]: iLikeSearch }
+        const where = { [field]: iLikeSearch }
         if (index === 0) query.where(where)
         else query.orWhere(where)
       })
