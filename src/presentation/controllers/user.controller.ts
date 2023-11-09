@@ -2,23 +2,27 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpCode,
   HttpStatus,
   Param,
   ParseUUIDPipe,
   Post,
-  Put
+  Put,
+  Req
 } from '@nestjs/common'
 
 import {
   CreateUserUsecase,
   DeleteUserUsecase,
+  ShowUserUsecase,
   UpdateUserUsecase
 } from '@/domain/usecases'
 import { ManagerRole } from '@/presentation/decorators'
 import { type ShowUserDto } from '@/presentation/resources'
 import {
   CreateUserTransformer,
+  ShowUserInputTransformer,
   ShowUserTransformer,
   UpdateUserTransformer
 } from '@/presentation/transformers'
@@ -27,10 +31,13 @@ import {
   UpdateUserValidated
 } from '@/presentation/validation'
 
+import { Request } from '../types'
+
 @Controller('users')
 export class UserController {
   constructor(
     private readonly createUserUsecase: CreateUserUsecase,
+    private readonly showUserUsecase: ShowUserUsecase,
     private readonly updateUserUsecase: UpdateUserUsecase,
     private readonly deleteUserUsecase: DeleteUserUsecase
   ) {}
@@ -42,6 +49,18 @@ export class UserController {
     const payload = CreateUserTransformer.mapFrom(data)
     const createdUser = await this.createUserUsecase.execute(payload)
     return ShowUserTransformer.mapTo(createdUser)
+  }
+
+  @ManagerRole()
+  @Get(':id')
+  async show(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() request: Request
+  ): Promise<ShowUserDto> {
+    const roles = request.user.roles
+    const payload = ShowUserInputTransformer.mapFrom(id, roles)
+    const user = await this.showUserUsecase.execute(payload)
+    return ShowUserTransformer.mapTo(user)
   }
 
   @ManagerRole()
