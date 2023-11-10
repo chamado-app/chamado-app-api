@@ -42,16 +42,12 @@ export class PgRepository<T extends Entity> extends Repository<T> {
 
   async getMany(options: GetManyOptions<T> = {}): Promise<GetManyResult<T>> {
     const { fields, filter = {}, orderBy, take, skip, search } = options
-    const snakeCasedFilter = Object.entries(filter).reduce(
-      (prev, [key, value]) => ({ ...prev, [camelToSnakeCase(key)]: value }),
-      {}
-    )
 
     const query = this.repository.createQueryBuilder(
       this.repository.metadata.tableName
     )
 
-    if (fields) query.select(fields.map(camelToSnakeCase))
+    if (fields) query.select(this.getTableFields(fields))
     if (take) query.take(take)
     if (skip) query.skip(skip)
 
@@ -86,13 +82,21 @@ export class PgRepository<T extends Entity> extends Repository<T> {
         }
       }
 
-      query.andWhere(snakeCasedFilter)
+      query.andWhere(filter)
     } else {
-      query.where(snakeCasedFilter)
+      query.where(filter)
     }
 
     const [items, total] = await query.getManyAndCount()
     return { items, total }
+  }
+
+  private getTableFields(fields: Array<keyof T & string>): string[] {
+    const tableName = this.repository.metadata.tableName
+    return fields.map((field) => {
+      const snakedField = camelToSnakeCase(field)
+      return `${tableName}.${snakedField}`
+    })
   }
 
   async delete(filter: Partial<T>, permanent?: boolean): Promise<number> {

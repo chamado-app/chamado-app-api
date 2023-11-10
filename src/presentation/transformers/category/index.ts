@@ -1,4 +1,5 @@
 export * from './create-category-input.transformer'
+export * from './fetch-categories-output.transformer'
 export * from './list-categories-input.transformer'
 export * from './list-categories-output.transformer'
 export * from './show-category-input.transformer'
