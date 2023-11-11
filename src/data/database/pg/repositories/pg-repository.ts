@@ -35,9 +35,9 @@ export class PgRepository<T extends Entity> extends Repository<T> {
   }
 
   async getOne(options: GetOneOptions<T>): Promise<T | null> {
-    const { filter, withDeleted = false } = options
+    const { filter, relations, withDeleted = false } = options
     const where = filter as FindOptionsWhere<T>
-    return await this.repository.findOne({ where, withDeleted })
+    return await this.repository.findOne({ where, withDeleted, relations })
   }
 
   async getMany(options: GetManyOptions<T> = {}): Promise<GetManyResult<T>> {

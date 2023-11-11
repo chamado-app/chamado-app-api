@@ -13,7 +13,10 @@ export class ShowUserUsecase implements Usecase<UserEntity> {
     const filter: Partial<UserEntity> = { id }
     if (!isManager) filter.isActive = true
 
-    const category = await this.repository.getOne({ filter })
+    const category = await this.repository.getOne({
+      filter,
+      relations: ['roles', 'sectors']
+    })
     if (!category) throw new NotFoundException()
     return category
   }
