@@ -15,9 +15,14 @@ export class CreateEquipmentTable1699734636497 implements MigrationInterface {
         { name: 'model', type: 'varchar', length: '80' },
         { name: 'type', type: 'varchar', length: '60' },
         { name: 'section', type: 'varchar', length: '60' },
-        { name: 'serial', type: 'varchar', length: '40' },
-        { name: 'patrimony', type: 'varchar', length: '40' },
-        { name: 'additionalInfo', type: 'varchar', length: '255' },
+        { name: 'serial', type: 'varchar', length: '40', isNullable: true },
+        { name: 'patrimony', type: 'varchar', length: '40', isNullable: true },
+        {
+          name: 'additionalInfo',
+          type: 'varchar',
+          length: '255',
+          isNullable: true
+        },
         { name: 'status', type: 'enum', enum: Object.values(EquipmentStatus) }
       ])
     })
