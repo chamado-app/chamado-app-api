@@ -1,4 +1,5 @@
 export * from './authenticate'
 export * from './base'
 export * from './category'
+export * from './equipment'
 export * from './user'
