@@ -20,4 +20,5 @@ export class EquipmentEntity extends Entity {
   status: EquipmentStatus
   createdAt: Date
   updatedAt: Date
+  deletedAt: Date
 }
