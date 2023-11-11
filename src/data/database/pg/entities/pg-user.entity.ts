@@ -13,7 +13,7 @@ import {
 import { TableNames } from '@/data/database/pg/helpers'
 import { type UserEntity } from '@/domain/entities'
 
-import { type PgCategoryEntity } from './pg-category.entity'
+import { PgCategoryEntity } from './pg-category.entity'
 import { PgRoleEntity } from './pg-role.entity'
 import { PgTokenEntity } from './pg-token.entity'
 
@@ -48,11 +48,11 @@ export class PgUserEntity implements UserEntity {
   })
   roles: PgRoleEntity[]
 
-  @ManyToMany(() => PgRoleEntity, (role) => role.users)
+  @ManyToMany(() => PgCategoryEntity, (sector) => sector.users)
   @JoinTable({
     name: TableNames.categoryUser,
     joinColumn: { name: 'user_id' },
-    inverseJoinColumn: { name: 'section_id' }
+    inverseJoinColumn: { name: 'sector_id' }
   })
   sectors: PgCategoryEntity[]
 
