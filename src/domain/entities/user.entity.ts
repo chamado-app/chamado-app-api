@@ -11,7 +11,7 @@ export class UserEntity extends Entity {
   lastName: string
   isActive: boolean
   roles: RoleEntity[]
-  sectors: CategoryEntity[]
+  sectors?: CategoryEntity[]
   tokens?: TokenEntity[]
   createdAt: Date
   updatedAt: Date
