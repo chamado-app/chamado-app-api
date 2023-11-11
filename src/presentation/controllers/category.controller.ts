@@ -16,6 +16,7 @@ import {
 import {
   CreateCategoryUsecase,
   DeleteCategoryUsecase,
+  FetchCategoriesUsecase,
   ListCategoriesUsecase,
   ShowCategoryUsecase,
   UpdateCategoryUsecase
@@ -27,6 +28,7 @@ import {
 } from '@/presentation/resources'
 import {
   CreateCategoryTransformer,
+  FetchCategoriesOutputTransformer,
   ListCategoriesInputTransformer,
   ListCategoriesOutputTransformer,
   ShowCategoryInputTransformer,
@@ -46,8 +48,9 @@ export class CategoryController {
   constructor(
     private readonly createCategoryUsecase: CreateCategoryUsecase,
     private readonly showCategoryUsecase: ShowCategoryUsecase,
-    private readonly updateCategoryUsecase: UpdateCategoryUsecase,
     private readonly listCategoriesUsecase: ListCategoriesUsecase,
+    private readonly fetchCategoriesUsecase: FetchCategoriesUsecase,
+    private readonly updateCategoryUsecase: UpdateCategoryUsecase,
     private readonly deleteCategoryUsecase: DeleteCategoryUsecase
   ) {}
 
@@ -72,6 +75,13 @@ export class CategoryController {
     const payload = ListCategoriesInputTransformer.mapFrom(query, roles)
     const result = await this.listCategoriesUsecase.execute(payload)
     return ListCategoriesOutputTransformer.mapTo(result)
+  }
+
+  @AuthenticatedRoles()
+  @Get('/fetch')
+  async fetch(): Promise<ShowCategoryDto[]> {
+    const result = await this.fetchCategoriesUsecase.execute()
+    return FetchCategoriesOutputTransformer.mapTo(result)
   }
 
   @AuthenticatedRoles()

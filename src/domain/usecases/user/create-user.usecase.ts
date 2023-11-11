@@ -42,7 +42,7 @@ export class CreateUserUsecase implements Usecase<UserEntity> {
       email: data.email,
       password: hashedPassword,
       roles,
-      sectors: data.sectors.map((id) => ({ id }))
+      sectors: data.sectors?.map((id) => ({ id }))
     }
 
     return userEntity as Partial<UserEntity>

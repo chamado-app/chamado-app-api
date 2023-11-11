@@ -11,7 +11,7 @@ export class CreateUserInputDto {
     readonly email: UserEntity['email'],
     readonly password: UserEntity['password'],
     readonly roles: Role[],
-    readonly sectors: Array<CategoryEntity['id']>,
+    readonly sectors?: Array<CategoryEntity['id']>,
     readonly isActive: UserEntity['isActive'] = true
   ) {}
 }

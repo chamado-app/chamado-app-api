@@ -11,12 +11,12 @@ export class CreateCategoryUserTable1699405521819
     const table = new Table({
       name: this.tableName,
       columns: [
-        { name: 'section_id', type: 'uuid' },
+        { name: 'sector_id', type: 'uuid' },
         { name: 'user_id', type: 'uuid' }
       ],
       foreignKeys: [
         {
-          columnNames: ['section_id'],
+          columnNames: ['sector_id'],
           referencedColumnNames: ['id'],
           referencedTableName: TableNames.category
         },

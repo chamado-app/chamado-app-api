@@ -35,23 +35,19 @@ export class PgRepository<T extends Entity> extends Repository<T> {
   }
 
   async getOne(options: GetOneOptions<T>): Promise<T | null> {
-    const { filter, withDeleted = false } = options
+    const { filter, relations, withDeleted = false } = options
     const where = filter as FindOptionsWhere<T>
-    return await this.repository.findOne({ where, withDeleted })
+    return await this.repository.findOne({ where, withDeleted, relations })
   }
 
   async getMany(options: GetManyOptions<T> = {}): Promise<GetManyResult<T>> {
     const { fields, filter = {}, orderBy, take, skip, search } = options
-    const snakeCasedFilter = Object.entries(filter).reduce(
-      (prev, [key, value]) => ({ ...prev, [camelToSnakeCase(key)]: value }),
-      {}
-    )
 
     const query = this.repository.createQueryBuilder(
       this.repository.metadata.tableName
     )
 
-    if (fields) query.select(fields.map(camelToSnakeCase))
+    if (fields) query.select(this.getTableFields(fields))
     if (take) query.take(take)
     if (skip) query.skip(skip)
 
@@ -71,8 +67,7 @@ export class PgRepository<T extends Entity> extends Repository<T> {
       )
 
       searchFielsWithoutId.forEach((field, index) => {
-        const snakeCaseField = camelToSnakeCase(field)
-        const where = { [snakeCaseField]: iLikeSearch }
+        const where = { [field]: iLikeSearch }
         if (index === 0) query.where(where)
         else query.orWhere(where)
       })
@@ -87,13 +82,21 @@ export class PgRepository<T extends Entity> extends Repository<T> {
         }
       }
 
-      query.andWhere(snakeCasedFilter)
+      query.andWhere(filter)
     } else {
-      query.where(snakeCasedFilter)
+      query.where(filter)
     }
 
     const [items, total] = await query.getManyAndCount()
     return { items, total }
+  }
+
+  private getTableFields(fields: Array<keyof T & string>): string[] {
+    const tableName = this.repository.metadata.tableName
+    return fields.map((field) => {
+      const snakedField = camelToSnakeCase(field)
+      return `${tableName}.${snakedField}`
+    })
   }
 
   async delete(filter: Partial<T>, permanent?: boolean): Promise<number> {

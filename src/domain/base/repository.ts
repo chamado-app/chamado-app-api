@@ -2,6 +2,7 @@ import { type Entity } from './entity'
 
 export interface GetOneOptions<T> {
   filter: Partial<T>
+  relations?: Array<keyof T & string>
   withDeleted?: boolean
 }
 
