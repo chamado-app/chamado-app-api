@@ -15,7 +15,8 @@ import {
   makeListTicketsUsecaseProvider,
   makeShowTicketUsecaseProvider,
   makeTicketMessageRepository,
-  makeTicketRepository
+  makeTicketRepository,
+  makeUpdateTicketStatusUsecaseProvider
 } from '@/main/factories'
 import { TicketController } from '@/presentation/controllers'
 
@@ -33,6 +34,7 @@ export const makeTicketModuleMetadata = (): ModuleMetadata => {
     makeEquipmentRepository(),
     makeCategoryRepository(),
     makeShowTicketUsecaseProvider(),
+    makeUpdateTicketStatusUsecaseProvider(),
     makeListTicketsUsecaseProvider(),
     makeCreateTicketUsecaseProvider(),
     makeCreateTicketTextMessageUsecaseProvider()
