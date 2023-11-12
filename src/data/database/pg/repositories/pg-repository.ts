@@ -27,7 +27,7 @@ export class PgRepository<T extends Entity> extends Repository<T> {
   }
 
   async create(data: T): Promise<T> {
-    return await this.repository.save(data)
+    return await this.repository.save(data, { reload: true })
   }
 
   async update(id: string, data: T): Promise<T> {
