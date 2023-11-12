@@ -4,17 +4,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn
 } from 'typeorm'
 
 import { TableNames } from '@/data/database/pg/helpers'
-import {
-  TicketMessageDataEntity,
-  type TicketMessageEntity
-} from '@/domain/entities'
+import { TicketMessageType, type TicketMessageEntity } from '@/domain/entities'
 
-import { PgTicketMessageDataEntity } from './pg-ticket-message-data.entity'
 import { PgTicketEntity } from './pg-ticket.entity'
 import { PgUserEntity } from './pg-user.entity'
 
@@ -23,9 +18,14 @@ export class PgTicketMessageEntity implements TicketMessageEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @OneToOne(() => TicketMessageDataEntity)
-  @JoinColumn({ name: 'ticket_message_data_id' })
-  data: PgTicketMessageDataEntity
+  @Column()
+  text: string
+
+  @Column({ nullable: true })
+  url?: string
+
+  @Column({ enum: TicketMessageType })
+  type: TicketMessageType
 
   @ManyToOne(() => PgTicketEntity)
   @JoinColumn({ name: 'ticket_id' })

@@ -1,5 +1,4 @@
 import { UnprocessableEntityException } from '@nestjs/common'
-import { type DeepPartial } from 'typeorm'
 
 import { type Usecase } from '@/domain/base'
 import { type CreateTicketInputDto } from '@/domain/dtos'
@@ -46,9 +45,10 @@ export class CreateTicketUsecase implements Usecase<TicketEntity> {
     reportedBy: UserEntity,
     text: string
   ): TicketMessageEntity[] {
-    const message: DeepPartial<TicketMessageEntity> = {
+    const message: Partial<TicketMessageEntity> = {
       sentBy: reportedBy,
-      data: { text, type: TicketMessageType.TEXT }
+      text,
+      type: TicketMessageType.TEXT
     }
 
     return [message] as TicketMessageEntity[]
