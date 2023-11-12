@@ -1,5 +1,6 @@
 export * from './create-user-usecase.factory'
 export * from './delete-user-usecase.factory'
+export * from './fetch-categories-usecase.factory'
 export * from './list-users-usecase.factory'
 export * from './show-user-usecase.factory'
 export * from './update-user-usecase.factory'

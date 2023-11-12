@@ -9,7 +9,7 @@ export class FetchCategoriesUsecase implements Usecase<CategoryEntity[]> {
     const getOptions: GetManyOptions<CategoryEntity> = {
       filter: { isActive: true },
       orderBy: { name: 'ASC' },
-      fields: ['id', 'name']
+      fields: ['id', 'name', 'isActive']
     }
 
     const { items: categories } = await this.repository.getMany(getOptions)

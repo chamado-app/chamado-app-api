@@ -5,6 +5,7 @@ import { PgRoleEntity, PgUserEntity } from '@/data/database/pg/entities'
 import {
   makeCreateUserUsecaseProvider,
   makeDeleteUserUsecaseProvider,
+  makeFetchUsersUsecaseProvider,
   makeHashGeneratorFactory,
   makeListUsersUsecaseProvider,
   makeRoleRepository,
@@ -23,6 +24,7 @@ export const makeUsersModuleMetadata = (): ModuleMetadata => {
     makeCreateUserUsecaseProvider(),
     makeShowUserUsecaseProvider(),
     makeListUsersUsecaseProvider(),
+    makeFetchUsersUsecaseProvider(),
     makeUpdateUserUsecaseProvider(),
     makeDeleteUserUsecaseProvider()
   ]

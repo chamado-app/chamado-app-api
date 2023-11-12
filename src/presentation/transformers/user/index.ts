@@ -1,4 +1,5 @@
 export * from './create-user-input.transformer'
+export * from './fetch-users-output.transformer'
 export * from './list-users-input.transformer'
 export * from './list-users-output.transformer'
 export * from './show-user-input.transformer'

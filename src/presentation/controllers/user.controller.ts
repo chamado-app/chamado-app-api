@@ -16,11 +16,12 @@ import {
 import {
   CreateUserUsecase,
   DeleteUserUsecase,
+  FetchUsersUsecase,
   ListUsersUsecase,
   ShowUserUsecase,
   UpdateUserUsecase
 } from '@/domain/usecases'
-import { ManagerRole } from '@/presentation/decorators'
+import { AuthenticatedRoles, ManagerRole } from '@/presentation/decorators'
 import {
   type ListUsersOutputDto,
   type ShowUserDto
@@ -31,7 +32,9 @@ import {
   ShowUserTransformer,
   UpdateUserTransformer,
   ListUsersInputTransformer,
-  ListUsersOutputTransformer
+  ListUsersOutputTransformer,
+  type FetchUsersItemDto,
+  FetchUsersOutputTransformer
 } from '@/presentation/transformers'
 import { Request } from '@/presentation/types'
 import {
@@ -45,6 +48,7 @@ export class UserController {
   constructor(
     private readonly createUserUsecase: CreateUserUsecase,
     private readonly listUsersUsecase: ListUsersUsecase,
+    private readonly fetchUsersUsecase: FetchUsersUsecase,
     private readonly showUserUsecase: ShowUserUsecase,
     private readonly updateUserUsecase: UpdateUserUsecase,
     private readonly deleteUserUsecase: DeleteUserUsecase
@@ -69,6 +73,13 @@ export class UserController {
     const payload = ListUsersInputTransformer.mapFrom(query, roles)
     const result = await this.listUsersUsecase.execute(payload)
     return ListUsersOutputTransformer.mapTo(result)
+  }
+
+  @AuthenticatedRoles()
+  @Get('/fetch')
+  async fetch(): Promise<FetchUsersItemDto[]> {
+    const result = await this.fetchUsersUsecase.execute()
+    return FetchUsersOutputTransformer.mapTo(result)
   }
 
   @ManagerRole()
