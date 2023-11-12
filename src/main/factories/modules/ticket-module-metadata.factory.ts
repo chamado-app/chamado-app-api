@@ -5,7 +5,8 @@ import {
   PgCategoryEntity,
   PgEquipmentEntity,
   PgTicketEntity,
-  PgTicketMessageEntity
+  PgTicketMessageEntity,
+  PgUserEntity
 } from '@/data/database/pg/entities'
 import {
   makeCategoryRepository,
@@ -15,7 +16,10 @@ import {
   makeListTicketsUsecaseProvider,
   makeShowTicketUsecaseProvider,
   makeTicketMessageRepository,
-  makeTicketRepository
+  makeTicketRepository,
+  makeUpdateTicketAssignedUsecaseProvider,
+  makeUpdateTicketStatusUsecaseProvider,
+  makeUserRepository
 } from '@/main/factories'
 import { TicketController } from '@/presentation/controllers'
 
@@ -24,7 +28,8 @@ export const makeTicketModuleMetadata = (): ModuleMetadata => {
     PgTicketEntity,
     PgTicketMessageEntity,
     PgCategoryEntity,
-    PgEquipmentEntity
+    PgEquipmentEntity,
+    PgUserEntity
   ])
 
   const providers: Provider[] = [
@@ -32,7 +37,10 @@ export const makeTicketModuleMetadata = (): ModuleMetadata => {
     makeTicketMessageRepository(),
     makeEquipmentRepository(),
     makeCategoryRepository(),
+    makeUserRepository(),
     makeShowTicketUsecaseProvider(),
+    makeUpdateTicketStatusUsecaseProvider(),
+    makeUpdateTicketAssignedUsecaseProvider(),
     makeListTicketsUsecaseProvider(),
     makeCreateTicketUsecaseProvider(),
     makeCreateTicketTextMessageUsecaseProvider()
