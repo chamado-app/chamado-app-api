@@ -7,7 +7,7 @@ import { type UserEntity } from './user.entity'
 export class TicketMessageEntity extends Entity {
   data: TicketMessageDataEntity
   ticket: TicketEntity
-  sentAt: Date
   sentBy: UserEntity
+  sentAt: Date
   readAt?: Date
 }
