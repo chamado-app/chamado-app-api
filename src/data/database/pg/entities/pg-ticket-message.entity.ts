@@ -31,7 +31,7 @@ export class PgTicketMessageEntity implements TicketMessageEntity {
   @JoinColumn({ name: 'ticket_id' })
   ticket: PgTicketEntity
 
-  @ManyToOne(() => PgUserEntity)
+  @ManyToOne(() => PgUserEntity, { eager: true })
   @JoinColumn({ name: 'sent_by_id' })
   sentBy: PgUserEntity
 

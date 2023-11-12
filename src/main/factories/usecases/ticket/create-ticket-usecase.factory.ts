@@ -5,21 +5,31 @@ import {
   EquipmentRepository,
   TicketRepository
 } from '@/domain/repositories'
-import { CreateTicketUsecase } from '@/domain/usecases'
+import {
+  CreateTicketTextMessageUsecase,
+  CreateTicketUsecase
+} from '@/domain/usecases'
 
 export const makeCreateTicketUsecase = (
   ticketRepository: TicketRepository,
   categoryRepository: CategoryRepository,
-  equipmentRepository: EquipmentRepository
+  equipmentRepository: EquipmentRepository,
+  createTicketTextMessageUsecase: CreateTicketTextMessageUsecase
 ): CreateTicketUsecase =>
   new CreateTicketUsecase(
     ticketRepository,
     categoryRepository,
-    equipmentRepository
+    equipmentRepository,
+    createTicketTextMessageUsecase
   )
 
 export const makeCreateTicketUsecaseProvider = (): Provider => ({
   provide: CreateTicketUsecase,
-  inject: [TicketRepository, CategoryRepository, EquipmentRepository],
+  inject: [
+    TicketRepository,
+    CategoryRepository,
+    EquipmentRepository,
+    CreateTicketTextMessageUsecase
+  ],
   useFactory: makeCreateTicketUsecase
 })
