@@ -6,24 +6,34 @@ import {
   HttpStatus,
   Param,
   ParseUUIDPipe,
-  Post
+  Post,
+  Put
 } from '@nestjs/common'
 
-import { CreateEquipmentUsecase, ShowEquipmentUsecase } from '@/domain/usecases'
+import {
+  CreateEquipmentUsecase,
+  ShowEquipmentUsecase,
+  UpdateEquipmentUsecase
+} from '@/domain/usecases'
 import { AuthenticatedRoles, ManagerRole } from '@/presentation/decorators'
 import { type ShowEquipmentDto } from '@/presentation/resources'
 import {
   CreateEquipmentTransformer,
   ShowEquipmentInputTransformer,
-  ShowEquipmentTransformer
+  ShowEquipmentTransformer,
+  UpdateEquipmentTransformer
 } from '@/presentation/transformers'
-import { CreateEquipmentValidated } from '@/presentation/validation'
+import {
+  CreateEquipmentValidated,
+  UpdateEquipmentValidated
+} from '@/presentation/validation'
 
 @Controller('equipments')
 export class EquipmentController {
   constructor(
     private readonly createEquipmentUsecase: CreateEquipmentUsecase,
-    private readonly showEquipmentUsecase: ShowEquipmentUsecase
+    private readonly showEquipmentUsecase: ShowEquipmentUsecase,
+    private readonly updateEquipmentUsecase: UpdateEquipmentUsecase
   ) {}
 
   @ManagerRole()
@@ -44,6 +54,17 @@ export class EquipmentController {
   ): Promise<ShowEquipmentDto> {
     const payload = ShowEquipmentInputTransformer.mapFrom(id)
     const equipment = await this.showEquipmentUsecase.execute(payload)
+    return ShowEquipmentTransformer.mapTo(equipment)
+  }
+
+  @ManagerRole()
+  @Put(':id')
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() data: UpdateEquipmentValidated
+  ): Promise<ShowEquipmentDto> {
+    const payload = UpdateEquipmentTransformer.mapFrom(data)
+    const equipment = await this.updateEquipmentUsecase.execute(id, payload)
     return ShowEquipmentTransformer.mapTo(equipment)
   }
 }
