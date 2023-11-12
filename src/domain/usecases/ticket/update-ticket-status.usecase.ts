@@ -15,7 +15,8 @@ export class UpdateTicketStatusUsecase implements Usecase<void> {
   async execute(id: string, data: ChangeTicketStatusInputDto): Promise<void> {
     const { status } = data
     const options: GetOneOptions<TicketEntity> = {
-      filter: { id }
+      filter: { id },
+      relations: ['reportedBy']
     }
 
     const ticket = await this.ticketRepository.getOne(options)

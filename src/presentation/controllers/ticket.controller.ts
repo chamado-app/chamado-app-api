@@ -19,7 +19,7 @@ import {
   ShowTicketUsecase,
   UpdateTicketStatusUsecase
 } from '@/domain/usecases'
-import { AuthenticatedRoles, UserRole } from '@/presentation/decorators'
+import { AuthenticatedRoles, OperationalRoles } from '@/presentation/decorators'
 import {
   type ListTicketsOutputDto,
   type ShowTicketDto
@@ -83,7 +83,7 @@ export class TicketController {
     return ShowTicketTransformer.mapTo(ticket, authenticatedUser)
   }
 
-  @UserRole()
+  @AuthenticatedRoles()
   @Put(':id/cancel')
   async cancel(
     @Param('id', ParseUUIDPipe) id: string,
@@ -92,6 +92,20 @@ export class TicketController {
     const authenticatedUser = request.user
     const payload = UpdateTicketTransformer.mapFrom(
       { status: TicketStatus.CANCELLED },
+      authenticatedUser
+    )
+    await this.updateTicketStatusUsecase.execute(id, payload)
+  }
+
+  @OperationalRoles()
+  @Put(':id/done')
+  async done(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() request: Request
+  ): Promise<void> {
+    const authenticatedUser = request.user
+    const payload = UpdateTicketTransformer.mapFrom(
+      { status: TicketStatus.DONE },
       authenticatedUser
     )
     await this.updateTicketStatusUsecase.execute(id, payload)
