@@ -1,5 +1,7 @@
 export * from './pg-category.entity'
 export * from './pg-equipment.entity'
 export * from './pg-role.entity'
+export * from './pg-ticket-message.entity'
+export * from './pg-ticket.entity'
 export * from './pg-token.entity'
 export * from './pg-user.entity'

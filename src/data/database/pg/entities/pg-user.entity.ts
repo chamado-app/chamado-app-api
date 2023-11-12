@@ -15,6 +15,7 @@ import { type UserEntity } from '@/domain/entities'
 
 import { PgCategoryEntity } from './pg-category.entity'
 import { PgRoleEntity } from './pg-role.entity'
+import { PgTicketEntity } from './pg-ticket.entity'
 import { PgTokenEntity } from './pg-token.entity'
 
 @Entity({ name: TableNames.user })
@@ -47,6 +48,12 @@ export class PgUserEntity implements UserEntity {
     inverseJoinColumn: { name: 'role_id' }
   })
   roles: PgRoleEntity[]
+
+  @OneToMany(() => PgTicketEntity, (ticket) => ticket.reportedBy)
+  reportedTickets?: PgTicketEntity[]
+
+  @OneToMany(() => PgTicketEntity, (ticket) => ticket.assignedTo)
+  assignedTickets?: PgTicketEntity[]
 
   @ManyToMany(() => PgCategoryEntity, (sector) => sector.users)
   @JoinTable({

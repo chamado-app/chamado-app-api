@@ -1,5 +1,7 @@
 import { Entity } from '@/domain/base'
 
+import { type TicketEntity } from './ticket.entity'
+
 export enum EquipmentStatus {
   DAMAGED = 'damaged',
   IN_REPAIR = 'in_repair',
@@ -14,10 +16,11 @@ export class EquipmentEntity extends Entity {
   model: string
   type: string
   section: string
+  status: EquipmentStatus
   serial?: string
   patrimony?: string
   additionalInfo?: string
-  status: EquipmentStatus
+  tickets?: TicketEntity[]
   createdAt: Date
   updatedAt: Date
   deletedAt: Date

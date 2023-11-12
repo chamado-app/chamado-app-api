@@ -1,5 +1,7 @@
 export * from './category.entity'
 export * from './equipment.entity'
 export * from './role.entity'
+export * from './ticket-message.entity'
+export * from './ticket.entity'
 export * from './token.entity'
 export * from './user.entity'
