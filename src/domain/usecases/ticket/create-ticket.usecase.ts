@@ -8,7 +8,8 @@ import {
   type TicketEntity,
   TicketMessageType,
   type CategoryEntity,
-  type UserEntity
+  type UserEntity,
+  TicketStatus
 } from '@/domain/entities'
 import {
   type CategoryRepository,
@@ -19,8 +20,8 @@ import {
 export class CreateTicketUsecase implements Usecase<TicketEntity> {
   constructor(
     private readonly ticketRepository: TicketRepository,
-    private readonly equipmentRepository: EquipmentRepository,
-    private readonly categoryRepository: CategoryRepository
+    private readonly categoryRepository: CategoryRepository,
+    private readonly equipmentRepository: EquipmentRepository
   ) {}
 
   async execute(data: CreateTicketInputDto): Promise<TicketEntity> {
@@ -32,7 +33,11 @@ export class CreateTicketUsecase implements Usecase<TicketEntity> {
     data: CreateTicketInputDto
   ): Promise<Partial<TicketEntity>> {
     const { categoryId, reportedBy, title, message, equipmentId } = data
-    const entity: Partial<TicketEntity> = { title }
+    const entity: Partial<TicketEntity> = {
+      title,
+      reportedBy,
+      status: TicketStatus.NEW
+    }
 
     entity.messages = this.prepareMessages(reportedBy, message)
     entity.category = await this.getCategory(categoryId)

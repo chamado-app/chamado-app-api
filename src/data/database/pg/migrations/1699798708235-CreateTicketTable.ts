@@ -16,7 +16,7 @@ export class CreateTicketTable1699798708235 implements MigrationInterface {
           { name: 'status', type: 'enum', enum: Object.values(TicketStatus) },
           { name: 'category_id', type: 'uuid' },
           { name: 'reported_by_id', type: 'uuid' },
-          { name: 'assigned_by_id', type: 'uuid', isNullable: true },
+          { name: 'assigned_to_id', type: 'uuid', isNullable: true },
           { name: 'equipment_id', type: 'uuid', isNullable: true }
         ],
         this.useSoftDeletes
@@ -33,14 +33,14 @@ export class CreateTicketTable1699798708235 implements MigrationInterface {
           referencedTableName: TableNames.user
         },
         {
-          columnNames: ['assigned_by_id'],
+          columnNames: ['assigned_to_id'],
           referencedColumnNames: ['id'],
           referencedTableName: TableNames.user
         },
         {
           columnNames: ['equipment_id'],
           referencedColumnNames: ['id'],
-          referencedTableName: TableNames.user
+          referencedTableName: TableNames.equipment
         }
       ]
     })
