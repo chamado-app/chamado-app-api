@@ -7,25 +7,39 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Query,
   Req
 } from '@nestjs/common'
 
-import { CreateTicketUsecase, ShowTicketUsecase } from '@/domain/usecases'
+import {
+  CreateTicketUsecase,
+  ListTicketsUsecase,
+  ShowTicketUsecase
+} from '@/domain/usecases'
 import { AuthenticatedRoles } from '@/presentation/decorators'
-import { type ShowTicketDto } from '@/presentation/resources'
+import {
+  type ListTicketsOutputDto,
+  type ShowTicketDto
+} from '@/presentation/resources'
 import {
   CreateTicketTransformer,
+  ListTicketsInputTransformer,
+  ListTicketsOutputTransformer,
   ShowTicketInputTransformer,
   ShowTicketTransformer
 } from '@/presentation/transformers'
 import { Request } from '@/presentation/types'
-import { CreateTicketValidated } from '@/presentation/validation'
+import {
+  CreateTicketValidated,
+  ListTicketsValidated
+} from '@/presentation/validation'
 
 @Controller('tickets')
 export class TicketController {
   constructor(
     private readonly createTicketUsecase: CreateTicketUsecase,
-    private readonly showTicketUsecase: ShowTicketUsecase
+    private readonly showTicketUsecase: ShowTicketUsecase,
+    private readonly listTicketsUsecase: ListTicketsUsecase
   ) {}
 
   @AuthenticatedRoles()
@@ -39,6 +53,17 @@ export class TicketController {
     const payload = CreateTicketTransformer.mapFrom(data, authenticatedUser)
     const ticket = await this.createTicketUsecase.execute(payload)
     return ShowTicketTransformer.mapTo(ticket, authenticatedUser)
+  }
+
+  @AuthenticatedRoles()
+  @Get()
+  async list(
+    @Query() query: ListTicketsValidated,
+    @Req() request: Request
+  ): Promise<ListTicketsOutputDto> {
+    const payload = ListTicketsInputTransformer.mapFrom(query, request.user)
+    const result = await this.listTicketsUsecase.execute(payload)
+    return ListTicketsOutputTransformer.mapTo(result)
   }
 
   @AuthenticatedRoles()

@@ -12,6 +12,7 @@ import {
   makeCreateTicketTextMessageUsecaseProvider,
   makeCreateTicketUsecaseProvider,
   makeEquipmentRepository,
+  makeListTicketsUsecaseProvider,
   makeShowTicketUsecaseProvider,
   makeTicketMessageRepository,
   makeTicketRepository
@@ -32,6 +33,7 @@ export const makeTicketModuleMetadata = (): ModuleMetadata => {
     makeEquipmentRepository(),
     makeCategoryRepository(),
     makeShowTicketUsecaseProvider(),
+    makeListTicketsUsecaseProvider(),
     makeCreateTicketUsecaseProvider(),
     makeCreateTicketTextMessageUsecaseProvider()
   ]
