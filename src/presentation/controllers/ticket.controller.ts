@@ -7,16 +7,19 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Put,
   Query,
   Req
 } from '@nestjs/common'
 
+import { TicketStatus } from '@/domain/entities'
 import {
   CreateTicketUsecase,
   ListTicketsUsecase,
-  ShowTicketUsecase
+  ShowTicketUsecase,
+  UpdateTicketStatusUsecase
 } from '@/domain/usecases'
-import { AuthenticatedRoles } from '@/presentation/decorators'
+import { AuthenticatedRoles, UserRole } from '@/presentation/decorators'
 import {
   type ListTicketsOutputDto,
   type ShowTicketDto
@@ -26,7 +29,8 @@ import {
   ListTicketsInputTransformer,
   ListTicketsOutputTransformer,
   ShowTicketInputTransformer,
-  ShowTicketTransformer
+  ShowTicketTransformer,
+  UpdateTicketTransformer
 } from '@/presentation/transformers'
 import { Request } from '@/presentation/types'
 import {
@@ -39,6 +43,7 @@ export class TicketController {
   constructor(
     private readonly createTicketUsecase: CreateTicketUsecase,
     private readonly showTicketUsecase: ShowTicketUsecase,
+    private readonly updateTicketStatusUsecase: UpdateTicketStatusUsecase,
     private readonly listTicketsUsecase: ListTicketsUsecase
   ) {}
 
@@ -76,5 +81,19 @@ export class TicketController {
     const payload = ShowTicketInputTransformer.mapFrom(id, authenticatedUser)
     const ticket = await this.showTicketUsecase.execute(payload)
     return ShowTicketTransformer.mapTo(ticket, authenticatedUser)
+  }
+
+  @UserRole()
+  @Put(':id/cancel')
+  async cancel(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req() request: Request
+  ): Promise<void> {
+    const authenticatedUser = request.user
+    const payload = UpdateTicketTransformer.mapFrom(
+      { status: TicketStatus.CANCELLED },
+      authenticatedUser
+    )
+    await this.updateTicketStatusUsecase.execute(id, payload)
   }
 }
