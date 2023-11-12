@@ -12,6 +12,7 @@ import {
   makeEquipmentRepository,
   makeTicketRepository
 } from '@/main/factories'
+import { TicketController } from '@/presentation/controllers'
 
 export const makeTicketModuleMetadata = (): ModuleMetadata => {
   const database = TypeOrmModule.forFeature([
@@ -28,7 +29,7 @@ export const makeTicketModuleMetadata = (): ModuleMetadata => {
   ]
 
   const imports = [database]
-  const controllers = []
+  const controllers = [TicketController]
 
   return { providers, imports, controllers }
 }
