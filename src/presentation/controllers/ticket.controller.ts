@@ -14,6 +14,7 @@ import {
 
 import { TicketStatus } from '@/domain/entities'
 import {
+  CreateTicketTextMessageUsecase,
   CreateTicketUsecase,
   ListTicketsUsecase,
   ShowTicketUsecase,
@@ -30,6 +31,7 @@ import {
   type ShowTicketDto
 } from '@/presentation/resources'
 import {
+  CreateTicketTextMessageInputTransformer,
   CreateTicketTransformer,
   ListTicketsInputTransformer,
   ListTicketsOutputTransformer,
@@ -40,6 +42,7 @@ import {
 } from '@/presentation/transformers'
 import { Request } from '@/presentation/types'
 import {
+  CreateTicketTextMessageValidated,
   CreateTicketValidated,
   ListTicketsValidated,
   UpdateTicketAssignedValidated,
@@ -53,7 +56,8 @@ export class TicketController {
     private readonly showTicketUsecase: ShowTicketUsecase,
     private readonly updateTicketStatusUsecase: UpdateTicketStatusUsecase,
     private readonly updateTicketAssignedUsecase: UpdateTicketAssignedUsecase,
-    private readonly listTicketsUsecase: ListTicketsUsecase
+    private readonly listTicketsUsecase: ListTicketsUsecase,
+    private readonly createTicketTextMessageUsecase: CreateTicketTextMessageUsecase
   ) {}
 
   @AuthenticatedRoles()
@@ -139,5 +143,23 @@ export class TicketController {
       authenticatedUser
     )
     await this.updateTicketStatusUsecase.execute(id, payload)
+  }
+
+  @AuthenticatedRoles()
+  @Post(':id/messages/text')
+  @HttpCode(HttpStatus.CREATED)
+  async sendTextMessage(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() data: CreateTicketTextMessageValidated,
+    @Req() request: Request
+  ): Promise<void> {
+    const authenticatedUser = request.user
+    const payload = CreateTicketTextMessageInputTransformer.mapFrom(
+      data,
+      id,
+      authenticatedUser
+    )
+
+    await this.createTicketTextMessageUsecase.execute(payload)
   }
 }

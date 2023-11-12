@@ -1,4 +1,5 @@
 export * from './create-ticket-input.transformer'
+export * from './create-ticket-text-message-input.transformer'
 export * from './list-tickets-input.transformer'
 export * from './list-tickets-output.transformer'
 export * from './show-ticket-input.transformer'
