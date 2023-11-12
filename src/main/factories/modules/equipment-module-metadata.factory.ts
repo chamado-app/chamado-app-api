@@ -6,7 +6,8 @@ import {
   makeEquipmentRepository,
   makeCreateEquipmentUsecaseProvider,
   makeShowEquipmentUsecaseProvider,
-  makeUpdateEquipmentUsecaseProvider
+  makeUpdateEquipmentUsecaseProvider,
+  makeDeleteEquipmentUsecaseProvider
 } from '@/main/factories'
 import { EquipmentController } from '@/presentation/controllers'
 
@@ -17,7 +18,8 @@ export const makeEquipmentModuleMetadata = (): ModuleMetadata => {
     makeEquipmentRepository(),
     makeCreateEquipmentUsecaseProvider(),
     makeShowEquipmentUsecaseProvider(),
-    makeUpdateEquipmentUsecaseProvider()
+    makeUpdateEquipmentUsecaseProvider(),
+    makeDeleteEquipmentUsecaseProvider()
   ]
 
   const imports = [database]
