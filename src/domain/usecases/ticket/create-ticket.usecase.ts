@@ -26,8 +26,6 @@ export class CreateTicketUsecase implements Usecase<TicketEntity> {
 
   async execute(data: CreateTicketInputDto): Promise<TicketEntity> {
     const payload = await this.preparePayload(data)
-    console.log(payload)
-
     return await this.ticketRepository.create(payload)
   }
 

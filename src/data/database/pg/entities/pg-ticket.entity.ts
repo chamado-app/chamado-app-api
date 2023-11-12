@@ -42,7 +42,7 @@ export class PgTicketEntity implements TicketEntity {
 
   @ManyToOne(() => PgEquipmentEntity, { nullable: true })
   @JoinColumn({ name: 'equipment_id' })
-  equipment?: PgEquipmentEntity
+  equipment: PgEquipmentEntity
 
   @Column({ type: 'enum', enum: TicketStatus })
   status: TicketStatus

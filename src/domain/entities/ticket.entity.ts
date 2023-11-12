@@ -20,7 +20,7 @@ export class TicketEntity extends Entity {
   category: CategoryEntity
   reportedBy: UserEntity
   assignedTo?: UserEntity
-  equipment?: EquipmentEntity
+  equipment: EquipmentEntity
   status: TicketStatus
   createdAt: Date
   updatedAt: Date
