@@ -4,7 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { PgEquipmentEntity } from '@/data/database/pg/entities'
 import {
   makeEquipmentRepository,
-  makeCreateEquipmentUsecaseProvider
+  makeCreateEquipmentUsecaseProvider,
+  makeShowEquipmentUsecaseProvider
 } from '@/main/factories'
 import { EquipmentController } from '@/presentation/controllers'
 
@@ -13,7 +14,8 @@ export const makeEquipmentModuleMetadata = (): ModuleMetadata => {
 
   const providers: Provider[] = [
     makeEquipmentRepository(),
-    makeCreateEquipmentUsecaseProvider()
+    makeCreateEquipmentUsecaseProvider(),
+    makeShowEquipmentUsecaseProvider()
   ]
 
   const imports = [database]
