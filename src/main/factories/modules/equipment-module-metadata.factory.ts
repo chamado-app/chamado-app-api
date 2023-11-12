@@ -5,7 +5,8 @@ import { PgEquipmentEntity } from '@/data/database/pg/entities'
 import {
   makeEquipmentRepository,
   makeCreateEquipmentUsecaseProvider,
-  makeShowEquipmentUsecaseProvider
+  makeShowEquipmentUsecaseProvider,
+  makeUpdateEquipmentUsecaseProvider
 } from '@/main/factories'
 import { EquipmentController } from '@/presentation/controllers'
 
@@ -15,7 +16,8 @@ export const makeEquipmentModuleMetadata = (): ModuleMetadata => {
   const providers: Provider[] = [
     makeEquipmentRepository(),
     makeCreateEquipmentUsecaseProvider(),
-    makeShowEquipmentUsecaseProvider()
+    makeShowEquipmentUsecaseProvider(),
+    makeUpdateEquipmentUsecaseProvider()
   ]
 
   const imports = [database]
