@@ -3,11 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { PgEquipmentEntity } from '@/data/database/pg/entities'
 import {
-  makeEquipmentRepository,
   makeCreateEquipmentUsecaseProvider,
+  makeDeleteEquipmentUsecaseProvider,
+  makeEquipmentRepository,
+  makeListEquipmentsUsecaseProvider,
   makeShowEquipmentUsecaseProvider,
-  makeUpdateEquipmentUsecaseProvider,
-  makeDeleteEquipmentUsecaseProvider
+  makeUpdateEquipmentUsecaseProvider
 } from '@/main/factories'
 import { EquipmentController } from '@/presentation/controllers'
 
@@ -18,6 +19,7 @@ export const makeEquipmentModuleMetadata = (): ModuleMetadata => {
     makeEquipmentRepository(),
     makeCreateEquipmentUsecaseProvider(),
     makeShowEquipmentUsecaseProvider(),
+    makeListEquipmentsUsecaseProvider(),
     makeUpdateEquipmentUsecaseProvider(),
     makeDeleteEquipmentUsecaseProvider()
   ]

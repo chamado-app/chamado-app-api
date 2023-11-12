@@ -8,32 +8,44 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
-  Put
+  Put,
+  Query,
+  Req
 } from '@nestjs/common'
 
 import {
   CreateEquipmentUsecase,
   DeleteEquipmentUsecase,
+  ListEquipmentsUsecase,
   ShowEquipmentUsecase,
   UpdateEquipmentUsecase
 } from '@/domain/usecases'
 import { AuthenticatedRoles, ManagerRole } from '@/presentation/decorators'
-import { type ShowEquipmentDto } from '@/presentation/resources'
+import {
+  type ListEquipmentsOutputDto,
+  type ShowEquipmentDto
+} from '@/presentation/resources'
 import {
   CreateEquipmentTransformer,
+  ListEquipmentsInputTransformer,
+  ListEquipmentsOutputTransformer,
   ShowEquipmentInputTransformer,
   ShowEquipmentTransformer,
   UpdateEquipmentTransformer
 } from '@/presentation/transformers'
 import {
   CreateEquipmentValidated,
+  ListEquipmentsValidated,
   UpdateEquipmentValidated
 } from '@/presentation/validation'
+
+import { Request } from '../types'
 
 @Controller('equipments')
 export class EquipmentController {
   constructor(
     private readonly createEquipmentUsecase: CreateEquipmentUsecase,
+    private readonly listEquipmentsUsecase: ListEquipmentsUsecase,
     private readonly showEquipmentUsecase: ShowEquipmentUsecase,
     private readonly updateEquipmentUsecase: UpdateEquipmentUsecase,
     private readonly deleteEquipmentUsecase: DeleteEquipmentUsecase
@@ -48,6 +60,18 @@ export class EquipmentController {
     const payload = CreateEquipmentTransformer.mapFrom(data)
     const createdEquipment = await this.createEquipmentUsecase.execute(payload)
     return ShowEquipmentTransformer.mapTo(createdEquipment)
+  }
+
+  @AuthenticatedRoles()
+  @Get()
+  async list(
+    @Query() query: ListEquipmentsValidated,
+    @Req() request: Request
+  ): Promise<ListEquipmentsOutputDto> {
+    const roles = request.user.roles
+    const payload = ListEquipmentsInputTransformer.mapFrom(query, roles)
+    const result = await this.listEquipmentsUsecase.execute(payload)
+    return ListEquipmentsOutputTransformer.mapTo(result)
   }
 
   @AuthenticatedRoles()
