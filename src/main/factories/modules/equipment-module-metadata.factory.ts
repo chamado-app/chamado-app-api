@@ -6,6 +6,7 @@ import {
   makeCreateEquipmentUsecaseProvider,
   makeDeleteEquipmentUsecaseProvider,
   makeEquipmentRepository,
+  makeFetchEquipmentsUsecaseProvider,
   makeListEquipmentsUsecaseProvider,
   makeShowEquipmentUsecaseProvider,
   makeUpdateEquipmentUsecaseProvider
@@ -20,6 +21,7 @@ export const makeEquipmentModuleMetadata = (): ModuleMetadata => {
     makeCreateEquipmentUsecaseProvider(),
     makeShowEquipmentUsecaseProvider(),
     makeListEquipmentsUsecaseProvider(),
+    makeFetchEquipmentsUsecaseProvider(),
     makeUpdateEquipmentUsecaseProvider(),
     makeDeleteEquipmentUsecaseProvider()
   ]
