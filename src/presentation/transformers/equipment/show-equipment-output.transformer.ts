@@ -10,9 +10,9 @@ export class ShowEquipmentTransformer {
       entity.model,
       entity.type,
       entity.section,
-      entity.serial ?? '',
-      entity.patrimony ?? '',
-      entity.additionalInfo ?? '',
+      entity.serial,
+      entity.patrimony,
+      entity.additionalInfo,
       entity.status,
       entity.createdAt,
       entity.updatedAt
