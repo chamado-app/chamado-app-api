@@ -19,8 +19,8 @@ import {
 export class CreateTicketUsecase implements Usecase<TicketEntity> {
   constructor(
     private readonly ticketRepository: TicketRepository,
-    private readonly equipmentRepository: EquipmentRepository,
-    private readonly categoryRepository: CategoryRepository
+    private readonly categoryRepository: CategoryRepository,
+    private readonly equipmentRepository: EquipmentRepository
   ) {}
 
   async execute(data: CreateTicketInputDto): Promise<TicketEntity> {

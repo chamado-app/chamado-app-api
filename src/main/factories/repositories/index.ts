@@ -1,5 +1,6 @@
 export * from './category-repository.factory'
 export * from './equipment-repository.factory'
 export * from './role-repository.factory'
+export * from './ticket-repository.factory'
 export * from './token-repository.factory'
 export * from './user-repository.factory'

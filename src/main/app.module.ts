@@ -9,6 +9,7 @@ import {
   AuthModule,
   CategoryModule,
   EquipmentModule,
+  TicketModule,
   UserModule
 } from '@/main/modules'
 
@@ -25,6 +26,7 @@ import { providers } from './providers'
     AuthModule,
     CategoryModule,
     EquipmentModule,
+    TicketModule,
     UserModule
   ],
   providers
