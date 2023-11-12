@@ -1,4 +1,5 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
@@ -23,6 +24,7 @@ export class PgTicketMessageEntity implements TicketMessageEntity {
   id: string
 
   @OneToOne(() => TicketMessageDataEntity)
+  @JoinColumn({ name: 'ticket_message_data_id' })
   data: PgTicketMessageDataEntity
 
   @ManyToOne(() => PgTicketEntity)
@@ -36,5 +38,6 @@ export class PgTicketMessageEntity implements TicketMessageEntity {
   @CreateDateColumn({ type: 'timestamp', name: 'sent_at' })
   sentAt: Date
 
+  @Column({ type: 'timestamp', name: 'read_at', nullable: true })
   readAt?: Date
 }

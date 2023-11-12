@@ -1,4 +1,4 @@
 import { Repository } from '@/domain/base'
-import { type TicketEntity } from '@/domain/entities'
+import { type TicketMessageEntity } from '@/domain/entities'
 
-export abstract class TicketRepository extends Repository<TicketEntity> {}
+export abstract class TicketMessageRepository extends Repository<TicketMessageEntity> {}

@@ -1,6 +1,7 @@
 export * from './category.repository'
 export * from './equipment.repository'
 export * from './role.repository'
+export * from './ticket-message.repository'
 export * from './ticket.repository'
 export * from './token.repository'
 export * from './user.repository'
