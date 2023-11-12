@@ -1,5 +1,6 @@
 export * from './create-equipment-usecase.factory'
 export * from './delete-equipment-usecase.factory'
+export * from './fetch-equipments-usecase.factory'
 export * from './list-equipments-usecase.factory'
 export * from './show-equipment-usecase.factory'
 export * from './update-equipment-usecase.factory'

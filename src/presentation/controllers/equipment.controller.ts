@@ -16,6 +16,7 @@ import {
 import {
   CreateEquipmentUsecase,
   DeleteEquipmentUsecase,
+  FetchEquipmentsUsecase,
   ListEquipmentsUsecase,
   ShowEquipmentUsecase,
   UpdateEquipmentUsecase
@@ -27,6 +28,7 @@ import {
 } from '@/presentation/resources'
 import {
   CreateEquipmentTransformer,
+  FetchEquipmentsOutputTransformer,
   ListEquipmentsInputTransformer,
   ListEquipmentsOutputTransformer,
   ShowEquipmentInputTransformer,
@@ -46,6 +48,7 @@ export class EquipmentController {
   constructor(
     private readonly createEquipmentUsecase: CreateEquipmentUsecase,
     private readonly listEquipmentsUsecase: ListEquipmentsUsecase,
+    private readonly fetchEquipmentsUsecase: FetchEquipmentsUsecase,
     private readonly showEquipmentUsecase: ShowEquipmentUsecase,
     private readonly updateEquipmentUsecase: UpdateEquipmentUsecase,
     private readonly deleteEquipmentUsecase: DeleteEquipmentUsecase
@@ -72,6 +75,13 @@ export class EquipmentController {
     const payload = ListEquipmentsInputTransformer.mapFrom(query, roles)
     const result = await this.listEquipmentsUsecase.execute(payload)
     return ListEquipmentsOutputTransformer.mapTo(result)
+  }
+
+  @AuthenticatedRoles()
+  @Get('/fetch')
+  async fetch(): Promise<ShowEquipmentDto[]> {
+    const result = await this.fetchEquipmentsUsecase.execute()
+    return FetchEquipmentsOutputTransformer.mapTo(result)
   }
 
   @AuthenticatedRoles()
