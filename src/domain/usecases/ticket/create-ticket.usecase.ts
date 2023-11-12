@@ -1,14 +1,14 @@
 import { UnprocessableEntityException } from '@nestjs/common'
 
 import { type Usecase } from '@/domain/base'
-import { type CreateTicketInputDto } from '@/domain/dtos'
+import {
+  type CreateTicketTextMessageInputDto,
+  type CreateTicketInputDto
+} from '@/domain/dtos'
 import {
   type EquipmentEntity,
-  type TicketMessageEntity,
   type TicketEntity,
-  TicketMessageType,
   type CategoryEntity,
-  type UserEntity,
   TicketStatus
 } from '@/domain/entities'
 import {
@@ -17,46 +17,53 @@ import {
   type TicketRepository
 } from '@/domain/repositories'
 
+import { type CreateTicketTextMessageUsecase } from './create-ticket-text-message.usecase'
+
 export class CreateTicketUsecase implements Usecase<TicketEntity> {
   constructor(
     private readonly ticketRepository: TicketRepository,
     private readonly categoryRepository: CategoryRepository,
-    private readonly equipmentRepository: EquipmentRepository
+    private readonly equipmentRepository: EquipmentRepository,
+    private readonly createTicketTextMessageUsecase: CreateTicketTextMessageUsecase
   ) {}
 
   async execute(data: CreateTicketInputDto): Promise<TicketEntity> {
     const payload = await this.preparePayload(data)
-    return await this.ticketRepository.create(payload)
+    const ticket = await this.ticketRepository.create(payload)
+    const messagePayload = this.prepareMessage(data, ticket)
+    const message =
+      await this.createTicketTextMessageUsecase.execute(messagePayload)
+
+    return { ...ticket, messages: [message] }
   }
 
   private async preparePayload(
     data: CreateTicketInputDto
   ): Promise<Partial<TicketEntity>> {
-    const { categoryId, reportedBy, title, message, equipmentId } = data
+    const { categoryId, reportedBy, title, equipmentId } = data
     const entity: Partial<TicketEntity> = {
       title,
       reportedBy,
       status: TicketStatus.NEW
     }
 
-    entity.messages = this.prepareMessages(reportedBy, message)
     entity.category = await this.getCategory(categoryId)
     entity.equipment = await this.getEquipment(equipmentId)
 
     return entity
   }
 
-  private prepareMessages(
-    reportedBy: UserEntity,
-    text: string
-  ): TicketMessageEntity[] {
-    const message: Partial<TicketMessageEntity> = {
-      sentBy: reportedBy,
-      text,
-      type: TicketMessageType.TEXT
+  private prepareMessage(
+    data: CreateTicketInputDto,
+    ticket: TicketEntity
+  ): CreateTicketTextMessageInputDto {
+    const message: CreateTicketTextMessageInputDto = {
+      sentBy: data.reportedBy,
+      message: data.message,
+      ticketId: ticket.id
     }
 
-    return [message] as TicketMessageEntity[]
+    return message
   }
 
   private async getCategory(id?: string): Promise<CategoryEntity | undefined> {
