@@ -3,12 +3,15 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from 'typeorm'
 
 import { TableNames } from '@/data/database/pg/helpers'
 import { EquipmentStatus, type EquipmentEntity } from '@/domain/entities'
+
+import { PgTicketEntity } from './pg-ticket.entity'
 
 @Entity({ name: TableNames.equipment })
 export class PgEquipmentEntity implements EquipmentEntity {
@@ -38,6 +41,9 @@ export class PgEquipmentEntity implements EquipmentEntity {
 
   @Column({ nullable: true })
   additionalInfo?: string
+
+  @OneToMany(() => PgTicketEntity, (ticket) => ticket.equipment)
+  tickets?: PgTicketEntity[]
 
   @Column({ nullable: true, enum: EquipmentStatus })
   status: EquipmentStatus
