@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -12,6 +13,7 @@ import {
 
 import {
   CreateEquipmentUsecase,
+  DeleteEquipmentUsecase,
   ShowEquipmentUsecase,
   UpdateEquipmentUsecase
 } from '@/domain/usecases'
@@ -33,7 +35,8 @@ export class EquipmentController {
   constructor(
     private readonly createEquipmentUsecase: CreateEquipmentUsecase,
     private readonly showEquipmentUsecase: ShowEquipmentUsecase,
-    private readonly updateEquipmentUsecase: UpdateEquipmentUsecase
+    private readonly updateEquipmentUsecase: UpdateEquipmentUsecase,
+    private readonly deleteEquipmentUsecase: DeleteEquipmentUsecase
   ) {}
 
   @ManagerRole()
@@ -66,5 +69,12 @@ export class EquipmentController {
     const payload = UpdateEquipmentTransformer.mapFrom(data)
     const equipment = await this.updateEquipmentUsecase.execute(id, payload)
     return ShowEquipmentTransformer.mapTo(equipment)
+  }
+
+  @ManagerRole()
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async destroy(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    return this.deleteEquipmentUsecase.execute(id)
   }
 }
