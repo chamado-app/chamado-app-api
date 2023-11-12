@@ -35,7 +35,8 @@ import {
 import { Request } from '@/presentation/types'
 import {
   CreateTicketValidated,
-  ListTicketsValidated
+  ListTicketsValidated,
+  UpdateTicketValidated
 } from '@/presentation/validation'
 
 @Controller('tickets')
@@ -81,6 +82,17 @@ export class TicketController {
     const payload = ShowTicketInputTransformer.mapFrom(id, authenticatedUser)
     const ticket = await this.showTicketUsecase.execute(payload)
     return ShowTicketTransformer.mapTo(ticket, authenticatedUser)
+  }
+
+  @AuthenticatedRoles()
+  @Put(':id')
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() data: UpdateTicketValidated,
+    @Req() request: Request
+  ): Promise<void> {
+    const payload = UpdateTicketTransformer.mapFrom(data, request.user)
+    await this.updateTicketStatusUsecase.execute(id, payload)
   }
 
   @AuthenticatedRoles()
