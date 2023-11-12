@@ -17,9 +17,14 @@ import {
   CreateTicketUsecase,
   ListTicketsUsecase,
   ShowTicketUsecase,
+  UpdateTicketAssignedUsecase,
   UpdateTicketStatusUsecase
 } from '@/domain/usecases'
-import { AuthenticatedRoles, OperationalRoles } from '@/presentation/decorators'
+import {
+  AuthenticatedRoles,
+  ManagerRole,
+  OperationalRoles
+} from '@/presentation/decorators'
 import {
   type ListTicketsOutputDto,
   type ShowTicketDto
@@ -30,13 +35,15 @@ import {
   ListTicketsOutputTransformer,
   ShowTicketInputTransformer,
   ShowTicketTransformer,
-  UpdateTicketTransformer
+  UpdateTicketAssignedTransformer,
+  UpdateTicketStatusTransformer
 } from '@/presentation/transformers'
 import { Request } from '@/presentation/types'
 import {
   CreateTicketValidated,
   ListTicketsValidated,
-  UpdateTicketValidated
+  UpdateTicketAssignedValidated,
+  UpdateTicketStatusValidated
 } from '@/presentation/validation'
 
 @Controller('tickets')
@@ -45,6 +52,7 @@ export class TicketController {
     private readonly createTicketUsecase: CreateTicketUsecase,
     private readonly showTicketUsecase: ShowTicketUsecase,
     private readonly updateTicketStatusUsecase: UpdateTicketStatusUsecase,
+    private readonly updateTicketAssignedUsecase: UpdateTicketAssignedUsecase,
     private readonly listTicketsUsecase: ListTicketsUsecase
   ) {}
 
@@ -88,11 +96,21 @@ export class TicketController {
   @Put(':id')
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() data: UpdateTicketValidated,
+    @Body() data: UpdateTicketStatusValidated,
     @Req() request: Request
   ): Promise<void> {
-    const payload = UpdateTicketTransformer.mapFrom(data, request.user)
+    const payload = UpdateTicketStatusTransformer.mapFrom(data, request.user)
     await this.updateTicketStatusUsecase.execute(id, payload)
+  }
+
+  @ManagerRole()
+  @Put(':id/assign')
+  async assign(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() data: UpdateTicketAssignedValidated
+  ): Promise<void> {
+    const payload = UpdateTicketAssignedTransformer.mapFrom(data)
+    await this.updateTicketAssignedUsecase.execute(id, payload)
   }
 
   @AuthenticatedRoles()
@@ -102,7 +120,7 @@ export class TicketController {
     @Req() request: Request
   ): Promise<void> {
     const authenticatedUser = request.user
-    const payload = UpdateTicketTransformer.mapFrom(
+    const payload = UpdateTicketStatusTransformer.mapFrom(
       { status: TicketStatus.CANCELLED },
       authenticatedUser
     )
@@ -116,7 +134,7 @@ export class TicketController {
     @Req() request: Request
   ): Promise<void> {
     const authenticatedUser = request.user
-    const payload = UpdateTicketTransformer.mapFrom(
+    const payload = UpdateTicketStatusTransformer.mapFrom(
       { status: TicketStatus.DONE },
       authenticatedUser
     )

@@ -1,10 +1,10 @@
 import { ChangeTicketStatusInputDto } from '@/domain/dtos'
 import { type UserEntity } from '@/domain/entities'
-import { type UpdateTicketValidated } from '@/presentation/validation'
+import { type UpdateTicketStatusValidated } from '@/presentation/validation'
 
-export class UpdateTicketTransformer {
+export class UpdateTicketStatusTransformer {
   static mapFrom(
-    data: UpdateTicketValidated,
+    data: UpdateTicketStatusValidated,
     authenticatedUser: UserEntity
   ): ChangeTicketStatusInputDto {
     return new ChangeTicketStatusInputDto(data.status, authenticatedUser)
