@@ -35,13 +35,12 @@ import {
   ShowCategoryTransformer,
   UpdateCategoryTransformer
 } from '@/presentation/transformers'
+import { Request } from '@/presentation/types'
 import {
   CreateCategoryValidated,
   ListCategoriesValidated,
   UpdateCategoryValidated
 } from '@/presentation/validation'
-
-import { Request } from '../types'
 
 @Controller('categories')
 export class CategoryController {
@@ -65,7 +64,7 @@ export class CategoryController {
     return ShowCategoryTransformer.mapTo(createdCategory)
   }
 
-  @AuthenticatedRoles()
+  @ManagerRole()
   @Get()
   async list(
     @Query() query: ListCategoriesValidated,
@@ -84,7 +83,7 @@ export class CategoryController {
     return FetchCategoriesOutputTransformer.mapTo(result)
   }
 
-  @AuthenticatedRoles()
+  @ManagerRole()
   @Get(':id')
   async show(
     @Param('id', ParseUUIDPipe) id: string,

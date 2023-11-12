@@ -35,13 +35,12 @@ import {
   ShowEquipmentTransformer,
   UpdateEquipmentTransformer
 } from '@/presentation/transformers'
+import { Request } from '@/presentation/types'
 import {
   CreateEquipmentValidated,
   ListEquipmentsValidated,
   UpdateEquipmentValidated
 } from '@/presentation/validation'
-
-import { Request } from '../types'
 
 @Controller('equipments')
 export class EquipmentController {
@@ -65,7 +64,7 @@ export class EquipmentController {
     return ShowEquipmentTransformer.mapTo(createdEquipment)
   }
 
-  @AuthenticatedRoles()
+  @ManagerRole()
   @Get()
   async list(
     @Query() query: ListEquipmentsValidated,
@@ -84,7 +83,7 @@ export class EquipmentController {
     return FetchEquipmentsOutputTransformer.mapTo(result)
   }
 
-  @AuthenticatedRoles()
+  @ManagerRole()
   @Get(':id')
   async show(
     @Param('id', ParseUUIDPipe) id: string
