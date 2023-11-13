@@ -9,6 +9,7 @@ export class ShowUserDto {
     readonly id: string,
     readonly firstName?: string,
     readonly lastName?: string,
+    readonly name?: string,
     readonly email?: string,
     readonly isActive?: UserEntity['isActive'],
     readonly roles?: Role[],
