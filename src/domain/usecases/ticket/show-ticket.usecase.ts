@@ -1,4 +1,5 @@
 import { NotFoundException } from '@nestjs/common'
+import { type DeepPartial } from 'typeorm'
 
 import { type Usecase } from '@/domain/base'
 import { type ShowTicketInputDto } from '@/domain/dtos'
@@ -12,10 +13,10 @@ export class ShowTicketUsecase implements Usecase<TicketEntity> {
     id,
     authenticatedUser
   }: ShowTicketInputDto): Promise<TicketEntity> {
-    const filter: Partial<TicketEntity> = { id }
+    const filter: DeepPartial<TicketEntity> = { id }
 
     if (!this.isOperationalRoles(authenticatedUser)) {
-      filter.reportedBy = authenticatedUser
+      filter.reportedBy = { id: authenticatedUser.id }
     }
 
     const ticket = await this.repository.getOne({

@@ -1,14 +1,16 @@
+import { type DeepPartial } from 'typeorm'
+
 import { type Entity } from './entity'
 
 export interface GetOneOptions<T> {
-  filter: Partial<T>
+  filter: DeepPartial<T>
   relations?: Array<keyof T & string>
   withDeleted?: boolean
 }
 
 export interface GetManyOptions<T> {
   search?: { value: string; fields: Array<keyof T & string> }
-  filter?: Partial<T>
+  filter?: DeepPartial<T>
   fields?: Array<keyof T & string>
   orderBy?: { [K in keyof T]?: 'ASC' | 'DESC' }
   take?: number
