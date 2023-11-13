@@ -22,6 +22,7 @@ export class ListTicketsOutputTransformer {
         ticket.category.name,
         totalMessages,
         lastMessage.text,
+        lastMessage.sentAt,
         reportedBy,
         ticket.createdAt,
         ticket.updatedAt,

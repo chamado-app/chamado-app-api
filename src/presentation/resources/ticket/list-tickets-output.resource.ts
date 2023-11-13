@@ -8,6 +8,7 @@ export class ListTicketsItemDto {
     readonly category: string,
     readonly totalMessages: number,
     readonly lastMessage: string,
+    readonly lastMessageAt: Date,
     readonly reportedBy: string,
     readonly createdAt: Date,
     readonly updatedAt: Date,
