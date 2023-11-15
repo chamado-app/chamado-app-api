@@ -14,7 +14,7 @@ export class TicketMessageEntity extends Entity {
   url?: string
   type: TicketMessageType
   ticket: TicketEntity
-  sentBy: UserEntity
+  sentBy?: UserEntity
   sentAt: Date
   readAt?: Date
 }

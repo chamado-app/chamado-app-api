@@ -10,6 +10,7 @@ import {
 } from '@/data/database/pg/entities'
 import {
   makeCategoryRepository,
+  makeCreateTicketSystemMessageUsecaseProvider,
   makeCreateTicketTextMessageUsecaseProvider,
   makeCreateTicketUsecaseProvider,
   makeEquipmentRepository,
@@ -43,6 +44,7 @@ export const makeTicketModuleMetadata = (): ModuleMetadata => {
     makeUpdateTicketAssignedUsecaseProvider(),
     makeListTicketsUsecaseProvider(),
     makeCreateTicketUsecaseProvider(),
+    makeCreateTicketSystemMessageUsecaseProvider(),
     makeCreateTicketTextMessageUsecaseProvider()
   ]
 

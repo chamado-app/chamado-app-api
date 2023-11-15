@@ -8,17 +8,19 @@ export class ShowTicketMessageTransformer {
     entity: TicketMessageEntity,
     authenticatedUser: UserEntity
   ): ShowTicketMessageDto {
-    const sentBy = ShowUserTransformer.mapTo(entity.sentBy)
-    const sentByMe = sentBy.id === authenticatedUser.id
+    const sentBy = entity.sentBy
+      ? ShowUserTransformer.mapTo(entity.sentBy)
+      : undefined
+    const sentByMe = !!sentBy && sentBy.id === authenticatedUser.id
 
     return new ShowTicketMessageDto(
       entity.id,
       entity.text,
-      sentBy,
       entity.sentAt,
       entity.readAt,
       sentByMe,
       entity.type,
+      sentBy,
       entity.url
     )
   }

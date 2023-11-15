@@ -1,6 +1,7 @@
 export * from './change-ticket-assigned-input.dto'
 export * from './change-ticket-status-input.dto'
 export * from './create-ticket-input.dto'
+export * from './create-ticket-system-message-input.dto'
 export * from './create-ticket-text-message-input.dto'
 export * from './list-tickets-input.dto'
 export * from './list-tickets-output.dto'

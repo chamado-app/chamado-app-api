@@ -1,3 +1,4 @@
+export * from './create-ticket-system-message-usecase.factory'
 export * from './create-ticket-text-message-usecase.factory'
 export * from './create-ticket-usecase.factory'
 export * from './list-tickets-usecase.factory'
