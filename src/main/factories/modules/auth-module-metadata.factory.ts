@@ -6,6 +6,7 @@ import {
   makeAuthenticateUsecaseProvider,
   makeHashComparerFactory,
   makeJwtGeneratorFactory,
+  makeLogoutUsecaseProvider,
   makeTokenRepository
 } from '@/main/factories'
 import { UserModule } from '@/main/modules'
@@ -20,7 +21,8 @@ export const makeAuthModuleMetadata = (): ModuleMetadata => {
     makeTokenRepository(),
     makeHashComparerFactory(),
     makeJwtGeneratorFactory(),
-    makeAuthenticateUsecaseProvider()
+    makeAuthenticateUsecaseProvider(),
+    makeLogoutUsecaseProvider()
   ]
 
   return { imports, providers, controllers }

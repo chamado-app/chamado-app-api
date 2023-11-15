@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Req } from '@nestjs/common'
 
-import { AuthenticateUsecase } from '@/domain/usecases'
+import { AuthenticateUsecase, LogoutUsecase } from '@/domain/usecases'
 import { AuthenticatedRoles, GuestRole } from '@/presentation/decorators'
 import {
   type AuthenticateOutputDto,
@@ -9,6 +9,7 @@ import {
 import {
   AuthenticateInputTransformer,
   AuthenticateOutputTransformer,
+  LogoutInputTransformer,
   WhoAmITransformer
 } from '@/presentation/transformers'
 import { Request } from '@/presentation/types'
@@ -16,7 +17,10 @@ import { AuthenticateValidated } from '@/presentation/validation'
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authenticateUsecase: AuthenticateUsecase) {}
+  constructor(
+    private readonly authenticateUsecase: AuthenticateUsecase,
+    private readonly logoutUsecase: LogoutUsecase
+  ) {}
 
   @GuestRole()
   @Post('login')
@@ -26,6 +30,13 @@ export class AuthController {
     const payload = AuthenticateInputTransformer.mapFrom(data)
     const token = await this.authenticateUsecase.execute(payload)
     return AuthenticateOutputTransformer.mapTo(token)
+  }
+
+  @AuthenticatedRoles()
+  @Post('logout')
+  async logout(@Req() request: Request): Promise<void> {
+    const payload = LogoutInputTransformer.mapFrom(request.user)
+    await this.logoutUsecase.execute(payload)
   }
 
   @AuthenticatedRoles()

@@ -45,11 +45,15 @@ export class AuthGuard implements CanActivate {
       const payload = await this.jwtVerifier.verify(token)
       if (!payload) throw new UnauthorizedException()
 
-      const user = await this.userRepository.getByIdWithRoles(payload.id)
+      const user = await this.userRepository.getByIdWithAuthorization(
+        payload.id
+      )
       if (!user) throw new UnauthorizedException()
 
       if (!this.isValidUserRoles(requiredRoles, user.roles))
         throw new ForbiddenException()
+
+      if (!this.isValidUserAuthorization(user)) throw new ForbiddenException()
 
       request.user = user
     } catch (exception) {
@@ -69,6 +73,12 @@ export class AuthGuard implements CanActivate {
 
   private isOnlyGuest(roles: Role[]): boolean {
     return roles.length === 1 && roles[0] === Role.GUEST
+  }
+
+  private isValidUserAuthorization(user: UserEntity): boolean {
+    const tokens = user.tokens?.filter((token) => token.type === TokenType.JWT)
+    if (!tokens?.length) return false
+    return true
   }
 
   private isValidUserRoles(roles: Role[], userRoles: RoleEntity[]): boolean {

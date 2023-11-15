@@ -18,10 +18,12 @@ export class PgUserRepository
     super(repository)
   }
 
-  async getByIdWithRoles(id: UserEntity['id']): Promise<UserEntity | null> {
+  async getByIdWithAuthorization(
+    id: UserEntity['id']
+  ): Promise<UserEntity | null> {
     return this.repository.findOne({
       where: { id, isActive: true },
-      relations: { roles: true }
+      relations: { roles: true, tokens: true }
     })
   }
 }
