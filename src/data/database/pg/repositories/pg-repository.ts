@@ -12,6 +12,7 @@ import {
   Repository,
   type GetOneOptions
 } from '@/domain/base'
+import { type DeepPartial } from '@/domain/types'
 import { camelToSnakeCase } from '@/shared/utils'
 
 const VALIDATE_UUID_REGEXP =
@@ -99,7 +100,7 @@ export class PgRepository<T extends Entity> extends Repository<T> {
     })
   }
 
-  async delete(filter: Partial<T>, permanent?: boolean): Promise<number> {
+  async delete(filter: DeepPartial<T>, permanent?: boolean): Promise<number> {
     const where = filter as FindOptionsWhere<T>
     let affected = 0
 
