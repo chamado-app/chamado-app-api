@@ -1,7 +1,8 @@
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { In, Repository } from 'typeorm'
 
 import { PgUserEntity } from '@/data/database/pg/entities'
+import { type FetchUsersInputDto } from '@/domain/dtos'
 import { type UserEntity } from '@/domain/entities'
 import { type UserRepository } from '@/domain/repositories'
 
@@ -25,5 +26,19 @@ export class PgUserRepository
       where: { id, isActive: true },
       relations: { roles: true, tokens: true }
     })
+  }
+
+  async fetchUsers(data: FetchUsersInputDto): Promise<UserEntity[]> {
+    const { showRoles: roles } = data
+
+    const users = await this.repository.find({
+      order: { firstName: 'ASC', lastName: 'ASC' },
+      where: {
+        isActive: true,
+        roles: { name: roles?.length ? In(roles) : undefined }
+      }
+    })
+
+    return users
   }
 }

@@ -1,4 +1,5 @@
 export * from './create-user-input.dto'
+export * from './fetch-users-input.dto'
 export * from './list-users-input.dto'
 export * from './list-users-output.dto'
 export * from './show-user-input.dto'
