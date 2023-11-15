@@ -6,6 +6,9 @@ export class LogoutUsecase implements Usecase<void> {
   constructor(private readonly repository: TokenRepository) {}
 
   async execute(data: LogoutInputDto): Promise<void> {
-    await this.repository.delete({ user: { id: data.authenticatedUser.id } })
+    await this.repository.delete(
+      { user: { id: data.authenticatedUser.id } },
+      true
+    )
   }
 }
