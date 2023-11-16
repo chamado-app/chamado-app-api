@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req
+} from '@nestjs/common'
 
 import { AuthenticateUsecase, LogoutUsecase } from '@/domain/usecases'
 import { AuthenticatedRoles, GuestRole } from '@/presentation/decorators'
@@ -34,6 +42,7 @@ export class AuthController {
 
   @AuthenticatedRoles()
   @Post('logout')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async logout(@Req() request: Request): Promise<void> {
     const payload = LogoutInputTransformer.mapFrom(request.user)
     await this.logoutUsecase.execute(payload)

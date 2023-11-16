@@ -53,7 +53,8 @@ export class AuthGuard implements CanActivate {
       if (!this.isValidUserRoles(requiredRoles, user.roles))
         throw new ForbiddenException()
 
-      if (!this.isValidUserAuthorization(user)) throw new ForbiddenException()
+      if (!this.isValidUserAuthorization(user, token))
+        throw new UnauthorizedException()
 
       request.user = user
     } catch (exception) {
@@ -75,10 +76,11 @@ export class AuthGuard implements CanActivate {
     return roles.length === 1 && roles[0] === Role.GUEST
   }
 
-  private isValidUserAuthorization(user: UserEntity): boolean {
+  private isValidUserAuthorization(user: UserEntity, token: string): boolean {
     const tokens = user.tokens?.filter((token) => token.type === TokenType.JWT)
     if (!tokens?.length) return false
-    return true
+    const [userToken] = tokens
+    return userToken.token === token
   }
 
   private isValidUserRoles(roles: Role[], userRoles: RoleEntity[]): boolean {
