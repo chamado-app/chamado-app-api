@@ -3,7 +3,12 @@ import { UnprocessableEntityException } from '@nestjs/common'
 import { type Usecase } from '@/domain/base'
 import { type HashGenerator } from '@/domain/contracts'
 import { type CreateUserInputDto } from '@/domain/dtos'
-import { type RoleEntity, type UserEntity } from '@/domain/entities'
+import {
+  type CategoryEntity,
+  Role,
+  type RoleEntity,
+  type UserEntity
+} from '@/domain/entities'
 import { type RoleRepository, type UserRepository } from '@/domain/repositories'
 import { type DeepPartial } from '@/domain/types'
 
@@ -42,9 +47,23 @@ export class CreateUserUsecase implements Usecase<UserEntity> {
       email: data.email,
       password: hashedPassword,
       roles,
-      sectors: data.sectors?.map((id) => ({ id }))
+      sectors: this.prepareSectors(data)
     }
 
     return userEntity as Partial<UserEntity>
+  }
+
+  private prepareSectors(
+    data: CreateUserInputDto
+  ): Array<Partial<CategoryEntity>> {
+    if (!data.sectors?.length) return []
+    if (!this.isOperationalRoles(data.roles)) return []
+    return data.sectors.map((id) => ({ id }))
+  }
+
+  private isOperationalRoles(roles?: Role[]): boolean {
+    if (!roles) return false
+    const operationalRoles: Role[] = [Role.MANAGER, Role.TECHNICIAN]
+    return roles.some((role) => operationalRoles.includes(role))
   }
 }

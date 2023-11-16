@@ -5,11 +5,11 @@ export class ShowTicketMessageDto {
   constructor(
     readonly id: TicketMessageEntity['id'],
     readonly text: TicketMessageEntity['text'],
-    readonly sentBy: ShowUserDto,
     readonly sentAt: TicketMessageEntity['sentAt'],
     readonly readAt: TicketMessageEntity['readAt'],
     readonly sentByMe: boolean,
     readonly type: TicketMessageEntity['type'],
+    readonly sentBy?: ShowUserDto,
     readonly url?: TicketMessageEntity['url']
   ) {}
 }

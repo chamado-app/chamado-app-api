@@ -34,11 +34,13 @@ import {
   ListUsersInputTransformer,
   ListUsersOutputTransformer,
   type FetchUsersItemDto,
-  FetchUsersOutputTransformer
+  FetchUsersOutputTransformer,
+  FetchUsersInputTransformer
 } from '@/presentation/transformers'
 import { Request } from '@/presentation/types'
 import {
   CreateUserValidated,
+  FetchUsersValidated,
   ListUsersValidated,
   UpdateUserValidated
 } from '@/presentation/validation'
@@ -77,8 +79,11 @@ export class UserController {
 
   @AuthenticatedRoles()
   @Get('/fetch')
-  async fetch(): Promise<FetchUsersItemDto[]> {
-    const result = await this.fetchUsersUsecase.execute()
+  async fetch(
+    @Query() data: FetchUsersValidated
+  ): Promise<FetchUsersItemDto[]> {
+    const payload = FetchUsersInputTransformer.mapFrom(data)
+    const result = await this.fetchUsersUsecase.execute(payload)
     return FetchUsersOutputTransformer.mapTo(result)
   }
 

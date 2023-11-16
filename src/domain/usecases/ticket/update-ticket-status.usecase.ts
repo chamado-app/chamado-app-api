@@ -9,9 +9,16 @@ import {
   TicketStatus
 } from '@/domain/entities'
 import { type TicketRepository } from '@/domain/repositories'
+import { getTicketStatusLabel } from '@/domain/utils'
+
+import { type CreateTicketSystemMessageUsecase } from './create-ticket-system-message.usecase'
 
 export class UpdateTicketStatusUsecase implements Usecase<void> {
-  constructor(private readonly ticketRepository: TicketRepository) {}
+  constructor(
+    private readonly ticketRepository: TicketRepository,
+    private readonly createTicketSystemMessageUsecase: CreateTicketSystemMessageUsecase
+  ) {}
+
   async execute(id: string, data: ChangeTicketStatusInputDto): Promise<void> {
     const { status } = data
     const options: GetOneOptions<TicketEntity> = {
@@ -25,6 +32,7 @@ export class UpdateTicketStatusUsecase implements Usecase<void> {
       throw new ForbiddenException()
 
     await this.ticketRepository.update(id, { status })
+    await this.sendSystemMessage(ticket, status)
   }
 
   canUpdateStatus(
@@ -32,11 +40,29 @@ export class UpdateTicketStatusUsecase implements Usecase<void> {
     user: UserEntity,
     status: TicketStatus
   ): boolean {
+    if ([TicketStatus.CANCELLED, TicketStatus.DONE].includes(ticket.status))
+      return false
+
     const operationalRoles = [Role.TECHNICIAN, Role.MANAGER]
     const isOwner = ticket.reportedBy.id === user.id
 
     if (status === TicketStatus.CANCELLED) return isOwner
 
     return user.roles.some((role) => operationalRoles.includes(role.name))
+  }
+
+  async sendSystemMessage(
+    ticket: TicketEntity,
+    status: TicketStatus
+  ): Promise<void> {
+    if (ticket.status === status) return
+
+    const statusLabel = getTicketStatusLabel(status)
+    const message = `Situação do chamado alterado para "${statusLabel}"`
+
+    await this.createTicketSystemMessageUsecase.execute({
+      ticketId: ticket.id,
+      message
+    })
   }
 }

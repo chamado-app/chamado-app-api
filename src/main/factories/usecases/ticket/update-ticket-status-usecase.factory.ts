@@ -1,14 +1,22 @@
 import { type Provider } from '@nestjs/common'
 
 import { TicketRepository } from '@/domain/repositories'
-import { UpdateTicketStatusUsecase } from '@/domain/usecases'
+import {
+  CreateTicketSystemMessageUsecase,
+  UpdateTicketStatusUsecase
+} from '@/domain/usecases'
 
 export const makeUpdateTicketStatusUsecase = (
-  ticketRepository: TicketRepository
-): UpdateTicketStatusUsecase => new UpdateTicketStatusUsecase(ticketRepository)
+  ticketRepository: TicketRepository,
+  createTicketSystemMessageUsecase: CreateTicketSystemMessageUsecase
+): UpdateTicketStatusUsecase =>
+  new UpdateTicketStatusUsecase(
+    ticketRepository,
+    createTicketSystemMessageUsecase
+  )
 
 export const makeUpdateTicketStatusUsecaseProvider = (): Provider => ({
   provide: UpdateTicketStatusUsecase,
-  inject: [TicketRepository],
+  inject: [TicketRepository, CreateTicketSystemMessageUsecase],
   useFactory: makeUpdateTicketStatusUsecase
 })

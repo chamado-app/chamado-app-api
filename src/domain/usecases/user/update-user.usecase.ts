@@ -3,7 +3,12 @@ import { NotFoundException, UnprocessableEntityException } from '@nestjs/common'
 import { type Usecase } from '@/domain/base'
 import { type HashGenerator } from '@/domain/contracts'
 import { type UpdateUserInputDto } from '@/domain/dtos'
-import { type RoleEntity, type UserEntity } from '@/domain/entities'
+import {
+  Role,
+  type CategoryEntity,
+  type RoleEntity,
+  type UserEntity
+} from '@/domain/entities'
 import { type RoleRepository, type UserRepository } from '@/domain/repositories'
 import { type DeepPartial } from '@/domain/types'
 
@@ -55,9 +60,22 @@ export class UpdateUserUsecase implements Usecase<UserEntity> {
     }
 
     if (roles.length) userEntity.roles = roles
-    if (data.sectors?.length)
-      userEntity.sectors = data.sectors.map((id) => ({ id }))
+    if (data.sectors?.length) userEntity.sectors = this.prepareSectors(data)
 
     return userEntity as Partial<UserEntity>
+  }
+
+  private prepareSectors(
+    data: UpdateUserInputDto
+  ): Array<Partial<CategoryEntity>> {
+    if (!data.sectors?.length) return []
+    if (!this.isOperationalRoles(data.roles)) return []
+    return data.sectors.map((id) => ({ id }))
+  }
+
+  private isOperationalRoles(roles?: Role[]): boolean {
+    if (!roles) return false
+    const operationalRoles: Role[] = [Role.MANAGER, Role.TECHNICIAN]
+    return roles.some((role) => operationalRoles.includes(role))
   }
 }
