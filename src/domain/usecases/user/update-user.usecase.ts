@@ -41,7 +41,7 @@ export class UpdateUserUsecase implements Usecase<UserEntity> {
       withDeleted: true
     })
 
-    if (user?.id !== id) throw new UnprocessableEntityException()
+    if (user?.id && user.id !== id) throw new UnprocessableEntityException()
   }
 
   private async preparePayload(
