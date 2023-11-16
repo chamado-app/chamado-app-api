@@ -12,10 +12,13 @@ import {
   type TicketRepository
 } from '@/domain/repositories'
 
+import { type CreateTicketSystemMessageUsecase } from './create-ticket-system-message.usecase'
+
 export class UpdateTicketAssignedUsecase implements Usecase<void> {
   constructor(
     private readonly ticketRepository: TicketRepository,
-    private readonly userRepositiory: UserRepository
+    private readonly userRepositiory: UserRepository,
+    private readonly createTicketSystemMessageUsecase: CreateTicketSystemMessageUsecase
   ) {}
 
   async execute(id: string, data: ChangeTicketAssignedInputDto): Promise<void> {
@@ -40,9 +43,25 @@ export class UpdateTicketAssignedUsecase implements Usecase<void> {
       assignedTo,
       status: TicketStatus.IN_PROGRESS
     })
+    await this.sendSystemMessage(ticket, assignedTo)
   }
 
-  canChangeAssigned(ticket: TicketEntity, assignedTo: UserEntity): boolean {
+  private canChangeAssigned(
+    ticket: TicketEntity,
+    assignedTo: UserEntity
+  ): boolean {
     return ticket.reportedBy.id !== assignedTo.id
+  }
+
+  private async sendSystemMessage(
+    ticket: TicketEntity,
+    assignedTo: UserEntity
+  ): Promise<void> {
+    const name = `${assignedTo.firstName} ${assignedTo.lastName}`
+    const message = `Chamado atribuído para "${name}"`
+    await this.createTicketSystemMessageUsecase.execute({
+      ticketId: ticket.id,
+      message
+    })
   }
 }
