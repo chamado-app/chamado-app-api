@@ -41,7 +41,7 @@ export class CreateUserValidated {
   @ValidateIf((_, value) => value !== undefined)
   @IsArray({ message: 'O usuário deve estar em ao menos um setor' })
   @IsUUID('4', { each: true, message: 'O setor deve ser um UUID válido' })
-  sectors: Array<CategoryEntity['id']>
+  sectors?: Array<CategoryEntity['id']>
 
   @ValidateIf((_, value) => value !== undefined)
   @IsBoolean()

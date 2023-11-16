@@ -69,13 +69,13 @@ export class UpdateUserUsecase implements Usecase<UserEntity> {
     data: UpdateUserInputDto
   ): Array<Partial<CategoryEntity>> {
     if (!data.sectors?.length) return []
-    if (!this.isOperationalRoles(data.roles)) return []
+    if (!this.needsSectors(data.roles)) return []
     return data.sectors.map((id) => ({ id }))
   }
 
-  private isOperationalRoles(roles?: Role[]): boolean {
+  private needsSectors(roles?: Role[]): boolean {
     if (!roles) return false
-    const operationalRoles: Role[] = [Role.MANAGER, Role.TECHNICIAN]
+    const operationalRoles: Role[] = [Role.TECHNICIAN]
     return roles.some((role) => operationalRoles.includes(role))
   }
 }
